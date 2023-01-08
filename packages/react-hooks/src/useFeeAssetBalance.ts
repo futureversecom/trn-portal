@@ -11,7 +11,7 @@ import { useEffect, useState } from 'react';
 import { feeAssets } from '@polkadot/apps-config';
 import { useApi, useCall } from '@polkadot/react-hooks';
 
-export const useFeeAssetBalance = (accountId: string | null): [
+export const useFeeAssetBalance = (accountId: string | null | undefined): [
   FeeAsset,
   BN | null
 ] => {
