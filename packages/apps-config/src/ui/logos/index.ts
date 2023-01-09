@@ -10,15 +10,16 @@
 // anything for a specific chain, most would probably fit into the node category (but allow for chain-specific)
 // alphabetical
 import { sanitize } from '../util';
-import rootnet from './chains/rootnet.png';
+import rootnetBlackBg from './chains/rootnet-black-bg.png';
+import rootnetWhiteBg from './chains/rootnet-white-bg.png';
 import extensionPolkadotJs from './extensions/polkadot-js.svg';
 import emptyLogo from './empty.svg';
 
 // Alphabetical overrides based on the actual matched chain name
 // NOTE: This is as retrieved via system.chain RPC
 export const chainLogos = Object.entries({
-  Porcini: rootnet,
-  Root: rootnet
+  Porcini: rootnetWhiteBg,
+  Root: rootnetWhiteBg
 }).reduce<Record<string, unknown>>((logos, [chain, logo]) => ({
   ...logos,
   [sanitize(chain)]: logo
@@ -34,7 +35,7 @@ export const nodeLogos = Object.entries({
 
 // Alphabetical overrides based on the actual specName
 export const specLogos = Object.entries({
-  root: rootnet
+  root: rootnetWhiteBg
 }).reduce<Record<string, unknown>>((logos, [spec, logo]) => ({
   ...logos,
   [sanitize(spec)]: logo
@@ -45,9 +46,9 @@ export const specLogos = Object.entries({
 // (Generally would be the 'network' key in the known ss58 as per
 // https://github.com/polkadot-js/common/blob/master/packages/networks/src/index.ts)
 export const namedLogos: Record<string, unknown> = {
-  porcini: rootnet,
-  rootnet,
-  'Seed 🌱': rootnet
+  porcini: rootnetBlackBg,
+  rootnet: rootnetBlackBg,
+  'Seed 🌱': rootnetWhiteBg
 };
 
 // extension logos
