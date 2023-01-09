@@ -14,13 +14,14 @@ const emptyColor = '#99999';
 // based on chain name
 // alphabetical
 const rootnet = '#000000';
+const porcini = '#222222';
 
 export { emptyColor };
 
 // Alphabetical overrides based on the actual matched chain name
 // NOTE: This is as retrieved via the system.chain RPC
 export const chainColors: Record<string, string> = Object.entries({
-  Porcini: rootnet,
+  Porcini: porcini,
   Root: rootnet
 }).reduce<Record<string, string>>((colors, [chain, color]) => ({
   ...colors,
@@ -30,7 +31,7 @@ export const chainColors: Record<string, string> = Object.entries({
 // Alphabetical overrides based on the actual software node type
 // NOTE: This is as retrieved via the system.name RPC
 export const nodeColors = Object.entries({
-  'Seed ': rootnet
+  'Seed 🌱': rootnet
 }).reduce<Record<string, string>>((colors, [node, color]) => ({
   ...colors,
   [sanitize(node)]: color
