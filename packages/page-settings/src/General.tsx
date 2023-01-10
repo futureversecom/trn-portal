@@ -1,19 +1,17 @@
 // Copyright 2017-2023 @polkadot/app-settings authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { Option } from '@polkadot/apps-config/settings/types';
 import type { SettingsStruct } from '@polkadot/ui-settings/types';
 
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { createLanguages, createSs58 } from '@polkadot/apps-config';
-import { allNetworks } from '@polkadot/networks';
+import { createLanguages } from '@polkadot/apps-config';
 import { Button, Dropdown, MarkWarning } from '@polkadot/react-components';
 import { useApi, useLedger } from '@polkadot/react-hooks';
 import { settings } from '@polkadot/ui-settings';
 
 import { useTranslation } from './translate';
-import { createIdenticon, createOption, save, saveAndReload } from './util';
+import { save, saveAndReload } from './util';
 
 interface Props {
   className?: string;
@@ -23,45 +21,24 @@ const _ledgerConnOptions = settings.availableLedgerConn;
 
 function General ({ className = '' }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
-  const { chainSS58, isApiReady, isElectron } = useApi();
+  const { isElectron } = useApi();
   const { hasLedgerChain, hasWebUsb } = useLedger();
   // tri-state: null = nothing changed, false = no reload, true = reload required
   const [changed, setChanged] = useState<boolean | null>(null);
   const [state, setSettings] = useState((): SettingsStruct => {
-    const values = settings.get();
+    let values = settings.get();
 
-    return { ...values, uiTheme: values.uiTheme === 'dark' ? 'dark' : 'light' };
+    // Default to dark theme
+    values = { ...values, uiTheme: 'dark' };
+
+    settings.set(values);
+
+    return values;
   });
 
   const ledgerConnOptions = useMemo(
     () => _ledgerConnOptions.filter(({ value }) => !isElectron || value !== 'webusb'),
     [isElectron]
-  );
-
-  const iconOptions = useMemo(
-    () => settings.availableIcons
-      .map((o): Option => createIdenticon(o, ['default']))
-      .concat(createIdenticon({ info: 'robohash', text: 'RoboHash', value: 'robohash' })),
-    []
-  );
-
-  const prefixOptions = useMemo(
-    (): (Option | React.ReactNode)[] => {
-      const network = allNetworks.find(({ prefix }) => prefix === chainSS58);
-
-      return createSs58(t).map((o) =>
-        createOption(o, ['default'], 'empty', (
-          o.value === -1
-            ? isApiReady
-              ? network
-                ? ` (${network.displayName}, ${chainSS58 || 0})`
-                : ` (${chainSS58 || 0})`
-              : undefined
-            : ` (${o.value})`
-        ))
-      );
-    },
-    [chainSS58, isApiReady, t]
   );
 
   const themeOptions = useMemo(
@@ -108,28 +85,10 @@ function General ({ className = '' }: Props): React.ReactElement<Props> {
     [state]
   );
 
-  const { i18nLang, icon, ledgerConn, prefix, uiTheme } = state;
+  const { i18nLang, ledgerConn, uiTheme } = state;
 
   return (
     <div className={className}>
-      <div className='ui--row'>
-        <Dropdown
-          defaultValue={prefix}
-          help={t<string>('Override the default ss58 prefix for address generation')}
-          label={t<string>('address prefix')}
-          onChange={_handleChange('prefix')}
-          options={prefixOptions}
-        />
-      </div>
-      <div className='ui--row'>
-        <Dropdown
-          defaultValue={icon}
-          help={t<string>('Override the default identity icon display with a specific theme')}
-          label={t<string>('default icon theme')}
-          onChange={_handleChange('icon')}
-          options={iconOptions}
-        />
-      </div>
       <div className='ui--row'>
         <Dropdown
           defaultValue={uiTheme}

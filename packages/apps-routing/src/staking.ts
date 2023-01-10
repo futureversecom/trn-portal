@@ -21,6 +21,7 @@ function needsApiCheck (api: ApiPromise): boolean {
     );
 
     const TEST_ADDR_FOR_CHAIN = api.registry.createType('AccountId32', TEST_ADDR);
+
     assert(total.eq(BN_ONE) && own.eq(BN_ONE) && who.eq(TEST_ADDR_FOR_CHAIN) && value.eq(BN_ONE), 'Needs a known Exposure type');
   } catch {
     console.warn('Unable to create known-shape Exposure type, disabling staking route');
