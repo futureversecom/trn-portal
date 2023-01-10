@@ -19,5 +19,12 @@ export const testChains: EndpointOption[] = [
     providers: {
       'The Root Network': 'wss://porcini.au.rootnet.app/ws'
     }
+  },
+  {
+    info: 'porcini',
+    text: 'Porcini Archive',
+    providers: {
+      'The Root Network': 'wss://porcini.au.rootnet.app/archive/ws'
+    }
   }
 ];

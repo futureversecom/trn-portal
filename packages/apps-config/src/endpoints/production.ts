@@ -19,5 +19,12 @@ export const prodChains: EndpointOption[] = [
     providers: {
       'The Root Network': 'wss://root.au.rootnet.live/ws'
     }
+  },
+  {
+    info: 'rootnet',
+    text: 'The Root Network Archive',
+    providers: {
+      'The Root Network': 'wss://root.au.rootnet.live/archive/ws'
+    }
   }
 ];
