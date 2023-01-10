@@ -15,9 +15,16 @@ import type { EndpointOption } from './types';
 export const testChains: EndpointOption[] = [
   {
     info: 'porcini',
-    text: 'Porcini',
+    text: 'Porcini (Archive Node)',
     providers: {
-      'The Root Network': 'wss://porcini.au.rootnet.app/ws'
+      'TRN-AU': 'wss://porcini.au.rootnet.app/archive/ws'
+    }
+  },
+  {
+    info: 'porcini',
+    text: 'Porcini (Full Node)',
+    providers: {
+      'TRN-AU': 'wss://porcini.au.rootnet.app/ws'
     }
   }
 ];
