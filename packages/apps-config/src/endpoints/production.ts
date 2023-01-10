@@ -15,16 +15,16 @@ import type { EndpointOption } from './types';
 export const prodChains: EndpointOption[] = [
   {
     info: 'rootnet',
-    text: 'The Root Network',
+    text: 'Root (Archive Node)',
     providers: {
-      'The Root Network': 'wss://root.au.rootnet.live/ws'
+      'TRN-AU': 'wss://root.au.rootnet.live/archive/ws'
     }
   },
   {
     info: 'rootnet',
-    text: 'The Root Network Archive',
+    text: 'Root (Full Node)',
     providers: {
-      'The Root Network': 'wss://root.au.rootnet.live/archive/ws'
+      'TRN-AU': 'wss://root.au.rootnet.live/ws'
     }
   }
 ];
