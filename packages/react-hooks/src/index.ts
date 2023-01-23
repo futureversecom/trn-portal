@@ -71,3 +71,4 @@ export { useTxBatch } from './useTxBatch';
 export { useVotingStatus } from './useVotingStatus';
 export { useWeight } from './useWeight';
 export { useWindowSize } from './useWindowSize';
+export { useMetaMask } from './useMetaMask';

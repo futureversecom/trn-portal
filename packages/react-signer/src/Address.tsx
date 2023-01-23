@@ -231,8 +231,7 @@ function Address ({ currentItem, onChange, onEnter, passwordError, requestAddres
   // multisig
   useEffect((): void => {
     setMultInfo(null);
-
-    currentItem.extrinsic && extractExternal(proxyAddress || requestAddress).isMultisig &&
+    currentItem.extrinsic && !currentItem.isMetaMask && extractExternal(proxyAddress || requestAddress).isMultisig &&
       queryForMultisig(api, requestAddress, proxyAddress, currentItem.extrinsic)
         .then((info): void => {
           if (mountedRef.current) {
@@ -288,7 +287,7 @@ function Address ({ currentItem, onChange, onEnter, passwordError, requestAddres
           />
         </Modal.Columns>
       )}
-      {signAddress && !currentItem.isUnsigned && flags.isUnlockable && (
+      {signAddress && !currentItem.isUnsigned && !currentItem.isMetaMask && flags.isUnlockable && (
         <Password
           address={signAddress}
           error={passwordError}

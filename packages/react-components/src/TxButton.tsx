@@ -14,7 +14,7 @@ import Button from './Button';
 import { StatusContext } from './Status';
 import { useTranslation } from './translate';
 
-function TxButton ({ accountId, className = '', extrinsic: propsExtrinsic, icon, isBasic, isBusy, isDisabled, isIcon, isToplevel, isUnsigned, label, onClick, onFailed, onSendRef, onStart, onSuccess, onUpdate, params, tooltip, tx, withSpinner, withoutLink }: Props): React.ReactElement<Props> {
+function TxButton ({ accountId, className = '', extrinsic: propsExtrinsic, icon, isBasic, isBusy, isDisabled, isIcon, isToplevel, isUnsigned, isMetaMask, label, onClick, onFailed, onSendRef, onStart, onSuccess, onUpdate, params, tooltip, tx, withSpinner, withoutLink }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
   const mountedRef = useIsMountedRef();
   const { queueExtrinsic } = useContext(StatusContext);
@@ -71,11 +71,11 @@ function TxButton ({ accountId, className = '', extrinsic: propsExtrinsic, icon,
       assert(extrinsics?.length, 'Expected generated extrinsic passed to TxButton');
 
       mountedRef.current && withSpinner && setIsSending(true);
-
       extrinsics.forEach((extrinsic): void => {
         queueExtrinsic({
           accountId: accountId && accountId.toString(),
           extrinsic,
+          isMetaMask,
           isUnsigned,
           txFailedCb: withSpinner ? _onFailed : onFailed,
           txStartCb: _onStart,

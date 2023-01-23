@@ -40,6 +40,7 @@ export interface QueueTx extends AccountInfo {
   extrinsic?: SubmittableExtrinsic;
   id: number;
   isUnsigned?: boolean;
+  isMetaMask?: boolean;
   payload?: SignerPayloadJSON;
   result?: any;
   removeItem: () => void;
@@ -81,6 +82,7 @@ export interface PartialAccountInfo {
 export interface PartialQueueTxExtrinsic extends PartialAccountInfo {
   extrinsic?: SubmittableExtrinsic;
   payload?: SignerPayloadJSON;
+  isMetaMask?: boolean;
   signerCb?: SignerCallback;
   txFailedCb?: TxFailedCallback;
   txSuccessCb?: TxCallback;
