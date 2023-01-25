@@ -11,10 +11,10 @@
   },
   "sideEffects": false,
   "type": "module",
-  "version": "0.122.3-240-x",
+  "version": "0.123.2-29-x",
   "dependencies": {
-    "@babel/runtime": "^7.20.7",
-    "@polkadot/hw-ledger": "^10.2.3",
+    "@babel/runtime": "^7.20.13",
+    "@polkadot/hw-ledger": "^10.2.6",
     "@web3-react/core": "8.0.33-beta.0",
     "@web3-react/metamask": "8.0.26-beta.0",
     "is-ipfs": "6.0.2",

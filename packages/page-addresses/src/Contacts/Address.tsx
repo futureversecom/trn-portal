@@ -5,7 +5,6 @@ import type { ActionStatus } from '@polkadot/react-components/Status/types';
 import type { KeyringAddress } from '@polkadot/ui-keyring/types';
 
 import React, { useCallback, useEffect, useState } from 'react';
-import styled from 'styled-components';
 
 import Transfer from '@polkadot/app-accounts/modals/Transfer';
 import { AddressInfo, AddressSmall, Button, ChainLock, Columar, Forget, LinkExternal, Menu, Popup, Table, Tags } from '@polkadot/react-components';
@@ -25,7 +24,18 @@ interface Props {
 
 const isEditable = true;
 
-const BALANCE_OPTS = {
+const BAL_OPTS_DEFAULT = {
+  available: false,
+  bonded: false,
+  locked: false,
+  redeemable: false,
+  reserved: false,
+  total: true,
+  unlocking: false,
+  vested: false
+};
+
+const BAL_OPTS_EXPANDED = {
   available: true,
   bonded: true,
   locked: true,
@@ -35,17 +45,6 @@ const BALANCE_OPTS = {
   total: false,
   unlocking: true,
   vested: true
-};
-
-const BALANCE_OPTS_ONLY = {
-  available: false,
-  bonded: false,
-  locked: false,
-  redeemable: false,
-  reserved: false,
-  total: true,
-  unlocking: false,
-  vested: false
 };
 
 function Address ({ address, className = '', filter, isFavorite, toggleFavorite }: Props): React.ReactElement<Props> | null {
@@ -238,8 +237,7 @@ function Address ({ address, className = '', filter, isFavorite, toggleFavorite 
           <AddressInfo
             address={address}
             balancesAll={balancesAll}
-            withBalance={BALANCE_OPTS_ONLY}
-            withExtended={false}
+            withBalance={BAL_OPTS_DEFAULT}
           />
         </td>
         <td />
@@ -253,8 +251,7 @@ function Address ({ address, className = '', filter, isFavorite, toggleFavorite 
           <AddressInfo
             address={address}
             balancesAll={balancesAll}
-            withBalance={BALANCE_OPTS}
-            withExtended={false}
+            withBalance={BAL_OPTS_EXPANDED}
           />
           <Columar size='tiny'>
             <Columar.Column>
@@ -282,5 +279,4 @@ function Address ({ address, className = '', filter, isFavorite, toggleFavorite 
   );
 }
 
-// FIXME: This is weird, if we remove the styled wrapper we have test failures...
-export default React.memo(styled(Address)``);
+export default React.memo(Address);
