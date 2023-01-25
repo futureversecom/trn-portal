@@ -4,11 +4,11 @@
 import type { QueueTx } from '@polkadot/react-components/Status/types';
 import type { AddressProxy } from './types';
 
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
-import { Button, ErrorBoundary, Modal, Output, StatusContext } from '@polkadot/react-components';
-import { useApi, useMetaMask, useToggle } from '@polkadot/react-hooks';
+import { Button, ErrorBoundary, Modal, Output } from '@polkadot/react-components';
+import {useApi, useMetaMask, useQueue, useToggle} from '@polkadot/react-hooks';
 import { nextTick } from '@polkadot/util';
 
 import Address from './Address';
@@ -37,7 +37,7 @@ const EMPTY_INNER: InnerTx = { innerHash: null, innerTx: null };
 function TxSigned ({ className, currentItem, requestAddress }: Props): React.ReactElement<Props> | null {
   const { t } = useTranslation();
   const { api } = useApi();
-  const { queueSetTxStatus } = useContext(StatusContext);
+  const { queueSetTxStatus } = useQueue();
   const [error] = useState<Error | null>(null);
   const [isBusy, setBusy] = useState(false);
   const [isRenderError, toggleRenderError] = useToggle();
