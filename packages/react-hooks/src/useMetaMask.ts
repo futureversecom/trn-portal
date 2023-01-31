@@ -3,8 +3,6 @@
 
 import { initializeConnector, useWeb3React } from "@web3-react/core";
 import { MetaMask } from "@web3-react/metamask";
-import { useAtom } from "jotai";
-import { atomWithStorage } from "jotai/utils";
 import { useCallback, useEffect, useState } from "react";
 
 export const [metaMask, metaMaskHooks] = initializeConnector(
@@ -18,16 +16,13 @@ export const [metaMask, metaMaskHooks] = initializeConnector(
 );
 export const metaMaskConnectors = [metaMask, metaMaskHooks];
 
-const storedAccountAtom = atomWithStorage("metamask_account", '');
-
 export const useMetaMask = () => {
   const wallet = useWeb3React();
   const provider = wallet?.provider;
   const [isMetaMask, setIsMetaMask] = useState<boolean | undefined>();
-  const chainId = 3999;
+  const chainId = metaMaskHooks.useChainId();
 
   const [isConnecting, setIsConnecting] = useState(true);
-  const [storedAccount, setStoredAccount] = useAtom(storedAccountAtom);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -40,20 +35,6 @@ export const useMetaMask = () => {
       .then(() => setIsConnecting(false));
   }, []);
 
-  const disconnectWallet = useCallback(() => {
-    setStoredAccount('');
-
-    if (metaMask?.deactivate) return metaMask.deactivate();
-
-//    if (metaMask?.actions?.resetState) return metaMask.actions.resetState();
-  }, [setStoredAccount]);
-
-  // Update stored account
-  useEffect(() => {
-    if (!wallet?.account || wallet?.account === storedAccount) return;
-
-    setStoredAccount(wallet.account);
-  }, [storedAccount, setStoredAccount, wallet?.account]);
 
   useEffect(() => {
     if (!isMetaMask || typeof isMetaMask === "undefined" || wallet?.isActive)
@@ -73,7 +54,6 @@ export const useMetaMask = () => {
     wallet,
     provider,
     connectWallet,
-    disconnectWallet,
     isConnecting,
     isMetaMask,
   };

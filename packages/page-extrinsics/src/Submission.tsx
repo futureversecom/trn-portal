@@ -91,7 +91,7 @@ function Selection ({ className, defaultValue }: Props): React.ReactElement<Prop
         value={signMethod}
         withLabel={true}
       />
-      { !signMethod ? <></> :
+      {
       (signMethod === 'MetaMask'
         ? (
           <AddressRow
@@ -137,19 +137,11 @@ function Selection ({ className, defaultValue }: Props): React.ReactElement<Prop
           withSpinner
         />
         <TxButton
-          accountId={accountId}
+          accountId={ signMethod === 'MetaMask' ? metamaskAccountId : accountId }
           extrinsic={extrinsic}
+          isMetaMask={ signMethod === 'MetaMask' ? true : undefined }
           icon='sign-in-alt'
-          isDisabled={signMethod != 'Signer'}
-          label={t<string>('Submit Transaction')}
-        />
-        <TxButton
-          accountId={metamaskAccountId}
-          extrinsic={extrinsic}
-          isMetaMask
-          isDisabled={signMethod != 'MetaMask'}
-          icon='sign-in-alt'
-          label={t<string>('Submit Via Metamask')}
+          label={ signMethod === 'MetaMask' ? t<string>('Submit Via Metamask') : t<string>('Submit Transaction')}
         />
       </Button.Group>
     </div>

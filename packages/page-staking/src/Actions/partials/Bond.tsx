@@ -131,7 +131,7 @@ function Bond ({ className = '', isNominating, minNominated, minNominatorBond, m
           value={signMethod}
           withLabel={true}
         />
-        { !signMethod ? <></> :
+        {
           (signMethod === 'MetaMask'
             ? (
               <AddressRow

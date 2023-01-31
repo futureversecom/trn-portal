@@ -16,7 +16,7 @@ import { assert, isFunction, loggerFormat } from '@polkadot/util';
 import { useTranslation } from './translate';
 import TxSigned from './TxSigned';
 import TxUnsigned from './TxUnsigned';
-import TxMetamaskSign from "@polkadot/react-signer/TxMetamaskSign";
+import TxMetaMaskSign from "@polkadot/react-signer/TxMetaMaskSign";
 
 interface ItemState {
   count: number;
@@ -130,7 +130,7 @@ function Signer ({ children, className = '' }: Props): React.ReactElement<Props>
           {currentItem.isUnsigned
             ? <TxUnsigned currentItem={currentItem} />
             : currentItem.isMetaMask ?
-              <TxMetamaskSign
+              <TxMetaMaskSign
                 currentItem={currentItem}
                 requestAddress={requestAddress}
               />

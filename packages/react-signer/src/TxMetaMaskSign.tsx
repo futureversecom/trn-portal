@@ -39,6 +39,7 @@ function TxSigned ({ className, currentItem, requestAddress }: Props): React.Rea
   const { api } = useApi();
   const { queueSetTxStatus } = useContext(StatusContext);
   const [error] = useState<Error | null>(null);
+  const [passwordError, setPasswordError] = useState<string | null>(null);
   const [isBusy, setBusy] = useState(false);
   const [isRenderError, toggleRenderError] = useToggle();
   const [isSubmit] = useState(true);
@@ -78,6 +79,10 @@ function TxSigned ({ className, currentItem, requestAddress }: Props): React.Rea
           const unsubscribe = await signedExtrinsic.send(handleTxResults('signAndSend', queueSetTxStatus, currentItem, (): void => {
             unsubscribe();
           }));
+        }).catch(err => {
+          const errMsg = `${err.message}, do you want to try again?`
+          setPasswordError(errMsg);
+          setBusy(false);
         });
 
       });
@@ -101,7 +106,7 @@ function TxSigned ({ className, currentItem, requestAddress }: Props): React.Rea
                   currentItem={currentItem}
                   onChange={setSenderInfo}
                   onEnter={_doStart}
-                  passwordError={null}
+                  passwordError={passwordError}
                   requestAddress={requestAddress}
                 />
                 {isSubmit && innerHash && (
