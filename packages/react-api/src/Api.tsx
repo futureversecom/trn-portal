@@ -26,6 +26,8 @@ import { defaults as addressDefaults } from '@polkadot/util-crypto/address/defau
 import { lightSpecs, relaySpecs } from './light';
 import registry from './typeRegistry';
 import { decodeUrlTypes } from './urlTypes';
+import {metaMaskConnectors} from "@polkadot/react-hooks/useMetaMask";
+import {Web3ReactProvider} from "@web3-react/core";
 
 interface Props {
   children: React.ReactNode;
@@ -313,8 +315,11 @@ export function ApiCtxRoot ({ apiUrl, children, isElectron, store }: Props): Rea
   }
 
   return (
+    // @ts-ignore
+    <Web3ReactProvider connectors={[metaMaskConnectors]}>
     <ApiCtx.Provider value={value}>
       {children}
     </ApiCtx.Provider>
+    </Web3ReactProvider>
   );
 }

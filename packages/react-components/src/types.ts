@@ -37,6 +37,7 @@ export interface TxButtonProps {
   isIcon?: boolean;
   isToplevel?: boolean;
   isUnsigned?: boolean;
+  isMetaMask?: boolean
   label?: React.ReactNode;
   onClick?: () => void;
   onFailed?: TxFailedCallback;

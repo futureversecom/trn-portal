@@ -14,7 +14,10 @@
   "version": "0.124.2-15-x",
   "dependencies": {
     "@babel/runtime": "^7.20.13",
+    "@polkadot/api": "^9.11.1",
     "@polkadot/hw-ledger": "^10.3.1",
-    "@polkadot/react-components": "^0.124.2-15-x"
+    "@polkadot/react-components": "^0.124.2-15-x",
+    "@polkadot/util": "^10.2.3",
+    "@polkadot/util-crypto": "^10.2.3"
   }
 }

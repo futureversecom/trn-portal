@@ -9,6 +9,7 @@ export interface BondInfo {
   controllerId?: string | null;
   controllerTx?: SubmittableExtrinsic<'promise'> | null;
   stashId?: string | null;
+  isMetaMask?: boolean | null;
 }
 
 export interface NominateInfo {

@@ -82,3 +82,4 @@ export { useVotingStatus } from './useVotingStatus';
 export { useWeight } from './useWeight';
 export { useWindowColumns } from './useWindowColumns';
 export { useWindowSize } from './useWindowSize';
+export { useMetaMask } from './useMetaMask';
