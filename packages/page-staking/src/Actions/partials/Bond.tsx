@@ -8,8 +8,8 @@ import type { BondInfo } from './types';
 
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Dropdown, InputAddress, InputBalance, MarkError, Modal, Static } from '@polkadot/react-components';
-import { useApi, useCall } from '@polkadot/react-hooks';
+import {AddressRow, Dropdown, InputAddress, InputBalance, MarkError, Modal, Static} from '@polkadot/react-components';
+import {useApi, useCall, useMetaMask} from '@polkadot/react-hooks';
 import { BalanceFree, BlockToTime } from '@polkadot/react-query';
 import { BN_ZERO } from '@polkadot/util';
 
@@ -50,6 +50,11 @@ function Bond ({ className = '', isNominating, minNominated, minNominatorBond, m
   const stashBalance = useCall<DeriveBalancesAll>(api.derive.balances?.all, [stashId]);
   const destBalance = useCall<DeriveBalancesAll>(api.derive.balances?.all, [destAccount]);
   const bondedBlocks = useUnbondDuration();
+  const signOptions = [{text: 'MetaMask', value: 'MetaMask'},{text: 'Keyring Signer', value: 'Signer'}];
+  const [signMethod, setSignMethod] = useState<string>('MetaMask');
+  const [metamaskAccountId, setMetaMaskAccountId] = useState<string | null>();
+  const {wallet, connectWallet} = useMetaMask();
+  connectWallet();
 
   const options = useMemo(
     () => createDestCurr(t),
@@ -73,6 +78,17 @@ function Bond ({ className = '', isNominating, minNominated, minNominatorBond, m
     setStartBalance(null);
   }, [stashId]);
 
+
+  useEffect((): void => {
+    if (wallet.account) {
+      setMetaMaskAccountId(wallet.account as string);
+      if (signMethod === 'MetaMask') {
+        setControllerId(wallet.account);
+        setStashId(wallet.account);
+      }
+    }
+  }, [wallet.account, signMethod]);
+
   useEffect((): void => {
     const bondDest = destination === 'Account'
       ? { Account: destAccount }
@@ -85,11 +101,13 @@ function Bond ({ className = '', isNominating, minNominated, minNominatorBond, m
           bondTx: api.tx.staking.bond(controllerId, amount, bondDest),
           controllerId,
           controllerTx: api.tx.staking.setController(controllerId),
-          stashId
+          stashId,
+          isMetaMask: signMethod === 'MetaMask'
         }
         : EMPTY_INFO
     );
-  }, [api, amount, amountError, controllerError, controllerId, destination, destAccount, stashId, onChange]);
+  }, [api, amount, amountError, controllerError, controllerId, destination, destAccount, stashId, onChange, signMethod]);
+
 
   const hasValue = !!amount?.gtn(0);
   const isAccount = destination === 'Account';
@@ -105,6 +123,24 @@ function Bond ({ className = '', isNominating, minNominated, minNominatorBond, m
           </>
         }
       >
+        <Dropdown
+          label={t<string>('Select Signer')}
+          className={`ui--DropdownLinked-Items ${className}`}
+          onChange={setSignMethod}
+          options={signOptions}
+          value={signMethod}
+          withLabel={true}
+        />
+        {
+          (signMethod === 'MetaMask'
+            ? (
+              <AddressRow
+                value={metamaskAccountId}
+              />
+
+            ):
+            (
+              <>
         <InputAddress
           label={t<string>('stash account')}
           onChange={setStashId}
@@ -118,6 +154,8 @@ function Bond ({ className = '', isNominating, minNominated, minNominatorBond, m
           type='account'
           value={controllerId}
         />
+              </>))
+        }
         <InputValidationController
           accountId={stashId}
           controllerId={controllerId}

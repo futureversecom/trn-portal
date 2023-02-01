@@ -29,6 +29,8 @@ import ApiContext from './ApiContext';
 import { lightSpecs, relaySpecs } from './light';
 import registry from './typeRegistry';
 import { decodeUrlTypes } from './urlTypes';
+import {metaMaskConnectors} from "@polkadot/react-hooks/useMetaMask";
+import {Web3ReactProvider} from "@web3-react/core";
 
 interface Props {
   children: React.ReactNode;
@@ -340,6 +342,7 @@ function Api ({ apiUrl, children, isElectron, store }: Props): React.ReactElemen
             .catch(onError);
         });
 
+
         setIsApiInitialized(true);
       })
       .catch(onError);
@@ -350,9 +353,12 @@ function Api ({ apiUrl, children, isElectron, store }: Props): React.ReactElemen
   }
 
   return (
+    // @ts-ignore
+    <Web3ReactProvider connectors={[metaMaskConnectors]}>
     <ApiContext.Provider value={value}>
       {children}
     </ApiContext.Provider>
+    </Web3ReactProvider>
   );
 }
 
