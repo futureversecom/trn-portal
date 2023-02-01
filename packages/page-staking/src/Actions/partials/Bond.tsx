@@ -51,7 +51,7 @@ function Bond ({ className = '', isNominating, minNominated, minNominatorBond, m
   const destBalance = useCall<DeriveBalancesAll>(api.derive.balances?.all, [destAccount]);
   const bondedBlocks = useUnbondDuration();
   const signOptions = [{text: 'MetaMask', value: 'MetaMask'},{text: 'Keyring Signer', value: 'Signer'}];
-  const [signMethod, setSignMethod] = useState<string>();
+  const [signMethod, setSignMethod] = useState<string>('MetaMask');
   const [metamaskAccountId, setMetaMaskAccountId] = useState<string | null>();
   const {wallet, connectWallet} = useMetaMask();
   connectWallet();

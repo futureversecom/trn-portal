@@ -51,7 +51,7 @@ function Selection ({ className, defaultValue }: Props): React.ReactElement<Prop
   const {wallet, connectWallet} = useMetaMask();
   const [accountId, setAccountId] = useState<string | null>();
   const [metamaskAccountId, setMetaMaskAccountId] = useState<string | null>();
-  const [signMethod, setSignMethod] = useState<string>();
+  const [signMethod, setSignMethod] = useState<string>('MetaMask');
 
   const [error, setError] = useState<string | null>(null);
   const [extrinsic, setExtrinsic] = useState<SubmittableExtrinsic<'promise'> | null>(null);
