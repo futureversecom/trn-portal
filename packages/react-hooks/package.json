@@ -17,6 +17,7 @@
     "@polkadot/hw-ledger": "^10.3.1",
     "@web3-react/core": "8.0.33-beta.0",
     "@web3-react/metamask": "8.0.26-beta.0",
-    "is-ipfs": "6.0.2"
+    "is-ipfs": "6.0.2",
+    "jotai": "^1.8.4"
   }
 }

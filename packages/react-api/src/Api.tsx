@@ -305,6 +305,7 @@ export function ApiCtxRoot ({ apiUrl, children, isElectron, store }: Props): Rea
             .catch(onError);
         });
 
+
         setIsApiInitialized(true);
       })
       .catch(onError);
