@@ -4,10 +4,10 @@
 import type { QueueTx } from '@polkadot/react-components/Status/types';
 import type { AddressProxy } from './types';
 
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
-import { Button, ErrorBoundary, Modal, Output, StatusContext } from '@polkadot/react-components';
+import { Button, ErrorBoundary, Modal, Output } from '@polkadot/react-components';
 import {useApi, useMetaMask, useQueue, useToggle} from '@polkadot/react-hooks';
 import { nextTick } from '@polkadot/util';
 
