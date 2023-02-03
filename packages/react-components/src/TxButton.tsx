@@ -13,7 +13,7 @@ import { assert, isFunction } from '@polkadot/util';
 import Button from './Button';
 import { useTranslation } from './translate';
 
-function TxButton ({ accountId, className = '', extrinsic: propsExtrinsic, icon, isBasic, isBusy, isDisabled, isIcon, isToplevel, isUnsigned, isMetaMask, label, onClick, onFailed, onSendRef, onStart, onSuccess, onUpdate, params, tooltip, tx, withSpinner, withoutLink }: Props): React.ReactElement<Props> {
+function TxButton ({ accountId, className = '', extrinsic: propsExtrinsic, icon, isBasic, isBusy, isDisabled, isIcon, isMetaMask, isToplevel, isUnsigned, label, onClick, onFailed, onSendRef, onStart, onSuccess, onUpdate, params, tooltip, tx, withSpinner, withoutLink }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
   const mountedRef = useIsMountedRef();
   const { queueExtrinsic } = useQueue();
@@ -85,7 +85,7 @@ function TxButton ({ accountId, className = '', extrinsic: propsExtrinsic, icon,
 
       onClick && onClick();
     },
-    [_onFailed, _onStart, _onSuccess, accountId, isUnsigned, onClick, onFailed, onSuccess, onUpdate, params, propsExtrinsic, queueExtrinsic, setIsSending, tx, withSpinner, mountedRef]
+    [_onFailed, _onStart, _onSuccess, accountId, isMetaMask, isUnsigned, onClick, onFailed, onSuccess, onUpdate, params, propsExtrinsic, queueExtrinsic, setIsSending, tx, withSpinner, mountedRef]
   );
 
   if (onSendRef) {

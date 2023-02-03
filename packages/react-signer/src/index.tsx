@@ -11,12 +11,12 @@ import styled from 'styled-components';
 import { ApiPromise } from '@polkadot/api';
 import { Modal } from '@polkadot/react-components';
 import { useApi, useQueue } from '@polkadot/react-hooks';
+import TxMetaMaskSign from '@polkadot/react-signer/TxMetaMaskSign';
 import { assert, isFunction, loggerFormat } from '@polkadot/util';
 
 import { useTranslation } from './translate';
 import TxSigned from './TxSigned';
 import TxUnsigned from './TxUnsigned';
-import TxMetaMaskSign from "@polkadot/react-signer/TxMetaMaskSign";
 
 interface ItemState {
   currentItem: QueueTx | null;
@@ -134,20 +134,20 @@ function Signer ({ children, className = '' }: Props): React.ReactElement<Props>
         >
           {currentItem.isUnsigned
             ? <TxUnsigned currentItem={currentItem} />
-            : currentItem.isMetaMask ?
-              <TxMetaMaskSign
+            : currentItem.isMetaMask
+              ? <TxMetaMaskSign
                 currentItem={currentItem}
                 requestAddress={requestAddress}
               />
-            : (
-              <TxSigned
-                currentItem={currentItem}
-                isQueueSubmit={isQueueSubmit}
-                queueSize={queueSize}
-                requestAddress={requestAddress}
-                setIsQueueSubmit={setIsQueueSubmit}
-              />
-            )
+              : (
+                <TxSigned
+                  currentItem={currentItem}
+                  isQueueSubmit={isQueueSubmit}
+                  queueSize={queueSize}
+                  requestAddress={requestAddress}
+                  setIsQueueSubmit={setIsQueueSubmit}
+                />
+              )
           }
         </StyledModal>
       )}

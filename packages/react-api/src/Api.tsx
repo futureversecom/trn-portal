@@ -8,6 +8,7 @@ import type { KeyringStore } from '@polkadot/ui-keyring/types';
 import type { ApiProps, ApiState } from './types';
 
 import * as Sc from '@substrate/connect';
+import { Web3ReactProvider } from '@web3-react/core';
 import React, { useEffect, useMemo, useState } from 'react';
 import store from 'store';
 
@@ -17,6 +18,7 @@ import { ethereumChains, typesBundle } from '@polkadot/apps-config';
 import { web3Accounts, web3Enable } from '@polkadot/extension-dapp';
 import { TokenUnit } from '@polkadot/react-components/InputNumber';
 import { useApiUrl, useEndpoint, useQueue } from '@polkadot/react-hooks';
+import { metaMaskConnectors } from '@polkadot/react-hooks/useMetaMask';
 import ApiSigner from '@polkadot/react-signer/signers/ApiSigner';
 import { keyring } from '@polkadot/ui-keyring';
 import { settings } from '@polkadot/ui-settings';
@@ -26,8 +28,6 @@ import { defaults as addressDefaults } from '@polkadot/util-crypto/address/defau
 import { lightSpecs, relaySpecs } from './light';
 import registry from './typeRegistry';
 import { decodeUrlTypes } from './urlTypes';
-import {metaMaskConnectors} from "@polkadot/react-hooks/useMetaMask";
-import {Web3ReactProvider} from "@web3-react/core";
 
 interface Props {
   children: React.ReactNode;
@@ -305,7 +305,6 @@ export function ApiCtxRoot ({ apiUrl, children, isElectron, store }: Props): Rea
             .catch(onError);
         });
 
-
         setIsApiInitialized(true);
       })
       .catch(onError);
@@ -316,11 +315,10 @@ export function ApiCtxRoot ({ apiUrl, children, isElectron, store }: Props): Rea
   }
 
   return (
-    // @ts-ignore
-    <Web3ReactProvider connectors={[metaMaskConnectors]}>
-    <ApiCtx.Provider value={value}>
-      {children}
-    </ApiCtx.Provider>
+    <Web3ReactProvider connectors={[metaMaskConnectors as any]}>
+      <ApiCtx.Provider value={value}>
+        {children}
+      </ApiCtx.Provider>
     </Web3ReactProvider>
   );
 }

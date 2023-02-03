@@ -1,17 +1,17 @@
 // Copyright 2017-2023 @polkadot/react-hooks authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { initializeConnector, useWeb3React } from "@web3-react/core";
-import { MetaMask } from "@web3-react/metamask";
-import { useCallback, useEffect, useState } from "react";
+import { initializeConnector, useWeb3React } from '@web3-react/core';
+import { MetaMask } from '@web3-react/metamask';
+import { useCallback, useEffect, useState } from 'react';
 
 export const [metaMask, metaMaskHooks] = initializeConnector(
   (actions) =>
     new MetaMask({
       actions,
       options: {
-        mustBeMetaMask: true,
-      },
+        mustBeMetaMask: true
+      }
     })
 );
 export const metaMaskConnectors = [metaMask, metaMaskHooks];
@@ -25,36 +25,42 @@ export const useMetaMask = () => {
   const [isConnecting, setIsConnecting] = useState(true);
 
   useEffect(() => {
-    if (typeof window === "undefined") return;
+    if (typeof window === 'undefined') {
+      return;
+    }
+
     setIsMetaMask(window.ethereum?.isMetaMask);
   }, []);
 
   const connectWallet = useCallback(() => {
     metaMask
       .activate(chainId)
-      .then(() => setIsConnecting(false));
-  }, []);
-
+      .then(() => setIsConnecting(false))
+      .catch(console.error);
+  }, [chainId]);
 
   useEffect(() => {
-    if (!isMetaMask || typeof isMetaMask === "undefined" || wallet?.isActive)
+    if (!isMetaMask || typeof isMetaMask === 'undefined' || wallet?.isActive) {
       return;
+    }
 
-    metaMask.connectEagerly().then(() => setIsConnecting(false));
+    metaMask.connectEagerly().then(() => setIsConnecting(false)).catch(console.error);
   }, [isMetaMask, wallet?.isActive]);
 
   // Update connecting state on account change
   useEffect(() => {
-    if (!wallet?.account) return;
+    if (!wallet?.account) {
+      return;
+    }
 
     setIsConnecting(false);
   }, [wallet?.account]);
 
   return {
-    wallet,
-    provider,
     connectWallet,
     isConnecting,
     isMetaMask,
+    provider,
+    wallet
   };
 };

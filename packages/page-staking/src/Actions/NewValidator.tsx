@@ -28,7 +28,7 @@ function NewValidator ({ isInElection, minCommission, targets }: Props): React.R
   const { t } = useTranslation();
   const { api } = useApi();
   const [isVisible, toggleVisible] = useToggle();
-  const [{ bondOwnTx, bondTx, controllerId, controllerTx, stashId, isMetaMask }, setBondInfo] = useState<BondInfo>({});
+  const [{ bondOwnTx, bondTx, controllerId, controllerTx, isMetaMask, stashId }, setBondInfo] = useState<BondInfo>({});
   const [{ sessionTx }, setSessionInfo] = useState<SessionInfo>({});
   const [{ validateTx }, setValidateInfo] = useState<ValidateInfo>({});
   const [step, setStep] = useState(1);
@@ -113,9 +113,9 @@ function NewValidator ({ isInElection, minCommission, targets }: Props): React.R
               ? (
                 <TxButton
                   accountId={stashId}
-                  isMetaMask={isMetaMask as boolean}
                   icon='sign-in-alt'
                   isDisabled={!bondTx || !sessionTx || !validateTx}
+                  isMetaMask={isMetaMask as boolean}
                   label={t<string>('Bond & Validate')}
                   onStart={_toggle}
                   params={[

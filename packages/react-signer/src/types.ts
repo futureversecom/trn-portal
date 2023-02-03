@@ -3,6 +3,8 @@
 
 import type { SignerResult } from '@polkadot/api/types';
 
+import { Header, Index } from '@polkadot/types/interfaces';
+
 export interface AddressFlags {
   accountOffset: number;
   addressOffset: number;
@@ -38,3 +40,5 @@ export interface Signed {
   message: Uint8Array;
   signature: Uint8Array;
 }
+
+export interface SigningInfo { header: Header | null; mortalLength: number; nonce: Index }
