@@ -2,10 +2,13 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import type { BN } from '@polkadot/util';
+import type { ExternalDef } from './types';
 
 import { externalLogos } from '../ui/logos';
 
-export default {
+// NOTE Not maintained, see breakage reports in
+// https://github.com/polkadot-js/apps/issues/8903
+export const Polkastats: ExternalDef = {
   chains: {
     Kusama: 'kusama',
     Polkadot: 'polkadot',
@@ -20,7 +23,6 @@ export default {
     address: 'account',
     block: 'block',
     extrinsic: 'extrinsic',
-    intention: 'intention',
     validator: 'validator'
   },
   url: 'https://polkastats.io/'

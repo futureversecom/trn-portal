@@ -14,7 +14,7 @@ import BondPartial from './partials/Bond';
 function NewStash (): React.ReactElement {
   const { t } = useTranslation();
   const [isVisible, toggleVisible] = useToggle();
-  const [{ bondTx, stashId, isMetaMask }, setBondInfo] = useState<BondInfo>({});
+  const [{ bondTx, isMetaMask, stashId }, setBondInfo] = useState<BondInfo>({});
 
   const _toggle = useCallback(
     (): void => {
@@ -44,10 +44,10 @@ function NewStash (): React.ReactElement {
           <Modal.Actions>
             <TxButton
               accountId={stashId}
-              isMetaMask={isMetaMask as boolean}
               extrinsic={bondTx}
               icon='sign-in-alt'
               isDisabled={!bondTx || !stashId}
+              isMetaMask={isMetaMask as boolean}
               label={t<string>('Bond')}
               onStart={_toggle}
             />

@@ -8,10 +8,10 @@ import type { Codec } from '@polkadot/types/types';
 
 import React, { useMemo } from 'react';
 
-import { Input } from '@polkadot/react-components';
-import { balanceEvents, balanceEventsOverrides } from '@polkadot/react-components/constants';
 import Params from '@polkadot/react-params';
 
+import { balanceEvents, balanceEventsOverrides } from './constants';
+import Input from './Input';
 import { useTranslation } from './translate';
 import { getContractAbi } from './util';
 
@@ -78,12 +78,13 @@ function EventDisplay ({ children, className = '', eventName, value, withExpande
   );
 
   return (
-    <div className={`ui--Event ${className}`}>
+    <div className={`${className} ui--Event`}>
       {children}
       <Params
         isDisabled
         overrides={overrides}
         params={params}
+        registry={value.registry}
         values={values}
         withExpander={withExpander}
       >
@@ -97,6 +98,7 @@ function EventDisplay ({ children, className = '', eventName, value, withExpande
             <Params
               isDisabled
               params={abiEvent.event.args}
+              registry={value.registry}
               values={abiEvent.values}
             />
           </>

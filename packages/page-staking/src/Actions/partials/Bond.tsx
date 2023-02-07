@@ -8,8 +8,8 @@ import type { BondInfo } from './types';
 
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
-import {AddressRow, Dropdown, InputAddress, InputBalance, MarkError, Modal, Static} from '@polkadot/react-components';
-import {useApi, useCall, useMetaMask} from '@polkadot/react-hooks';
+import { AddressRow, Dropdown, InputAddress, InputBalance, MarkError, Modal, Static } from '@polkadot/react-components';
+import { useApi, useCall, useMetaMask } from '@polkadot/react-hooks';
 import { BalanceFree, BlockToTime } from '@polkadot/react-query';
 import { BN_ZERO } from '@polkadot/util';
 
@@ -50,10 +50,11 @@ function Bond ({ className = '', isNominating, minNominated, minNominatorBond, m
   const stashBalance = useCall<DeriveBalancesAll>(api.derive.balances?.all, [stashId]);
   const destBalance = useCall<DeriveBalancesAll>(api.derive.balances?.all, [destAccount]);
   const bondedBlocks = useUnbondDuration();
-  const signOptions = [{text: 'MetaMask', value: 'MetaMask'},{text: 'Keyring Signer', value: 'Signer'}];
+  const signOptions = [{ text: 'MetaMask', value: 'MetaMask' }, { text: 'Keyring Signer', value: 'Signer' }];
   const [signMethod, setSignMethod] = useState<string>('MetaMask');
   const [metamaskAccountId, setMetaMaskAccountId] = useState<string | null>();
-  const {wallet, connectWallet} = useMetaMask();
+  const { connectWallet, wallet } = useMetaMask();
+
   connectWallet();
 
   const options = useMemo(
@@ -78,10 +79,10 @@ function Bond ({ className = '', isNominating, minNominated, minNominatorBond, m
     setStartBalance(null);
   }, [stashId]);
 
-
   useEffect((): void => {
     if (wallet.account) {
-      setMetaMaskAccountId(wallet.account as string);
+      setMetaMaskAccountId(wallet.account);
+
       if (signMethod === 'MetaMask') {
         setControllerId(wallet.account);
         setStashId(wallet.account);
@@ -101,13 +102,12 @@ function Bond ({ className = '', isNominating, minNominated, minNominatorBond, m
           bondTx: api.tx.staking.bond(controllerId, amount, bondDest),
           controllerId,
           controllerTx: api.tx.staking.setController(controllerId),
-          stashId,
-          isMetaMask: signMethod === 'MetaMask'
+          isMetaMask: signMethod === 'MetaMask',
+          stashId
         }
         : EMPTY_INFO
     );
   }, [api, amount, amountError, controllerError, controllerId, destination, destAccount, stashId, onChange, signMethod]);
-
 
   const hasValue = !!amount?.gtn(0);
   const isAccount = destination === 'Account';
@@ -124,8 +124,8 @@ function Bond ({ className = '', isNominating, minNominated, minNominatorBond, m
         }
       >
         <Dropdown
-          label={t<string>('Select Signer')}
           className={`ui--DropdownLinked-Items ${className}`}
+          label={t<string>('Select Signer')}
           onChange={setSignMethod}
           options={signOptions}
           value={signMethod}
@@ -138,22 +138,21 @@ function Bond ({ className = '', isNominating, minNominated, minNominatorBond, m
                 value={metamaskAccountId}
               />
 
-            ):
-            (
+            )
+            : (
               <>
-        <InputAddress
-          label={t<string>('stash account')}
-          onChange={setStashId}
-          type='account'
-          value={stashId}
-        />
-        <InputAddress
-          help={t<string>('The controller is the account that will be used to control any nominating or validating actions. Should not match another stash or controller.')}
-          label={t<string>('controller account')}
-          onChange={setControllerId}
-          type='account'
-          value={controllerId}
-        />
+                <InputAddress
+                  label={t<string>('stash account')}
+                  onChange={setStashId}
+                  type='account'
+                  value={stashId}
+                />
+                <InputAddress
+                  label={t<string>('controller account')}
+                  onChange={setControllerId}
+                  type='account'
+                  value={controllerId}
+                />
               </>))
         }
         <InputValidationController
@@ -174,7 +173,6 @@ function Bond ({ className = '', isNominating, minNominated, minNominatorBond, m
           <InputBalance
             autoFocus
             defaultValue={startBalance}
-            help={t<string>('The total amount of the stash balance that will be at stake in any forthcoming rounds (should be less than the free amount available)')}
             isError={!hasValue || !!amountError?.error}
             label={t<string>('value bonded')}
             labelExtra={
@@ -197,7 +195,6 @@ function Bond ({ className = '', isNominating, minNominated, minNominatorBond, m
           />
           {bondedBlocks?.gtn(0) && (
             <Static
-              help={t<string>('The bonding duration for any staked funds. Needs to be unlocked and withdrawn to become available.')}
               label={t<string>('on-chain bonding duration')}
             >
               <BlockToTime value={bondedBlocks} />
@@ -208,7 +205,6 @@ function Bond ({ className = '', isNominating, minNominated, minNominatorBond, m
       <Modal.Columns hint={t<string>('Rewards (once paid) can be deposited to either the stash or controller, with different effects.')}>
         <Dropdown
           defaultValue={0}
-          help={t<string>('The destination account for any payments as either a nominator or validator')}
           label={t<string>('payment destination')}
           onChange={setDestination}
           options={options}
@@ -216,7 +212,6 @@ function Bond ({ className = '', isNominating, minNominated, minNominatorBond, m
         />
         {isAccount && (
           <InputAddress
-            help={t('An account that is to receive the rewards')}
             label={t('the payment account')}
             onChange={setDestAccount}
             type='account'

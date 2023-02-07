@@ -5,21 +5,15 @@ import type { SubmittableExtrinsic, SubmittableExtrinsicFunction } from '@polkad
 import type { RawParam } from '@polkadot/react-params/types';
 import type { DecodedExtrinsic } from './types';
 
-import React, {useCallback, useEffect, useState} from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
-import {
-  AddressRow,
-  Button,
-  Extrinsic,
-  InputAddress,
-  MarkError,
-  TxButton
-} from '@polkadot/react-components';
-import {useApi, useMetaMask} from '@polkadot/react-hooks';
+import { AddressRow, Button, Extrinsic, InputAddress, MarkError, TxButton } from '@polkadot/react-components';
+import Dropdown from '@polkadot/react-components/Dropdown';
+import { useApi, useMetaMask } from '@polkadot/react-hooks';
 import { BalanceFree } from '@polkadot/react-query';
+
 import Decoded from './Decoded';
 import { useTranslation } from './translate';
-import Dropdown from "@polkadot/react-components/Dropdown";
 
 interface Props {
   className?: string;
@@ -48,7 +42,7 @@ function extractDefaults (value: DecodedExtrinsic | null, defaultFn: Submittable
 function Selection ({ className, defaultValue }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
   const { apiDefaultTxSudo } = useApi();
-  const {wallet, connectWallet} = useMetaMask();
+  const { connectWallet, wallet } = useMetaMask();
   const [accountId, setAccountId] = useState<string | null>();
   const [metamaskAccountId, setMetaMaskAccountId] = useState<string | null>();
   const [signMethod, setSignMethod] = useState<string>('MetaMask');
@@ -56,22 +50,23 @@ function Selection ({ className, defaultValue }: Props): React.ReactElement<Prop
   const [error, setError] = useState<string | null>(null);
   const [extrinsic, setExtrinsic] = useState<SubmittableExtrinsic<'promise'> | null>(null);
   const [{ defaultArgs, defaultFn }] = useState<DefaultExtrinsic>(() => extractDefaults(defaultValue, apiDefaultTxSudo));
-  const options = [{text: 'MetaMask', value: 'MetaMask'},{text: 'Keyring Signer', value: 'Signer'}];
+  const options = [{ text: 'MetaMask', value: 'MetaMask' }, { text: 'Keyring Signer', value: 'Signer' }];
 
   const _onExtrinsicChange = useCallback(
     (method?: SubmittableExtrinsic<'promise'>): void => {
       setExtrinsic(() => method || null);
       connectWallet();
+
       if (wallet.account) {
         setMetaMaskAccountId(wallet.account);
       }
     },
-    []
+    [connectWallet, wallet.account]
   );
 
   useEffect((): void => {
     if (wallet.account) {
-      setMetaMaskAccountId(wallet.account as string);
+      setMetaMaskAccountId(wallet.account);
     }
   }, [wallet.account]);
 
@@ -84,35 +79,35 @@ function Selection ({ className, defaultValue }: Props): React.ReactElement<Prop
   return (
     <div className={className}>
       <Dropdown
+        className={`ui--DropdownLinked-Items ${className as string}`}
         label={t<string>('Select Signer')}
-        className={`ui--DropdownLinked-Items ${className}`}
         onChange={setSignMethod}
         options={options}
         value={signMethod}
         withLabel={true}
       />
       {
-      (signMethod === 'MetaMask'
-        ? (
-          <AddressRow
-            value={metamaskAccountId}
-          />
-
-        ):
-        (
-          <>
-            <InputAddress
-              label={t<string>('using the selected account')}
-              labelExtra={
-                <BalanceFree
-                  label={<label>{t<string>('free balance')}</label>}
-                  params={accountId}
-                />
-              }
-              onChange={setAccountId}
-              type='account'
+        (signMethod === 'MetaMask'
+          ? (
+            <AddressRow
+              value={metamaskAccountId}
             />
-          </>))
+
+          )
+          : (
+            <>
+              <InputAddress
+                label={t<string>('using the selected account')}
+                labelExtra={
+                  <BalanceFree
+                    label={<label>{t<string>('free balance')}</label>}
+                    params={accountId}
+                  />
+                }
+                onChange={setAccountId}
+                type='account'
+              />
+            </>))
       }
       <Extrinsic
         defaultArgs={defaultArgs}
@@ -139,8 +134,8 @@ function Selection ({ className, defaultValue }: Props): React.ReactElement<Prop
         <TxButton
           accountId={ signMethod === 'MetaMask' ? metamaskAccountId : accountId }
           extrinsic={extrinsic}
-          isMetaMask={ signMethod === 'MetaMask' ? true : undefined }
           icon='sign-in-alt'
+          isMetaMask={ signMethod === 'MetaMask' ? true : undefined }
           label={ signMethod === 'MetaMask' ? t<string>('Submit Via Metamask') : t<string>('Submit Transaction')}
         />
       </Button.Group>

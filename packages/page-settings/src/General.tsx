@@ -114,7 +114,6 @@ function General ({ className = '' }: Props): React.ReactElement<Props> {
                   ? ledgerConn
                   : ledgerConnOptions[0].value
               }
-              help={t<string>('Manage your connection to Ledger S')}
               isDisabled={!hasWebUsb}
               label={t<string>('manage hardware connections')}
               onChange={_handleChange('ledgerConn')}

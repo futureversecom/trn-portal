@@ -1,7 +1,7 @@
 // Copyright 2017-2023 @polkadot/react-components authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { ThemeDef } from '../types';
+import type { ThemeDef } from '@polkadot/react-hooks/ctx/types';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default (_theme: ThemeDef): string => `
@@ -46,7 +46,6 @@ export default (_theme: ThemeDef): string => `
 
   button.ui--Button {
     font: var(--font-sans);
-    font-size: var(--font-size-button);
   }
 
   .editable {

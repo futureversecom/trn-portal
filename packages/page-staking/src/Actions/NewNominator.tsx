@@ -26,7 +26,7 @@ function NewNominator ({ isInElection, targets }: Props): React.ReactElement<Pro
   const { t } = useTranslation();
   const { api } = useApi();
   const [isVisible, toggleVisible] = useToggle();
-  const [{ bondOwnTx, bondTx, controllerId, controllerTx, stashId, isMetaMask }, setBondInfo] = useState<BondInfo>({});
+  const [{ bondOwnTx, bondTx, controllerId, controllerTx, isMetaMask, stashId }, setBondInfo] = useState<BondInfo>({});
   const [{ nominateTx }, setNominateInfo] = useState<NominateInfo>({});
   const [step, setStep] = useState(1);
   const isDisabled = isInElection || !isFunction(api.tx.utility?.batch);
@@ -104,9 +104,9 @@ function NewNominator ({ isInElection, targets }: Props): React.ReactElement<Pro
               ? (
                 <TxButton
                   accountId={stashId}
-                  isMetaMask={isMetaMask as boolean}
                   icon='sign-in-alt'
                   isDisabled={!bondTx || !nominateTx || !stashId || !controllerId}
+                  isMetaMask={isMetaMask as boolean}
                   label={t<string>('Bond & Nominate')}
                   onStart={_toggle}
                   params={[
