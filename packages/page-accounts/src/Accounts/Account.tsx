@@ -16,7 +16,18 @@ import styled from 'styled-components';
 import { ApiPromise } from '@polkadot/api';
 import useAccountLocks from '@polkadot/app-referenda/useAccountLocks';
 import { AddressInfo, AddressSmall, Badge, Button, ChainLock, Columar, CryptoType, Forget, LinkExternal, Menu, Popup, Table, Tags } from '@polkadot/react-components';
-import { useAccountInfo, useApi, useBalancesAll, useBestNumber, useCall, useLedger, useQueue, useStakingInfo, useToggle } from '@polkadot/react-hooks';
+import {
+  useAccountInfo,
+  useApi,
+  useBalancesAll,
+  useBestNumber,
+  useCall,
+  useLedger,
+  useMetaMask,
+  useQueue,
+  useStakingInfo,
+  useToggle
+} from '@polkadot/react-hooks';
 import { keyring } from '@polkadot/ui-keyring';
 import { BN, BN_ZERO, formatBalance, formatNumber, isFunction } from '@polkadot/util';
 
@@ -156,12 +167,13 @@ function Account ({ account: { address, meta }, className = '', delegation, filt
   const { getLedger } = useLedger();
   const bestNumber = useBestNumber();
   const balancesAll = useBalancesAll(address);
+ // console.log('balancesAll::',balancesAll);
   const stakingInfo = useStakingInfo(address);
   const democracyLocks = useCall<DeriveDemocracyLock[]>(api.api.derive.democracy?.locks, [address]);
   const recoveryInfo = useCall<RecoveryConfig | null>(api.api.query.recovery?.recoverable, [address], transformRecovery);
   const multiInfos = useMultisigApprovals(address);
   const proxyInfo = useProxies(address);
-  const { flags: { isDevelopment, isEditable, isEthereum, isExternal, isHardware, isInjected, isMultisig, isProxied }, genesisHash, identity, name: accName, onSetGenesisHash, tags } = useAccountInfo(address);
+  const { flags: { isDevelopment, isEditable, isEthereum, isExternal, isHardware, isInjected, isMetaMask, isMultisig, isProxied }, genesisHash, identity, name: accName, onSetGenesisHash, tags } = useAccountInfo(address);
   const convictionLocks = useAccountLocks('referenda', 'convictionVoting', address);
   const [{ democracyUnlockTx }, setDemocracyUnlock] = useState<DemocracyUnlockable>({ democracyUnlockTx: null, ids: [] });
   const [{ referendaUnlockTx }, setReferandaUnlock] = useState<ReferendaUnlockable>({ ids: [], referendaUnlockTx: null });
@@ -179,6 +191,11 @@ function Account ({ account: { address, meta }, className = '', delegation, filt
   const [isTransferOpen, toggleTransfer] = useToggle();
   const [isDelegateOpen, toggleDelegate] = useToggle();
   const [isUndelegateOpen, toggleUndelegate] = useToggle();
+  const { connectWallet, wallet } = useMetaMask();
+
+  useEffect((): void => {
+    connectWallet();
+  }, [wallet.account]);
 
   useEffect((): void => {
     if (balancesAll) {
@@ -345,7 +362,7 @@ function Account ({ account: { address, meta }, className = '', delegation, filt
       )
     ], t('Identity')),
     createMenuGroup('deriveGroup', [
-      !(isEthereum || isExternal || isHardware || isInjected || isMultisig || api.isEthereum) && (
+      !(isEthereum || isExternal || isHardware || isInjected || isMetaMask || isMultisig || api.isEthereum) && (
         <Menu.Item
           icon='download'
           key='deriveAccount'
@@ -363,7 +380,7 @@ function Account ({ account: { address, meta }, className = '', delegation, filt
       )
     ], t('Derive')),
     createMenuGroup('backupGroup', [
-      !(isExternal || isHardware || isInjected || isMultisig || isDevelopment) && (
+      !(isExternal || isHardware || isInjected || isMetaMask || isMultisig || isDevelopment) && (
         <Menu.Item
           icon='database'
           key='backupJson'
@@ -371,7 +388,7 @@ function Account ({ account: { address, meta }, className = '', delegation, filt
           onClick={toggleBackup}
         />
       ),
-      !(isExternal || isHardware || isInjected || isMultisig || isDevelopment) && (
+      !(isExternal || isHardware || isInjected || isMetaMask || isMultisig || isDevelopment) && (
         <Menu.Item
           icon='edit'
           key='changePassword'
@@ -379,7 +396,7 @@ function Account ({ account: { address, meta }, className = '', delegation, filt
           onClick={togglePassword}
         />
       ),
-      !(isInjected || isDevelopment) && (
+      !(isInjected || isMetaMask || isDevelopment) && (
         <Menu.Item
           icon='trash-alt'
           key='forgetAccount'
@@ -473,7 +490,7 @@ function Account ({ account: { address, meta }, className = '', delegation, filt
         />
         <td className='address all relative'>
           <AddressSmall
-            parentAddress={meta.parentAddress as string}
+            parentAddress={meta?.parentAddress as string}
             value={address}
             withShortAddress
           />
@@ -533,6 +550,7 @@ function Account ({ account: { address, meta }, className = '', delegation, filt
           {isTransferOpen && (
             <Transfer
               key='modal-transfer'
+              isMetaMask={isMetaMask}
               onClose={toggleTransfer}
               senderId={address}
             />
@@ -577,7 +595,7 @@ function Account ({ account: { address, meta }, className = '', delegation, filt
             />
           )}
           <div className='absolute'>
-            {meta.genesisHash
+            {meta && meta.genesisHash
               ? <Badge color='transparent' />
               : isDevelopment
                 ? (
@@ -587,7 +605,11 @@ function Account ({ account: { address, meta }, className = '', delegation, filt
                     icon='wrench'
                   />
                 )
-                : (
+                : isMetaMask ? <Badge
+                  className='warning'
+                  hover={t<string>('This is a Metamask account.')}
+                  icon='wrench'
+                /> : (
                   <Badge
                     className='warning'
                     hover={

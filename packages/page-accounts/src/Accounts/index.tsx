@@ -12,7 +12,7 @@ import styled from 'styled-components';
 
 import { Button, FilterInput, SortDropdown, SummaryBox, Table } from '@polkadot/react-components';
 import { getAccountCryptoType } from '@polkadot/react-components/util';
-import { useAccounts, useApi, useDelegations, useFavorites, useIpfs, useLedger, useNextTick, useProxies, useToggle } from '@polkadot/react-hooks';
+import { useAccounts, useApi, useDelegations, useFavorites, useIpfs, useLedger, useMetaMask, useNextTick, useProxies, useToggle } from '@polkadot/react-hooks';
 import { keyring } from '@polkadot/ui-keyring';
 import { settings } from '@polkadot/ui-settings';
 import { BN_ZERO, isFunction } from '@polkadot/util';
@@ -45,13 +45,13 @@ interface SortControls {
   sortFromMax: boolean;
 }
 
-type GroupName = 'accounts' | 'hardware' | 'injected' | 'multisig' | 'proxied' | 'qr' | 'testing';
+type GroupName = 'accounts' | 'hardware' | 'injected' | 'metamask' | 'multisig' | 'proxied' | 'qr' | 'testing';
 
 const DEFAULT_SORT_CONTROLS: SortControls = { sortBy: 'date', sortFromMax: true };
 
 const STORE_FAVS = 'accounts:favorites';
 
-const GROUP_ORDER: GroupName[] = ['accounts', 'injected', 'qr', 'hardware', 'proxied', 'multisig', 'testing'];
+const GROUP_ORDER: GroupName[] = ['accounts', 'injected', 'qr', 'hardware', 'proxied', 'metamask', 'multisig', 'testing'];
 
 function groupAccounts (accounts: SortedAccount[]): Record<GroupName, string[]> {
   const ret: Record<GroupName, string[]> = {
@@ -61,14 +61,16 @@ function groupAccounts (accounts: SortedAccount[]): Record<GroupName, string[]> 
     multisig: [],
     proxied: [],
     qr: [],
-    testing: []
+    testing: [],
+    metamask: []
   };
 
   for (let i = 0; i < accounts.length; i++) {
     const { account, address } = accounts[i];
     const cryptoType = getAccountCryptoType(address);
-
-    if (account?.meta.isHardware) {
+    if (account?.meta?.isMetaMask && account ) {
+      ret.metamask.push(account.address);
+    } else if (account?.meta.isHardware) {
       ret.hardware.push(address);
     } else if (account?.meta.isTesting) {
       ret.testing.push(address);
@@ -84,6 +86,7 @@ function groupAccounts (accounts: SortedAccount[]): Record<GroupName, string[]> 
       ret.accounts.push(address);
     }
   }
+  console.log('ret::',ret);
 
   return ret;
 }
@@ -107,6 +110,7 @@ function Overview ({ className = '', onStatusChange }: Props): React.ReactElemen
   const [{ sortBy, sortFromMax }, setSortBy] = useState<SortControls>(DEFAULT_SORT_CONTROLS);
   const delegations = useDelegations();
   const proxies = useProxies();
+  const { wallet, connectWallet } = useMetaMask();
   const isNextTick = useNextTick();
 
   const onSortChange = useCallback(
@@ -169,7 +173,8 @@ function Overview ({ className = '', onStatusChange }: Props): React.ReactElemen
   );
 
   const accountsMap = useMemo(
-    () => allAccounts
+    () => {
+      const res = allAccounts
       .map((address, index): Omit<SortedAccount, 'account'> & { account: KeyringAddress | undefined } => {
         const deleg = delegations && delegations[index]?.isDelegating && delegations[index]?.asDelegating;
         const delegation: Delegation | undefined = (deleg && {
@@ -184,14 +189,24 @@ function Overview ({ className = '', onStatusChange }: Props): React.ReactElemen
           delegation,
           isFavorite: favoritesMap[address ?? ''] ?? false
         };
-      })
-      .filter((a): a is SortedAccount => !!a.account)
+      });
+      if (wallet.account) {
+        res.push({account: {address: wallet.account, meta:
+              {isMetaMask: true, name: 'MetaMaskAccount', tags: Array(0), whenCreated: 1659932964839},
+          publicKey:new Uint8Array()}, address: wallet.account, isFavorite: false});
+      }
+
+      res.filter((a): a is SortedAccount => !!a.account)
       .reduce((ret: Record<string, SortedAccount>, x) => {
         ret[x.address] = x;
 
         return ret;
-      }, {}),
-    [allAccounts, favoritesMap, delegations]
+      }, {});
+
+      console.log('Res ********** ', res);
+      return res;
+    },
+    [allAccounts, favoritesMap, delegations, wallet.account]
   );
 
   const header = useMemo(
@@ -203,7 +218,8 @@ function Overview ({ className = '', onStatusChange }: Props): React.ReactElemen
         multisig: [[<>{t('multisig')}<div className='sub'>{t<string>('on-chain multisig accounts')}</div></>]],
         proxied: [[<>{t('proxied')}<div className='sub'>{t<string>('on-chain proxied accounts')}</div></>]],
         qr: [[<>{t('via qr')}<div className='sub'>{t<string>('accounts available via mobile devices')}</div></>]],
-        testing: [[<>{t('development')}<div className='sub'>{t<string>('accounts derived via development seeds')}</div></>]]
+        testing: [[<>{t('development')}<div className='sub'>{t<string>('accounts derived via development seeds')}</div></>]],
+        metamask: [[<>{t('metamask')}<div className='sub'>{t<string>('accounts derived via metamask')}</div></>]]
       };
 
       Object.values(ret).forEach((a): void => {
@@ -220,6 +236,7 @@ function Overview ({ className = '', onStatusChange }: Props): React.ReactElemen
     () => groupAccounts(sortedAccounts),
     [sortedAccounts]
   );
+  console.log('accountsMap::',accountsMap);
 
   const accounts = useMemo(
     () => Object.values(accountsMap).reduce<Record<string, React.ReactNode>>((all, { account, address, delegation, isFavorite }, index) => {
@@ -243,6 +260,8 @@ function Overview ({ className = '', onStatusChange }: Props): React.ReactElemen
 
   const groups = useMemo(
     () => GROUP_ORDER.reduce<Record<string, React.ReactNode[]>>((groups, group) => {
+      console.log('groups:::',groups);
+      console.log('group::',group);
       const items = grouped[group];
 
       if (items.length) {
@@ -253,6 +272,8 @@ function Overview ({ className = '', onStatusChange }: Props): React.ReactElemen
     }, {}),
     [grouped, accounts]
   );
+
+  console.log('groups[group]::',groups);
 
   useEffect((): void => {
     setSorted((prev) => [
@@ -334,20 +355,20 @@ function Overview ({ className = '', onStatusChange }: Props): React.ReactElemen
           />
         </section>
         <Button.Group>
-          {canStoreAccounts && (
+          {/*{canStoreAccounts && (*/}
             <>
               <Button
                 icon='plus'
-                label={t<string>('Account')}
+                label={t<string>('MetaMask Account')}
                 onClick={toggleCreate}
               />
-              <Button
-                icon='sync'
-                label={t<string>('From JSON')}
-                onClick={toggleImport}
-              />
+              {/*<Button*/}
+              {/*  icon='sync'*/}
+              {/*  label={t<string>('From JSON')}*/}
+              {/*  onClick={toggleImport}*/}
+              {/*/>*/}
             </>
-          )}
+          {/*)}*/}
           <Button
             icon='qrcode'
             label={t<string>('From Qr')}

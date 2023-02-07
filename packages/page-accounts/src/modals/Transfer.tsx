@@ -22,6 +22,7 @@ interface Props {
   onClose: () => void;
   recipientId?: string;
   senderId?: string;
+  isMetaMask?: boolean;
 }
 
 function isRefcount (accountInfo: AccountInfoWithProviders | AccountInfoWithRefCount): accountInfo is AccountInfoWithRefCount {
@@ -41,7 +42,7 @@ async function checkPhishing (_senderId: string | null, recipientId: string | nu
   ];
 }
 
-function Transfer ({ className = '', onClose, recipientId: propRecipientId, senderId: propSenderId }: Props): React.ReactElement<Props> {
+function Transfer ({ className = '', onClose, recipientId: propRecipientId, senderId: propSenderId, isMetaMask }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
   const { api } = useApi();
   const [amount, setAmount] = useState<BN | undefined>(BN_ZERO);
@@ -54,6 +55,8 @@ function Transfer ({ className = '', onClose, recipientId: propRecipientId, send
   const [[, recipientPhish], setPhishing] = useState<[string | null, string | null]>([null, null]);
   const balances = useCall<DeriveBalancesAll>(api.derive.balances?.all, [propSenderId || senderId]);
   const accountInfo = useCall<AccountInfoWithProviders | AccountInfoWithRefCount>(api.query.system.account, [propSenderId || senderId]);
+  console.log('********************');
+  console.log('isMetaMask::',isMetaMask);
 
   useEffect((): void => {
     const fromId = propSenderId || senderId as string;
@@ -203,6 +206,7 @@ function Transfer ({ className = '', onClose, recipientId: propRecipientId, send
           isDisabled={!hasAvailable || !(propRecipientId || recipientId) || !amount || !!recipientPhish}
           label={t<string>('Make Transfer')}
           onStart={onClose}
+          isMetaMask
           params={
             canToggleAll && isAll
               ? isFunction(api.tx.balances?.transferAll)

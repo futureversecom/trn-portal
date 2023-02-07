@@ -28,6 +28,7 @@ const IS_NONE = {
   isHardware: false,
   isInContacts: false,
   isInjected: false,
+  isMetaMask: false,
   isMultisig: false,
   isNominator: false,
   isOwned: false,
@@ -120,7 +121,7 @@ function useAccountInfoImpl (value: string | null, isContract = false): UseAccou
         const accountOrAddress = keyring.getAccount(value) || keyring.getAddress(value);
         const isOwned = isAccount(value);
         const isInContacts = isAddress(value);
-
+        const isMetaMask = accountOrAddress === undefined;
         setGenesisHash(accountOrAddress?.meta.genesisHash || null);
         setFlags((flags): AddressFlags => ({
           ...flags,
@@ -131,14 +132,19 @@ function useAccountInfoImpl (value: string | null, isContract = false): UseAccou
           isHardware: !!accountOrAddress?.meta.isHardware || false,
           isInContacts,
           isInjected: !!accountOrAddress?.meta.isInjected || false,
+          isMetaMask,
           isMultisig: !!accountOrAddress?.meta.isMultisig || false,
           isOwned,
           isProxied: !!accountOrAddress?.meta.isProxied || false
         }));
         setMeta(accountOrAddress?.meta);
         setName(accountOrAddress?.meta.name || '');
+        if (isMetaMask) {
+          setName('MetaMask_Account');
+        }
         setSortedTags(accountOrAddress?.meta.tags ? (accountOrAddress.meta.tags as string[]).sort() : []);
       } catch (error) {
+        console.log('Error:::::::::::',error);
         // ignore
       }
     }
