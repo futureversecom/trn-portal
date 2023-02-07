@@ -23,6 +23,7 @@ import createItem from './createItem';
 
 interface Props {
   className?: string;
+  isMetaMask?: boolean
   defaultValue?: Uint8Array | string | null;
   filter?: string[] | null;
   hideAddress?: boolean;
@@ -150,9 +151,8 @@ class InputAddress extends React.PureComponent<Props, State> {
   }
 
   public override render (): React.ReactNode {
-    const { className = '', defaultValue, hideAddress = false, isDisabled = false, isError, isMultiple, label, labelExtra, options, optionsAll, placeholder, type = DEFAULT_TYPE, withEllipsis, withLabel } = this.props;
+    const { className = '', isMetaMask, defaultValue, hideAddress = false, isDisabled = false, isError, isMultiple, label, labelExtra, options, optionsAll, placeholder, type = DEFAULT_TYPE, withEllipsis, withLabel } = this.props;
     const hasOptions = (options && options.length !== 0) || (optionsAll && Object.keys(optionsAll[type]).length !== 0);
-
     // the options could be delayed, don't render without
     if (!hasOptions && !isDisabled) {
       // This is nasty, but since this things is non-functional, there is not much
@@ -176,7 +176,7 @@ class InputAddress extends React.PureComponent<Props, State> {
           ? lastValue
           : (lastOption && lastOption.value)
     );
-    const actualOptions: Option[] = options
+    let actualOptions: Option[] = options
       ? dedupe(options.map((o) => createItem(o)))
       : isDisabled && actualValue
         ? [createOption(actualValue)]
@@ -186,6 +186,8 @@ class InputAddress extends React.PureComponent<Props, State> {
     const _defaultValue = (isMultiple || !isUndefined(value))
       ? undefined
       : actualValue;
+
+    actualOptions = isMetaMask ? actualOptions.filter(o => o?.name?.startsWith('MetaMask_')) : actualOptions.filter(o => !o?.name?.startsWith('MetaMask_'));
 
     return (
       <StyledDropdown
@@ -252,6 +254,7 @@ class InputAddress extends React.PureComponent<Props, State> {
 
   private getFiltered (): Option[] {
     const { filter, optionsAll, type = DEFAULT_TYPE, withExclude = false } = this.props;
+    // const filteredOptions = optionsAll ?  optionsAll.filter
 
     return !optionsAll
       ? []

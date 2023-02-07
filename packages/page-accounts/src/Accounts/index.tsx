@@ -68,7 +68,7 @@ function groupAccounts (accounts: SortedAccount[]): Record<GroupName, string[]> 
   for (let i = 0; i < accounts.length; i++) {
     const { account, address } = accounts[i];
     const cryptoType = getAccountCryptoType(address);
-    if (account?.meta?.isMetaMask && account ) {
+    if (account?.meta?.source === 'isMetaMask') {
       ret.metamask.push(account.address);
     } else if (account?.meta.isHardware) {
       ret.hardware.push(address);
@@ -110,7 +110,7 @@ function Overview ({ className = '', onStatusChange }: Props): React.ReactElemen
   const [{ sortBy, sortFromMax }, setSortBy] = useState<SortControls>(DEFAULT_SORT_CONTROLS);
   const delegations = useDelegations();
   const proxies = useProxies();
-  const { wallet, connectWallet } = useMetaMask();
+  const { wallet } = useMetaMask();
   const isNextTick = useNextTick();
 
   const onSortChange = useCallback(
@@ -190,11 +190,6 @@ function Overview ({ className = '', onStatusChange }: Props): React.ReactElemen
           isFavorite: favoritesMap[address ?? ''] ?? false
         };
       });
-      if (wallet.account) {
-        res.push({account: {address: wallet.account, meta:
-              {isMetaMask: true, name: 'MetaMaskAccount', tags: Array(0), whenCreated: 1659932964839},
-          publicKey:new Uint8Array()}, address: wallet.account, isFavorite: false});
-      }
 
       res.filter((a): a is SortedAccount => !!a.account)
       .reduce((ret: Record<string, SortedAccount>, x) => {

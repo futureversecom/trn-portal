@@ -121,7 +121,7 @@ function useAccountInfoImpl (value: string | null, isContract = false): UseAccou
         const accountOrAddress = keyring.getAccount(value) || keyring.getAddress(value);
         const isOwned = isAccount(value);
         const isInContacts = isAddress(value);
-        const isMetaMask = accountOrAddress === undefined;
+        const isMetaMask = accountOrAddress?.meta?.source === 'isMetaMask';
         setGenesisHash(accountOrAddress?.meta.genesisHash || null);
         setFlags((flags): AddressFlags => ({
           ...flags,
@@ -131,8 +131,8 @@ function useAccountInfoImpl (value: string | null, isContract = false): UseAccou
           isExternal: !!accountOrAddress?.meta.isExternal || false,
           isHardware: !!accountOrAddress?.meta.isHardware || false,
           isInContacts,
-          isInjected: !!accountOrAddress?.meta.isInjected || false,
           isMetaMask,
+          isInjected: !!accountOrAddress?.meta.isInjected || false,
           isMultisig: !!accountOrAddress?.meta.isMultisig || false,
           isOwned,
           isProxied: !!accountOrAddress?.meta.isProxied || false

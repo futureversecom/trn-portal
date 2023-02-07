@@ -84,7 +84,6 @@ function Bond ({ className = '', isNominating, minNominated, minNominatorBond, m
       setMetaMaskAccountId(wallet.account);
 
       if (signMethod === 'MetaMask') {
-        setControllerId(wallet.account);
         setStashId(wallet.account);
       }
     }
@@ -134,10 +133,18 @@ function Bond ({ className = '', isNominating, minNominated, minNominatorBond, m
         {
           (signMethod === 'MetaMask'
             ? (
+              <>
               <AddressRow
                 value={metamaskAccountId}
               />
-
+              <InputAddress
+                label={t<string>('controller account')}
+                onChange={setControllerId}
+                type='account'
+                isMetaMask
+                value={controllerId}
+              />
+              </>
             )
             : (
               <>

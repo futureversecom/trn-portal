@@ -14,6 +14,8 @@ import { settings } from '@polkadot/ui-settings';
 
 import Apps from './Apps';
 import { darkTheme, lightTheme } from './themes';
+import {metaMaskConnectors} from "../../react-hooks/src/useMetaMask";
+import { Web3ReactProvider } from '@web3-react/core';
 
 interface Props {
   isElectron: boolean;
@@ -41,6 +43,7 @@ function Root ({ isElectron, store }: Props): React.ReactElement<Props> {
   // The ordering here is critical. It defines the hierarchy of dependencies,
   // i.e. Block* could from Api. Certainly no cross-deps allowed
   return (
+    <Web3ReactProvider connectors={[metaMaskConnectors as any]}>
     <Suspense fallback='...'>
       <ThemeProvider theme={theme}>
         <KeyringCtxRoot>
@@ -66,6 +69,7 @@ function Root ({ isElectron, store }: Props): React.ReactElement<Props> {
         </KeyringCtxRoot>
       </ThemeProvider>
     </Suspense>
+    </Web3ReactProvider>
   );
 }
 
