@@ -10,7 +10,7 @@ on:
         type: choice
         required: true
         description: Select a Substrate Ingestor PROD branch
-        options: ["", "prod/substrate-portal"]
+        options: ["", "prod/all"]
       token:
         type: string
         description: Deploy token, generate one with `repo` permission
