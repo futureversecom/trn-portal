@@ -96,7 +96,7 @@ async function getInjectedAccounts (injectedPromise: Promise<InjectedExtension[]
       })
     }));
     if (metamaskAccount) {
-      injectedAccounts.push(({address: metamaskAccount, meta: {source: "isMetaMask", name: `MetaMask_.${metamaskAccount}`, whenCreated: 1659932964839}}));
+      injectedAccounts.push(({address: metamaskAccount, meta: {source: "isMetaMask", name: `MetaMask_${metamaskAccount}`, whenCreated: 1659932964839}}));
     }
     console.log('Injected accounts::', injectedAccounts);
     return injectedAccounts;
@@ -305,7 +305,7 @@ export function ApiCtxRoot ({ apiUrl, children, isElectron, store }: Props): Rea
 
           loadOnReady(api, apiEndpoint, injectedPromise, store, types, wallet.account)
             .then(setState)
-            .catch(onError);
+            // .catch(onError);
         });
 
         setIsApiInitialized(true);
