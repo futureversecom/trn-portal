@@ -282,6 +282,7 @@ function Overview ({ className = '', onStatusChange }: Props): React.ReactElemen
     ]);
   }, [accountsMap]);
 
+
   useEffect((): void => {
     setSorted((sortedAccounts) =>
       sortAccounts(sortedAccounts, accountsMap, balances.accounts, sortBy, sortFromMax));
@@ -350,20 +351,20 @@ function Overview ({ className = '', onStatusChange }: Props): React.ReactElemen
           />
         </section>
         <Button.Group>
-          {/*{canStoreAccounts && (*/}
+          {canStoreAccounts && (
             <>
               <Button
                 icon='plus'
-                label={t<string>('MetaMask Account')}
+                label={t<string>('Account')}
                 onClick={toggleCreate}
               />
-              {/*<Button*/}
-              {/*  icon='sync'*/}
-              {/*  label={t<string>('From JSON')}*/}
-              {/*  onClick={toggleImport}*/}
-              {/*/>*/}
+              <Button
+                icon='sync'
+                label={t<string>('From JSON')}
+                onClick={toggleImport}
+              />
             </>
-          {/*)}*/}
+          )}
           <Button
             icon='qrcode'
             label={t<string>('From Qr')}

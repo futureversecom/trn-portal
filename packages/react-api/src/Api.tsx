@@ -292,6 +292,7 @@ export function ApiCtxRoot ({ apiUrl, children, isElectron, store }: Props): Rea
 
       setApiError((error as Error).message);
     };
+
     createApi(apiUrl, new ApiSigner(registry, queuePayload, queueSetTxStatus), onError)
       .then((types): void => {
         api.on('connected', () => setIsApiConnected(true));
