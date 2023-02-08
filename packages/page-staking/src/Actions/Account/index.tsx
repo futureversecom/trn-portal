@@ -7,7 +7,8 @@ import type { PalletStakingUnappliedSlash } from '@polkadot/types/lookup';
 import type { SortedTargets } from '../../types';
 import type { Slash } from '../types';
 
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import localStore from 'store';
 import styled from 'styled-components';
 
 import { ApiPromise } from '@polkadot/api';
@@ -75,12 +76,25 @@ function Account ({ allSlashes, className = '', info: { controllerId, destinatio
   const [isSetSessionOpen, toggleSetSession] = useToggle();
   const [isUnbondOpen, toggleUnbond] = useToggle();
   const [isValidateOpen, toggleValidate] = useToggle();
+  const [isMetaMask, setIsMetaMask] = useState<boolean>(false);
   const { balancesAll, spanCount, stakingAccount } = useStashCalls(api, stashId);
 
   const slashes = useMemo(
     () => extractSlashes(stashId, allSlashes),
     [allSlashes, stashId]
   );
+
+  useEffect((): void => {
+    /* eslint-disable @typescript-eslint/no-unsafe-assignment */
+    const metamaskAccounts: string[] = localStore.get('METAMASK_STORAGE_KEY') || [];
+    const isMetaMaskAccSelected: string | undefined = metamaskAccounts.find((address: string) => address === controllerId);
+
+    if (isMetaMaskAccSelected) {
+      setIsMetaMask(true);
+    } else {
+      setIsMetaMask(false);
+    }
+  }, [controllerId]);
 
   const withdrawFunds = useCallback(
     () => queueExtrinsic({
@@ -116,6 +130,7 @@ function Account ({ allSlashes, className = '', info: { controllerId, destinatio
         {isBondExtraOpen && (
           <BondExtra
             controllerId={controllerId}
+            isMetaMask={isMetaMask}
             onClose={toggleBondExtra}
             stakingInfo={stakingAccount}
             stashId={stashId}
@@ -127,6 +142,7 @@ function Account ({ allSlashes, className = '', info: { controllerId, destinatio
         {isKickOpen && controllerId && (
           <KickNominees
             controllerId={controllerId}
+            isMetaMask={isMetaMask}
             onClose={toggleKick}
             stashId={stashId}
           />
@@ -134,6 +150,7 @@ function Account ({ allSlashes, className = '', info: { controllerId, destinatio
         {isNominateOpen && controllerId && (
           <Nominate
             controllerId={controllerId}
+            isMetaMask={isMetaMask}
             nominating={nominating}
             onClose={toggleNominate}
             stashId={stashId}
@@ -143,6 +160,7 @@ function Account ({ allSlashes, className = '', info: { controllerId, destinatio
         {isRebondOpen && (
           <Rebond
             controllerId={controllerId}
+            isMetaMask={isMetaMask}
             onClose={toggleRebond}
             stakingInfo={stakingAccount}
             stashId={stashId}
@@ -151,6 +169,7 @@ function Account ({ allSlashes, className = '', info: { controllerId, destinatio
         {isSetControllerOpen && controllerId && (
           <SetControllerAccount
             defaultControllerId={controllerId}
+            isMetaMask={isMetaMask}
             onClose={toggleSetController}
             stashId={stashId}
           />
@@ -159,6 +178,7 @@ function Account ({ allSlashes, className = '', info: { controllerId, destinatio
           <SetRewardDestination
             controllerId={controllerId}
             defaultDestination={destination}
+            isMetaMask={isMetaMask}
             onClose={toggleRewardDestination}
             stashId={stashId}
           />
@@ -166,6 +186,7 @@ function Account ({ allSlashes, className = '', info: { controllerId, destinatio
         {isSetSessionOpen && controllerId && (
           <SetSessionKey
             controllerId={controllerId}
+            isMetaMask={isMetaMask}
             onClose={toggleSetSession}
             stashId={stashId}
           />
@@ -173,6 +194,7 @@ function Account ({ allSlashes, className = '', info: { controllerId, destinatio
         {isUnbondOpen && (
           <Unbond
             controllerId={controllerId}
+            isMetaMask={isMetaMask}
             onClose={toggleUnbond}
             stakingLedger={stakingLedger}
             stashId={stashId}
@@ -181,6 +203,7 @@ function Account ({ allSlashes, className = '', info: { controllerId, destinatio
         {isValidateOpen && controllerId && (
           <Validate
             controllerId={controllerId}
+            isMetaMask={isMetaMask}
             minCommission={minCommission}
             onClose={toggleValidate}
             stashId={stashId}
@@ -242,6 +265,7 @@ function Account ({ allSlashes, className = '', info: { controllerId, destinatio
                   accountId={controllerId}
                   icon='stop'
                   isDisabled={!isOwnController || isDisabled}
+                  isMetaMask={isMetaMask}
                   key='stop'
                   label={t<string>('Stop')}
                   tx={api.tx.staking.chill}

@@ -151,8 +151,9 @@ class InputAddress extends React.PureComponent<Props, State> {
   }
 
   public override render (): React.ReactNode {
-    const { className = '', isMetaMask, defaultValue, hideAddress = false, isDisabled = false, isError, isMultiple, label, labelExtra, options, optionsAll, placeholder, type = DEFAULT_TYPE, withEllipsis, withLabel } = this.props;
+    const { className = '', defaultValue, hideAddress = false, isDisabled = false, isError, isMultiple, label, labelExtra, options, optionsAll, placeholder, type = DEFAULT_TYPE, withEllipsis, withLabel } = this.props;
     const hasOptions = (options && options.length !== 0) || (optionsAll && Object.keys(optionsAll[type]).length !== 0);
+
     // the options could be delayed, don't render without
     if (!hasOptions && !isDisabled) {
       // This is nasty, but since this things is non-functional, there is not much
@@ -176,7 +177,7 @@ class InputAddress extends React.PureComponent<Props, State> {
           ? lastValue
           : (lastOption && lastOption.value)
     );
-    let actualOptions: Option[] = options
+    const actualOptions: Option[] = options
       ? dedupe(options.map((o) => createItem(o)))
       : isDisabled && actualValue
         ? [createOption(actualValue)]
@@ -187,7 +188,7 @@ class InputAddress extends React.PureComponent<Props, State> {
       ? undefined
       : actualValue;
 
-    actualOptions = isMetaMask ? actualOptions.filter(o => o?.name?.startsWith('MetaMask_')) : actualOptions.filter(o => !o?.name?.startsWith('MetaMask_'));
+    // actualOptions = isMetaMask ? actualOptions.filter(o => o?.name?.startsWith('MetaMask_')) : actualOptions.filter(o => !o?.name?.startsWith('MetaMask_'));
 
     return (
       <StyledDropdown

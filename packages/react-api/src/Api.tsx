@@ -9,14 +9,14 @@ import type { ApiProps, ApiState } from './types';
 
 import * as Sc from '@substrate/connect';
 import React, { useEffect, useMemo, useState } from 'react';
-import store from 'store';
+import localStore from 'store';
 
 import { ApiPromise, ScProvider, WsProvider } from '@polkadot/api';
 import { deriveMapCache, setDeriveCache } from '@polkadot/api-derive/util';
 import { ethereumChains, typesBundle } from '@polkadot/apps-config';
 import { web3Accounts, web3Enable } from '@polkadot/extension-dapp';
 import { TokenUnit } from '@polkadot/react-components/InputNumber';
-import {useApiUrl, useEndpoint, useMetaMask, useQueue} from '@polkadot/react-hooks';
+import { useApiUrl, useEndpoint, useMetaMask, useQueue } from '@polkadot/react-hooks';
 import ApiSigner from '@polkadot/react-signer/signers/ApiSigner';
 import { keyring } from '@polkadot/ui-keyring';
 import { settings } from '@polkadot/ui-settings';
@@ -65,16 +65,16 @@ let api: ApiPromise;
 
 export { api };
 
-function isKeyringLoaded () {
-  try {
-    return !!keyring.keyring;
-  } catch {
-    return false;
-  }
-}
+// function isKeyringLoaded () {
+//   try {
+//     return !!keyring.keyring;
+//   } catch {
+//     return false;
+//   }
+// }
 
 function getDevTypes (): Record<string, Record<string, string>> {
-  const types = decodeUrlTypes() || store.get('types', {}) as Record<string, Record<string, string>>;
+  const types = decodeUrlTypes() || localStore.get('types', {}) as Record<string, Record<string, string>>;
   const names = Object.keys(types);
 
   names.length && console.log('Injected types:', names.join(', '));
@@ -82,7 +82,7 @@ function getDevTypes (): Record<string, Record<string, string>> {
   return types;
 }
 
-async function getInjectedAccounts (injectedPromise: Promise<InjectedExtension[]>, metamaskAccount: string | undefined): Promise<InjectedAccountExt[]> {
+async function getInjectedAccounts (injectedPromise: Promise<InjectedExtension[]>): Promise<InjectedAccountExt[]> {
   try {
     await injectedPromise;
 
@@ -95,10 +95,13 @@ async function getInjectedAccounts (injectedPromise: Promise<InjectedExtension[]
         whenCreated
       })
     }));
-    if (metamaskAccount) {
-      injectedAccounts.push(({address: metamaskAccount, meta: {source: "isMetaMask", name: `MetaMask_${metamaskAccount}`, whenCreated: 1659932964839}}));
-    }
-    console.log('Injected accounts::', injectedAccounts);
+    /* eslint-disable @typescript-eslint/no-unsafe-assignment */
+    const metamaskAccounts: string[] = localStore.get('METAMASK_STORAGE_KEY');
+
+    metamaskAccounts && metamaskAccounts.forEach((acc: string) => {
+      injectedAccounts.push(({ address: acc, meta: { name: `MetaMask_${acc}`, source: 'isMetaMask', whenCreated: 1659932964839 } }));
+    });
+
     return injectedAccounts;
   } catch (error) {
     console.error('web3Accounts', error);
@@ -115,7 +118,7 @@ function makeCreateLink (baseApiUrl: string, isElectron: boolean): (path: string
     }?rpc=${encodeURIComponent(apiUrl || baseApiUrl)}#${path}`;
 }
 
-async function retrieve (api: ApiPromise, injectedPromise: Promise<InjectedExtension[]>, metamaskAccount: string | undefined): Promise<ChainData> {
+async function retrieve (api: ApiPromise, injectedPromise: Promise<InjectedExtension[]>): Promise<ChainData> {
   const [systemChain, systemChainType, systemName, systemVersion, injectedAccounts] = await Promise.all([
     api.rpc.system.chain(),
     api.rpc.system.chainType
@@ -123,7 +126,7 @@ async function retrieve (api: ApiPromise, injectedPromise: Promise<InjectedExten
       : Promise.resolve(registry.createType('ChainType', 'Live')),
     api.rpc.system.name(),
     api.rpc.system.version(),
-    getInjectedAccounts(injectedPromise, metamaskAccount)
+    getInjectedAccounts(injectedPromise)
   ]);
 
   return {
@@ -142,10 +145,9 @@ async function retrieve (api: ApiPromise, injectedPromise: Promise<InjectedExten
   };
 }
 
-async function loadOnReady (api: ApiPromise, endpoint: LinkOption | null, injectedPromise: Promise<InjectedExtension[]>, store: KeyringStore | undefined, types: Record<string, Record<string, string>>, metamaskAccount: string | undefined): Promise<ApiState> {
+async function loadOnReady (api: ApiPromise, endpoint: LinkOption | null, injectedPromise: Promise<InjectedExtension[]>, store: KeyringStore | undefined, types: Record<string, Record<string, string>>): Promise<ApiState> {
   registry.register(types);
-  console.log('metamaskAccount::',metamaskAccount);
-  const { injectedAccounts, properties, systemChain, systemChainType, systemName, systemVersion } = await retrieve(api, injectedPromise, metamaskAccount);
+  const { injectedAccounts, properties, systemChain, systemChainType, systemName, systemVersion } = await retrieve(api, injectedPromise);
   const chainSS58 = properties.ss58Format.unwrapOr(DEFAULT_SS58).toNumber();
   const ss58Format = settings.prefix === -1
     ? chainSS58
@@ -268,7 +270,8 @@ export function ApiCtxRoot ({ apiUrl, children, isElectron, store }: Props): Rea
   const [extensions, setExtensions] = useState<InjectedExtension[] | undefined>();
   const apiEndpoint = useEndpoint(apiUrl);
   const { wallet } = useMetaMask();
-  console.log('wallet::',wallet);
+
+  console.log('wallet::', wallet);
   const relayUrls = useMemo(
     () => (apiEndpoint && apiEndpoint.valueRelay && isNumber(apiEndpoint.paraId) && (apiEndpoint.paraId < 2000))
       ? apiEndpoint.valueRelay
@@ -285,6 +288,21 @@ export function ApiCtxRoot ({ apiUrl, children, isElectron, store }: Props): Rea
     [apiError, createLink, extensions, isApiConnected, isApiInitialized, isElectron, state, apiEndpoint, apiRelay, apiUrl]
   );
 
+  useEffect((): void => {
+    if (wallet.account) {
+      /* eslint-disable @typescript-eslint/no-unsafe-assignment */
+      const metaMaskAcc: string[] = localStore.get('METAMASK_STORAGE_KEY') || [];
+
+      metaMaskAcc.push(wallet.account);
+
+      if (metaMaskAcc.length > 0) {
+        const uniqueAcc = [...new Set(metaMaskAcc)];
+
+        localStore.set('METAMASK_STORAGE_KEY', uniqueAcc);
+      }
+    }
+  }, [wallet.account]);
+
   // initial initialization
   useEffect((): void => {
     const onError = (error: unknown): void => {
@@ -300,13 +318,14 @@ export function ApiCtxRoot ({ apiUrl, children, isElectron, store }: Props): Rea
         api.on('error', onError);
         api.on('ready', (): void => {
           const injectedPromise = web3Enable('polkadot-js/apps');
+
           injectedPromise
             .then(setExtensions)
             .catch(console.error);
 
-          loadOnReady(api, apiEndpoint, injectedPromise, store, types, wallet.account)
+          loadOnReady(api, apiEndpoint, injectedPromise, store, types)
             .then(setState)
-            // .catch(onError);
+            .catch(console.error);
         });
 
         setIsApiInitialized(true);
@@ -319,8 +338,8 @@ export function ApiCtxRoot ({ apiUrl, children, isElectron, store }: Props): Rea
   }
 
   return (
-      <ApiCtx.Provider value={value}>
-        {children}
-      </ApiCtx.Provider>
+    <ApiCtx.Provider value={value}>
+      {children}
+    </ApiCtx.Provider>
   );
 }

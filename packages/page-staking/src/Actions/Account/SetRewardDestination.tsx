@@ -5,10 +5,10 @@ import type { DeriveBalancesAll } from '@polkadot/api-derive/types';
 import type { RewardDestination } from '@polkadot/types/interfaces';
 import type { DestinationType } from '../types';
 
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import { Dropdown, InputAddress, MarkError, Modal, TxButton } from '@polkadot/react-components';
-import { useApi, useCall } from '@polkadot/react-hooks';
+import { useApi, useCall, useMetaMask } from '@polkadot/react-hooks';
 
 import { useTranslation } from '../../translate';
 import { createDestCurr } from '../destOptions';
@@ -18,14 +18,25 @@ interface Props {
   controllerId: string;
   onClose: () => void;
   stashId: string;
+  isMetaMask?: boolean
 }
 
-function SetRewardDestination ({ controllerId, defaultDestination, onClose, stashId }: Props): React.ReactElement<Props> {
+function SetRewardDestination ({ controllerId, defaultDestination, isMetaMask, onClose, stashId }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
   const { api } = useApi();
   const [destination, setDestination] = useState<DestinationType>(() => ((defaultDestination?.isAccount ? 'Account' : defaultDestination?.toString()) || 'Staked') as 'Staked');
   const [destAccount, setDestAccount] = useState<string | null>(() => defaultDestination?.isAccount ? defaultDestination.asAccount.toString() : null);
   const destBalance = useCall<DeriveBalancesAll>(api.derive.balances?.all, [destAccount]);
+  const { wallet } = useMetaMask();
+  const [addressError, setAddressError] = useState<string | null>(null);
+
+  useEffect((): void => {
+    if (wallet.account && isMetaMask && controllerId !== wallet.account) {
+      setAddressError(`Please select ${controllerId} in your MetaMask wallet`);
+    } else {
+      setAddressError(null);
+    }
+  }, [wallet.account, isMetaMask, controllerId]);
 
   const options = useMemo(
     () => createDestCurr(t),
@@ -76,10 +87,14 @@ function SetRewardDestination ({ controllerId, defaultDestination, onClose, stas
         </Modal.Columns>
       </Modal.Content>
       <Modal.Actions>
+        {addressError && (
+          <MarkError content={addressError} />
+        )}
         <TxButton
           accountId={controllerId}
           icon='sign-in-alt'
-          isDisabled={!controllerId || (isAccount && (!destAccount || isDestError))}
+          isDisabled={!controllerId || !!addressError || (isAccount && (!destAccount || isDestError))}
+          isMetaMask={isMetaMask}
           label={t<string>('Set reward destination')}
           onStart={onClose}
           params={[

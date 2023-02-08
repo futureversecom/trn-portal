@@ -4,23 +4,35 @@
 import type { BN } from '@polkadot/util';
 import type { ValidateInfo } from '../partials/types';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
-import { Modal, TxButton } from '@polkadot/react-components';
+import { MarkError, Modal, TxButton } from '@polkadot/react-components';
+import { useMetaMask } from '@polkadot/react-hooks';
 
 import { useTranslation } from '../../translate';
 import ValidatePartial from '../partials/Validate';
 
 interface Props {
   controllerId: string;
+  isMetaMask?: boolean;
   minCommission?: BN;
   onClose: () => void;
   stashId: string;
 }
 
-function Validate ({ controllerId, minCommission, onClose, stashId }: Props): React.ReactElement<Props> {
+function Validate ({ controllerId, isMetaMask, minCommission, onClose, stashId }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
   const [{ validateTx }, setTx] = useState<ValidateInfo>({});
+  const { wallet } = useMetaMask();
+  const [addressError, setAddressError] = useState<string | null>(null);
+
+  useEffect((): void => {
+    if (wallet.account && isMetaMask && controllerId !== wallet.account) {
+      setAddressError(`Please select ${controllerId} in your MetaMask wallet`);
+    } else {
+      setAddressError(null);
+    }
+  }, [wallet.account, isMetaMask, controllerId]);
 
   return (
     <Modal
@@ -39,11 +51,15 @@ function Validate ({ controllerId, minCommission, onClose, stashId }: Props): Re
         />
       </Modal.Content>
       <Modal.Actions>
+        {addressError && (
+          <MarkError content={addressError} />
+        )}
         <TxButton
           accountId={controllerId}
           extrinsic={validateTx}
           icon='certificate'
-          isDisabled={!validateTx}
+          isDisabled={!validateTx || !!addressError}
+          isMetaMask={isMetaMask}
           label={t<string>('Validate')}
           onStart={onClose}
         />

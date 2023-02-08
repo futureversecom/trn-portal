@@ -11,7 +11,7 @@ import styled from 'styled-components';
 import { checkAddress } from '@polkadot/phishing';
 import { InputAddress, InputBalance, MarkError, MarkWarning, Toggle, TxButton } from '@polkadot/react-components';
 import Modal from '@polkadot/react-components/Modal';
-import { useApi, useCall } from '@polkadot/react-hooks';
+import { useApi, useCall, useMetaMask } from '@polkadot/react-hooks';
 import { Available } from '@polkadot/react-query';
 import { BN_HUNDRED, BN_ZERO, isFunction, nextTick } from '@polkadot/util';
 
@@ -42,9 +42,10 @@ async function checkPhishing (_senderId: string | null, recipientId: string | nu
   ];
 }
 
-function Transfer ({ className = '', onClose, recipientId: propRecipientId, senderId: propSenderId, isMetaMask }: Props): React.ReactElement<Props> {
+function Transfer ({ className = '', isMetaMask, onClose, recipientId: propRecipientId, senderId: propSenderId }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
   const { api } = useApi();
+  const { wallet } = useMetaMask();
   const [amount, setAmount] = useState<BN | undefined>(BN_ZERO);
   const [hasAvailable] = useState(true);
   const [isProtected, setIsProtected] = useState(true);
@@ -53,10 +54,17 @@ function Transfer ({ className = '', onClose, recipientId: propRecipientId, send
   const [recipientId, setRecipientId] = useState<string | null>(null);
   const [senderId, setSenderId] = useState<string | null>(null);
   const [[, recipientPhish], setPhishing] = useState<[string | null, string | null]>([null, null]);
+  const [addressError, setAddressError] = useState<string | null>(null);
   const balances = useCall<DeriveBalancesAll>(api.derive.balances?.all, [propSenderId || senderId]);
   const accountInfo = useCall<AccountInfoWithProviders | AccountInfoWithRefCount>(api.query.system.account, [propSenderId || senderId]);
-  console.log('********************');
-  console.log('isMetaMask::',isMetaMask);
+
+  useEffect((): void => {
+    if (wallet.account && isMetaMask && propSenderId && propSenderId !== wallet.account) {
+      setAddressError(`Please select ${propSenderId} in your MetaMask wallet`);
+    } else {
+      setAddressError(null);
+    }
+  }, [wallet.account, senderId, isMetaMask, propSenderId]);
 
   useEffect((): void => {
     const fromId = propSenderId || senderId as string;
@@ -120,6 +128,9 @@ function Transfer ({ className = '', onClose, recipientId: propRecipientId, send
               onChange={setSenderId}
               type='account'
             />
+            {addressError && (
+              <MarkError content={addressError} />
+            )}
           </Modal.Columns>
           <Modal.Columns hint={t<string>('The beneficiary will have access to the transferred fees when the transaction is included in a block.')}>
             <InputAddress
@@ -203,10 +214,10 @@ function Transfer ({ className = '', onClose, recipientId: propRecipientId, send
         <TxButton
           accountId={propSenderId || senderId}
           icon='paper-plane'
-          isDisabled={!hasAvailable || !(propRecipientId || recipientId) || !amount || !!recipientPhish}
+          isDisabled={!hasAvailable || !(propRecipientId || recipientId) || !amount || !!recipientPhish || !!addressError}
+          isMetaMask
           label={t<string>('Make Transfer')}
           onStart={onClose}
-          isMetaMask
           params={
             canToggleAll && isAll
               ? isFunction(api.tx.balances?.transferAll)
