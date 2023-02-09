@@ -478,7 +478,7 @@ function Account ({ account: { address, meta }, className = '', delegation, filt
         />
         <td className='address all relative'>
           <AddressSmall
-            parentAddress={meta?.parentAddress as string}
+            parentAddress={meta.parentAddress as string}
             value={address}
             withShortAddress
           />
@@ -582,7 +582,7 @@ function Account ({ account: { address, meta }, className = '', delegation, filt
             />
           )}
           <div className='absolute'>
-            {meta && meta.genesisHash
+            {meta.genesisHash
               ? <Badge color='transparent' />
               : isDevelopment
                 ? (
