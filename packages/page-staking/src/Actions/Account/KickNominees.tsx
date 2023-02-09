@@ -6,8 +6,8 @@ import type { DeriveStakingQuery } from '@polkadot/api-derive/types';
 
 import React, { useEffect, useMemo, useState } from 'react';
 
-import { InputAddressMulti, Modal, Spinner, TxButton } from '@polkadot/react-components';
-import { useApi, useCall } from '@polkadot/react-hooks';
+import { InputAddressMulti, MarkError, Modal, Spinner, TxButton } from '@polkadot/react-components';
+import { useApi, useCall, useMetaMask } from '@polkadot/react-hooks';
 
 import { useTranslation } from '../../translate';
 import SenderInfo from '../partials/SenderInfo';
@@ -18,6 +18,7 @@ interface Props {
   nominating?: string[];
   onClose: () => void;
   stashId: string;
+  isMetaMask?: boolean
 }
 
 const MAX_KICK = 128;
@@ -26,12 +27,22 @@ const accountOpts = {
   withExposure: true
 };
 
-function KickNominees ({ className = '', controllerId, nominating, onClose, stashId }: Props): React.ReactElement<Props> | null {
+function KickNominees ({ className = '', controllerId, isMetaMask, nominating, onClose, stashId }: Props): React.ReactElement<Props> | null {
   const { t } = useTranslation();
   const { api } = useApi();
   const [selected, setSelected] = useState<string[]>([]);
   const [{ kickTx }, setTx] = useState<{ kickTx?: null | SubmittableExtrinsic<'promise'> }>({});
   const queryInfo = useCall<DeriveStakingQuery>(api.derive.staking.query, [stashId, accountOpts]);
+  const { wallet } = useMetaMask();
+  const [addressError, setAddressError] = useState<string | null>(null);
+
+  useEffect((): void => {
+    if (wallet.account && isMetaMask && controllerId !== wallet.account) {
+      setAddressError(`Please select ${controllerId} in your MetaMask wallet`);
+    } else {
+      setAddressError(null);
+    }
+  }, [wallet.account, isMetaMask, controllerId]);
 
   const nominators = useMemo(
     () => queryInfo?.exposure?.others.map(({ who }) => who.toString()),
@@ -77,11 +88,15 @@ function KickNominees ({ className = '', controllerId, nominating, onClose, stas
         }
       </Modal.Content>
       <Modal.Actions>
+        {addressError && (
+          <MarkError content={addressError} />
+        )}
         <TxButton
           accountId={controllerId}
           extrinsic={kickTx}
           icon='user-slash'
-          isDisabled={!kickTx}
+          isDisabled={!kickTx || !!addressError}
+          isMetaMask={isMetaMask}
           label={t<string>('Remove')}
           onStart={onClose}
         />

@@ -23,6 +23,7 @@ interface Props {
   className?: string;
   currentItem: QueueTx;
   requestAddress: string;
+  isDisabled: boolean;
 }
 
 interface InnerTx {
@@ -32,7 +33,7 @@ interface InnerTx {
 
 const EMPTY_INNER: InnerTx = { innerHash: null, innerTx: null };
 
-function TxSigned ({ className, currentItem, requestAddress }: Props): React.ReactElement<Props> | null {
+function TxSigned ({ className, currentItem, isDisabled, requestAddress }: Props): React.ReactElement<Props> | null {
   const { t } = useTranslation();
   const { api } = useApi();
   const { queueSetTxStatus } = useQueue();
@@ -127,7 +128,7 @@ function TxSigned ({ className, currentItem, requestAddress }: Props): React.Rea
         <Button
           icon={'sign-in-alt'}
           isBusy={isBusy}
-          isDisabled={!senderInfo.signAddress || isRenderError}
+          isDisabled={!senderInfo.signAddress || isRenderError || isDisabled}
           label={
             t<string>('Sign via Metamask')
           }

@@ -9,8 +9,8 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
 
 import { ApiPromise } from '@polkadot/api';
-import { Modal } from '@polkadot/react-components';
-import { useApi, useQueue } from '@polkadot/react-hooks';
+import { MarkError, Modal } from '@polkadot/react-components';
+import { useApi, useMetaMask, useQueue } from '@polkadot/react-hooks';
 import TxMetaMaskSign from '@polkadot/react-signer/TxMetaMaskSign';
 import { assert, isFunction, loggerFormat } from '@polkadot/util';
 
@@ -93,11 +93,22 @@ function Signer ({ children, className = '' }: Props): React.ReactElement<Props>
   const { t } = useTranslation();
   const { queueSetTxStatus, txqueue } = useQueue();
   const [isQueueSubmit, setIsQueueSubmit] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const { wallet } = useMetaMask();
 
   const { currentItem, isRpc, isVisible, queueSize, requestAddress } = useMemo(
     () => extractCurrent(txqueue),
     [txqueue]
   );
+
+  useEffect((): void => {
+    if (wallet.account && currentItem?.isMetaMask && currentItem?.accountId !== wallet.account) {
+      /* eslint-disable @typescript-eslint/restrict-template-expressions */
+      setError(`Please select ${currentItem?.accountId} in your MetaMask wallet`);
+    } else {
+      setError(null);
+    }
+  }, [wallet.account, currentItem]);
 
   useEffect((): void => {
     (queueSize === 1) && setIsQueueSubmit(false);
@@ -132,13 +143,19 @@ function Signer ({ children, className = '' }: Props): React.ReactElement<Props>
           onClose={_onCancel}
           size='large'
         >
+          {error && (
+            <MarkError content={error} />
+          )}
           {currentItem.isUnsigned
             ? <TxUnsigned currentItem={currentItem} />
             : currentItem.isMetaMask
-              ? <TxMetaMaskSign
-                currentItem={currentItem}
-                requestAddress={requestAddress}
-              />
+              ? (
+                <TxMetaMaskSign
+                  currentItem={currentItem}
+                  isDisabled={!!error}
+                  requestAddress={requestAddress}
+                />
+              )
               : (
                 <TxSigned
                   currentItem={currentItem}

@@ -1,10 +1,10 @@
 // Copyright 2017-2023 @polkadot/app-staking authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
-import { InputAddress, Modal, TxButton } from '@polkadot/react-components';
-import { useApi } from '@polkadot/react-hooks';
+import { InputAddress, MarkError, Modal, TxButton } from '@polkadot/react-components';
+import { useApi, useMetaMask } from '@polkadot/react-hooks';
 
 import { useTranslation } from '../../translate';
 import InputValidationController from './InputValidationController';
@@ -13,13 +13,24 @@ interface Props {
   defaultControllerId: string;
   onClose: () => void;
   stashId: string;
+  isMetaMask?: boolean
 }
 
-function SetControllerAccount ({ defaultControllerId, onClose, stashId }: Props): React.ReactElement<Props> {
+function SetControllerAccount ({ defaultControllerId, isMetaMask, onClose, stashId }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
   const { api } = useApi();
   const [isFatal, setIsFatal] = useState(false);
   const [controllerId, setControllerId] = useState<string | null>(null);
+  const { wallet } = useMetaMask();
+  const [addressError, setAddressError] = useState<string | null>(null);
+
+  useEffect((): void => {
+    if (wallet.account && isMetaMask && stashId !== wallet.account) {
+      setAddressError(`Please select ${stashId} in your MetaMask wallet`);
+    } else {
+      setAddressError(null);
+    }
+  }, [wallet.account, isMetaMask, stashId]);
 
   const _setError = useCallback(
     (_: string | null, isFatal: boolean) => setIsFatal(isFatal),
@@ -57,10 +68,14 @@ function SetControllerAccount ({ defaultControllerId, onClose, stashId }: Props)
         </Modal.Columns>
       </Modal.Content>
       <Modal.Actions>
+        {addressError && (
+          <MarkError content={addressError} />
+        )}
         <TxButton
           accountId={stashId}
           icon='sign-in-alt'
-          isDisabled={!controllerId || isFatal}
+          isDisabled={!controllerId || isFatal || !!addressError}
+          isMetaMask={isMetaMask}
           label={t<string>('Set controller')}
           onStart={onClose}
           params={[controllerId]}

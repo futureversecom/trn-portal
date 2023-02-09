@@ -6,11 +6,12 @@ import type { EraIndex } from '@polkadot/types/interfaces';
 import type { PayoutValidator } from './types';
 
 import React, { useEffect, useMemo, useState } from 'react';
+import localStore from 'store';
 import styled from 'styled-components';
 
 import { ApiPromise } from '@polkadot/api';
-import { AddressMini, Button, InputAddress, Modal, Static, TxButton } from '@polkadot/react-components';
-import { useApi, useToggle, useTxBatch } from '@polkadot/react-hooks';
+import { AddressMini, Button, InputAddress, MarkError, Modal, Static, TxButton } from '@polkadot/react-components';
+import { useApi, useMetaMask, useToggle, useTxBatch } from '@polkadot/react-hooks';
 
 import { useTranslation } from '../translate';
 
@@ -60,6 +61,18 @@ function PayButton ({ className, isAll, isDisabled, payout }: Props): React.Reac
   const [isVisible, togglePayout] = useToggle();
   const [accountId, setAccount] = useState<string | null>(null);
   const [txs, setTxs] = useState<SubmittableExtrinsic<'promise'>[] | null>(null);
+  const [isMetaMask, setIsMetaMask] = useState<boolean>(false);
+  const { wallet } = useMetaMask();
+  const [addressError, setAddressError] = useState<string | null>(null);
+
+  useEffect((): void => {
+    if (wallet.account && isMetaMask && accountId && accountId !== wallet.account) {
+      setAddressError(`Please select ${accountId} in your MetaMask wallet`);
+    } else {
+      setAddressError(null);
+    }
+  }, [wallet.account, isMetaMask, accountId]);
+
   const batchOpts = useMemo(
     () => ({
       max: 36 * 64 / (api.consts.staking.maxNominatorRewardedPerValidator?.toNumber() || 64)
@@ -67,6 +80,18 @@ function PayButton ({ className, isAll, isDisabled, payout }: Props): React.Reac
     [api]
   );
   const extrinsics = useTxBatch(txs, batchOpts);
+
+  useEffect((): void => {
+    /* eslint-disable @typescript-eslint/no-unsafe-assignment */
+    const metamaskAccounts: string[] = localStore.get('METAMASK_STORAGE_KEY') || [];
+    const isMetaMaskAccSelected = metamaskAccounts.find((address: string) => address === accountId);
+
+    if (isMetaMaskAccSelected) {
+      setIsMetaMask(true);
+    } else {
+      setIsMetaMask(false);
+    }
+  }, [accountId]);
 
   useEffect((): void => {
     payout && setTxs(
@@ -128,11 +153,15 @@ function PayButton ({ className, isAll, isDisabled, payout }: Props): React.Reac
             </Modal.Columns>
           </Modal.Content>
           <Modal.Actions>
+            {addressError && (
+              <MarkError content={addressError} />
+            )}
             <TxButton
               accountId={accountId}
               extrinsic={extrinsics}
               icon='credit-card'
-              isDisabled={!extrinsics || !extrinsics.length || !accountId}
+              isDisabled={!extrinsics || !extrinsics.length || !accountId || !!addressError}
+              isMetaMask={isMetaMask}
               label={t<string>('Payout')}
               onStart={togglePayout}
             />

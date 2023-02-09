@@ -23,6 +23,7 @@ import createItem from './createItem';
 
 interface Props {
   className?: string;
+  isMetaMask?: boolean
   defaultValue?: Uint8Array | string | null;
   filter?: string[] | null;
   hideAddress?: boolean;

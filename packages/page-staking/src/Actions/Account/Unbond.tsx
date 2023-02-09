@@ -4,11 +4,11 @@
 import type { AccountId, StakingLedger } from '@polkadot/types/interfaces';
 import type { BN } from '@polkadot/util';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
-import { InputAddress, InputBalance, Modal, Static, TxButton } from '@polkadot/react-components';
-import { useApi } from '@polkadot/react-hooks';
+import { InputAddress, InputBalance, MarkError, Modal, Static, TxButton } from '@polkadot/react-components';
+import { useApi, useMetaMask } from '@polkadot/react-hooks';
 import { BlockToTime, FormatBalance } from '@polkadot/react-query';
 import { BN_ZERO } from '@polkadot/util';
 
@@ -18,16 +18,28 @@ import useUnbondDuration from '../useUnbondDuration';
 interface Props {
   controllerId?: AccountId | string | null;
   onClose: () => void;
+  isMetaMask?: boolean;
   stakingLedger?: StakingLedger;
   stashId: string;
 }
 
-function Unbond ({ controllerId, onClose, stakingLedger, stashId }: Props): React.ReactElement<Props> {
+function Unbond ({ controllerId, isMetaMask, onClose, stakingLedger, stashId }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
   const { api } = useApi();
   const bondedBlocks = useUnbondDuration();
+  const { wallet } = useMetaMask();
+  const [addressError, setAddressError] = useState<string | null>(null);
   const [maxBalance] = useState<BN | null>(() => stakingLedger?.active?.unwrap() || null);
   const [maxUnbond, setMaxUnbond] = useState<BN | undefined>();
+
+  useEffect((): void => {
+    if (wallet.account && isMetaMask && controllerId !== wallet.account) {
+      /* eslint-disable @typescript-eslint/restrict-template-expressions */
+      setAddressError(`Please select ${controllerId} in your MetaMask wallet`);
+    } else {
+      setAddressError(null);
+    }
+  }, [wallet.account, isMetaMask, controllerId]);
 
   return (
     <StyledModal
@@ -73,10 +85,14 @@ function Unbond ({ controllerId, onClose, stakingLedger, stashId }: Props): Reac
         </Modal.Columns>
       </Modal.Content>
       <Modal.Actions>
+        {addressError && (
+          <MarkError content={addressError} />
+        )}
         <TxButton
           accountId={controllerId}
           icon='unlock'
-          isDisabled={!maxUnbond?.gt(BN_ZERO)}
+          isDisabled={!maxUnbond?.gt(BN_ZERO) || !!addressError}
+          isMetaMask={isMetaMask}
           label={t<string>('Unbond')}
           onStart={onClose}
           params={[maxUnbond]}
