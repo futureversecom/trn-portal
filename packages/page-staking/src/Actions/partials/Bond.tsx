@@ -149,8 +149,6 @@ function Bond ({ className = '', isNominating, minNominated, minNominatorBond, m
             value={controllerId}
           />
         </>
-        {/* ))*/}
-        {/* }*/}
         <InputValidationController
           accountId={stashId}
           controllerId={controllerId}

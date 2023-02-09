@@ -127,7 +127,6 @@ function Selection ({ className, defaultValue }: Props): React.ReactElement<Prop
           withSpinner
         />
         <TxButton
-          // accountId={ signMethod === 'MetaMask' ? metamaskAccountId : accountId }
           accountId={ accountId }
           extrinsic={extrinsic}
           icon='sign-in-alt'
