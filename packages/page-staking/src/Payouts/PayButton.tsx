@@ -83,7 +83,7 @@ function PayButton ({ className, isAll, isDisabled, payout }: Props): React.Reac
 
   useEffect((): void => {
     /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-    const metamaskAccounts: string[] = localStore.get('METAMASK_STORAGE_KEY') || [];
+    const metamaskAccounts: string[] = localStore.get('METAMASK_ACCOUNTS') || [];
     const isMetaMaskAccSelected = metamaskAccounts.find((address: string) => address === accountId);
 
     if (isMetaMaskAccSelected) {

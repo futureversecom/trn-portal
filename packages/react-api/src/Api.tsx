@@ -88,10 +88,10 @@ async function getInjectedAccounts (injectedPromise: Promise<InjectedExtension[]
       })
     }));
     /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-    const metamaskAccounts: string[] = localStore.get('METAMASK_STORAGE_KEY');
+    const metamaskAccounts: string[] = localStore.get('METAMASK_ACCOUNTS');
 
     metamaskAccounts && metamaskAccounts.forEach((acc: string) => {
-      injectedAccounts.push(({ address: acc, meta: { name: `MetaMask_${acc}`, source: 'isMetaMask', whenCreated: Date.now() } }));
+      injectedAccounts.push(({ address: acc, meta: { name: `${acc} (MetaMask)`, source: 'isMetaMask', whenCreated: Date.now() } }));
     });
 
     return injectedAccounts;
@@ -264,7 +264,6 @@ export function ApiCtxRoot ({ apiUrl, children, isElectron, store }: Props): Rea
   const apiEndpoint = useEndpoint(apiUrl);
   const { wallet } = useMetaMask();
 
-  console.log('wallet::', wallet);
   const relayUrls = useMemo(
     () => (apiEndpoint && apiEndpoint.valueRelay && isNumber(apiEndpoint.paraId) && (apiEndpoint.paraId < 2000))
       ? apiEndpoint.valueRelay
@@ -282,18 +281,14 @@ export function ApiCtxRoot ({ apiUrl, children, isElectron, store }: Props): Rea
   );
 
   useEffect((): void => {
-    if (wallet.account) {
+    if (!wallet.account) return
       /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-      const metaMaskAcc: string[] = localStore.get('METAMASK_STORAGE_KEY') || [];
+    const metaMaskAcc: string[] = localStore.get('METAMASK_ACCOUNTS') || [];
+    metaMaskAcc.push(wallet.account);
+    if (metaMaskAcc.length == 0) return;
 
-      metaMaskAcc.push(wallet.account);
-
-      if (metaMaskAcc.length > 0) {
-        const uniqueAcc = [...new Set(metaMaskAcc)];
-
-        localStore.set('METAMASK_STORAGE_KEY', uniqueAcc);
-      }
-    }
+    const uniqueAcc = [...new Set(metaMaskAcc)];
+    localStore.set('METAMASK_ACCOUNTS', uniqueAcc);
   }, [wallet.account]);
 
   // initial initialization

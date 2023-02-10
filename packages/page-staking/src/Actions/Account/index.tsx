@@ -86,7 +86,7 @@ function Account ({ allSlashes, className = '', info: { controllerId, destinatio
 
   useEffect((): void => {
     /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-    const metamaskAccounts: string[] = localStore.get('METAMASK_STORAGE_KEY') || [];
+    const metamaskAccounts: string[] = localStore.get('METAMASK_ACCOUNTS') || [];
     const isMetaMaskAccSelected: string | undefined = metamaskAccounts.find((address: string) => address === controllerId);
 
     if (isMetaMaskAccSelected) {

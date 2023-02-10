@@ -76,14 +76,9 @@ function Selection ({ className, defaultValue }: Props): React.ReactElement<Prop
 
   useEffect((): void => {
     /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-    const metamaskAccounts: string[] = localStore.get('METAMASK_STORAGE_KEY') || [];
+    const metamaskAccounts: string[] = localStore.get('METAMASK_ACCOUNTS') || [];
     const isMetaMaskAccSelected: string | undefined = metamaskAccounts.find((address: string) => address === accountId);
-
-    if (isMetaMaskAccSelected) {
-      setIsMetaMask(true);
-    } else {
-      setIsMetaMask(false);
-    }
+    setIsMetaMask(isMetaMaskAccSelected ? true : false);
   }, [accountId]);
 
   return (
