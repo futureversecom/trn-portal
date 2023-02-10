@@ -24,6 +24,9 @@ export const useMetaMask = () => {
 
   const [isConnecting, setIsConnecting] = useState(true);
 
+  console.log('Is connecting:::', isConnecting);
+  console.log('^^^^^^^^^^^');
+
   useEffect(() => {
     if (typeof window === 'undefined') {
       return;
@@ -33,15 +36,12 @@ export const useMetaMask = () => {
   }, []);
 
   const connectWallet = useCallback(() => {
-    console.log('Is connecting:::', isConnecting);
-    console.log('^^^^^^^^^^^');
-
     metaMask
       .activate(chainId)
-      .then(() => { console.log('*******');setIsConnecting(false)})
+      .then(() => {
+        console.log('*******'); setIsConnecting(false);
+      })
       .catch(console.error);
-    console.log('is connecting now::', isConnecting);
-
   }, [chainId]);
 
   useEffect(() => {
