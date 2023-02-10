@@ -179,7 +179,7 @@ function Account ({ account: { address, meta }, className = '', delegation, filt
   const [isTransferOpen, toggleTransfer] = useToggle();
   const [isDelegateOpen, toggleDelegate] = useToggle();
   const [isUndelegateOpen, toggleUndelegate] = useToggle();
-  const { connectWallet, wallet } = useMetaMask();
+  const { connectWallet } = useMetaMask();
 
   useEffect((): void => {
     connectWallet();

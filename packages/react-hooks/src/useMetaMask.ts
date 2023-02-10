@@ -35,8 +35,7 @@ export const useMetaMask = () => {
   const connectWallet = useCallback(() => {
     console.log('Is connecting:::', isConnecting);
     console.log('^^^^^^^^^^^');
-    // if (is)
-    // alert('Already connected');
+
     metaMask
       .activate(chainId)
       .then(() => { console.log('*******');setIsConnecting(false)})
