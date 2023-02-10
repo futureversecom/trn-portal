@@ -43,8 +43,8 @@ function Root ({ isElectron, store }: Props): React.ReactElement<Props> {
   // The ordering here is critical. It defines the hierarchy of dependencies,
   // i.e. Block* could from Api. Certainly no cross-deps allowed
   return (
-    <Web3ReactProvider connectors={[metaMaskConnectors as any]}>
-      <Suspense fallback='...'>
+    <Suspense fallback='...'>
+      <Web3ReactProvider connectors={[metaMaskConnectors as any]}>
         <ThemeProvider theme={theme}>
           <KeyringCtxRoot>
             <QueueCtxRoot>
@@ -68,8 +68,8 @@ function Root ({ isElectron, store }: Props): React.ReactElement<Props> {
             </QueueCtxRoot>
           </KeyringCtxRoot>
         </ThemeProvider>
-      </Suspense>
-    </Web3ReactProvider>
+      </Web3ReactProvider>
+    </Suspense>
   );
 }
 
