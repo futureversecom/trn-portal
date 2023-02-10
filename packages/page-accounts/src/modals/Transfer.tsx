@@ -45,7 +45,7 @@ async function checkPhishing (_senderId: string | null, recipientId: string | nu
 function Transfer ({ className = '', isMetaMask, onClose, recipientId: propRecipientId, senderId: propSenderId }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
   const { api } = useApi();
-  const { wallet } = useMetaMask();
+  const { wallet: metaMaskWallet } = useMetaMask();
   const [amount, setAmount] = useState<BN | undefined>(BN_ZERO);
   const [hasAvailable] = useState(true);
   const [isProtected, setIsProtected] = useState(true);
@@ -54,17 +54,17 @@ function Transfer ({ className = '', isMetaMask, onClose, recipientId: propRecip
   const [recipientId, setRecipientId] = useState<string | null>(null);
   const [senderId, setSenderId] = useState<string | null>(null);
   const [[, recipientPhish], setPhishing] = useState<[string | null, string | null]>([null, null]);
-  const [addressError, setAddressError] = useState<string | null>(null);
+  const [metaMaskAddressError, setMetaMaskAddressError] = useState<string | null>(null);
   const balances = useCall<DeriveBalancesAll>(api.derive.balances?.all, [propSenderId || senderId]);
   const accountInfo = useCall<AccountInfoWithProviders | AccountInfoWithRefCount>(api.query.system.account, [propSenderId || senderId]);
 
   useEffect((): void => {
-    if (wallet.account && isMetaMask && propSenderId && propSenderId !== wallet.account) {
-      setAddressError(`Please select ${propSenderId} in your MetaMask wallet`);
+    if (metaMaskWallet.account && isMetaMask && propSenderId && propSenderId !== metaMaskWallet.account) {
+      setMetaMaskAddressError(`Please select ${propSenderId} in your MetaMask wallet`);
     } else {
-      setAddressError(null);
+      setMetaMaskAddressError(null);
     }
-  }, [wallet.account, senderId, isMetaMask, propSenderId]);
+  }, [metaMaskWallet.account, senderId, isMetaMask, propSenderId]);
 
   useEffect((): void => {
     const fromId = propSenderId || senderId as string;
@@ -128,8 +128,8 @@ function Transfer ({ className = '', isMetaMask, onClose, recipientId: propRecip
               onChange={setSenderId}
               type='account'
             />
-            {addressError && (
-              <MarkError content={addressError} />
+            {metaMaskAddressError && (
+              <MarkError content={metaMaskAddressError} />
             )}
           </Modal.Columns>
           <Modal.Columns hint={t<string>('The beneficiary will have access to the transferred fees when the transaction is included in a block.')}>
@@ -214,7 +214,7 @@ function Transfer ({ className = '', isMetaMask, onClose, recipientId: propRecip
         <TxButton
           accountId={propSenderId || senderId}
           icon='paper-plane'
-          isDisabled={!hasAvailable || !(propRecipientId || recipientId) || !amount || !!recipientPhish || !!addressError}
+          isDisabled={!hasAvailable || !(propRecipientId || recipientId) || !amount || !!recipientPhish || !!metaMaskAddressError}
           isMetaMask
           label={t<string>('Make Transfer')}
           onStart={onClose}

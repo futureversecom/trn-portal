@@ -33,10 +33,16 @@ export const useMetaMask = () => {
   }, []);
 
   const connectWallet = useCallback(() => {
+    console.log('Is connecting:::', isConnecting);
+    console.log('^^^^^^^^^^^');
+    // if (is)
+    // alert('Already connected');
     metaMask
       .activate(chainId)
-      .then(() => setIsConnecting(false))
+      .then(() => { console.log('*******');setIsConnecting(false)})
       .catch(console.error);
+    console.log('is connecting now::', isConnecting);
+
   }, [chainId]);
 
   useEffect(() => {

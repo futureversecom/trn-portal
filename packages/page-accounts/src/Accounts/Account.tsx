@@ -183,7 +183,7 @@ function Account ({ account: { address, meta }, className = '', delegation, filt
 
   useEffect((): void => {
     connectWallet();
-  }, [wallet.account, connectWallet]);
+  }, [connectWallet]);
 
   useEffect((): void => {
     if (balancesAll) {

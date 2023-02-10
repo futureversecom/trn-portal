@@ -12,7 +12,18 @@ import styled from 'styled-components';
 
 import { Button, FilterInput, SortDropdown, SummaryBox, Table } from '@polkadot/react-components';
 import { getAccountCryptoType } from '@polkadot/react-components/util';
-import { useAccounts, useApi, useDelegations, useFavorites, useIpfs, useLedger, useNextTick, useProxies, useToggle } from '@polkadot/react-hooks';
+import {
+  useAccounts,
+  useApi,
+  useDelegations,
+  useFavorites,
+  useIpfs,
+  useLedger,
+  useMetaMask,
+  useNextTick,
+  useProxies,
+  useToggle
+} from '@polkadot/react-hooks';
 import { keyring } from '@polkadot/ui-keyring';
 import { settings } from '@polkadot/ui-settings';
 import { BN_ZERO, isFunction } from '@polkadot/util';
@@ -95,6 +106,7 @@ function Overview ({ className = '', onStatusChange }: Props): React.ReactElemen
   const { t } = useTranslation();
   const { api, isElectron } = useApi();
   const { allAccounts, hasAccounts } = useAccounts();
+  const { connectWallet } = useMetaMask();
   const { isIpfs } = useIpfs();
   const { isLedgerEnabled } = useLedger();
   const [isCreateOpen, toggleCreate] = useToggle();
@@ -352,6 +364,11 @@ function Overview ({ className = '', onStatusChange }: Props): React.ReactElemen
               />
             </>
           )}
+          <Button
+            icon="plus"
+            label={t<string>('Connect MetaMask')}
+            onClick={connectWallet}
+          />
           <Button
             icon='qrcode'
             label={t<string>('From Qr')}
