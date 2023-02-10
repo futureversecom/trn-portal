@@ -87,7 +87,8 @@ function Bond ({ className = '', isNominating, minNominated, minNominatorBond, m
     /* eslint-disable @typescript-eslint/no-unsafe-assignment */
     const metamaskAccounts: string[] = localStore.get('METAMASK_ACCOUNTS') || [];
     const isMetaMaskAccSelected = metamaskAccounts.find((address: string) => address === stashId);
-    setIsMetaMask(isMetaMaskAccSelected ? true : false);
+
+    setIsMetaMask(!!isMetaMaskAccSelected);
   }, [stashId]);
 
   useEffect((): void => {

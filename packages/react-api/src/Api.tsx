@@ -281,13 +281,21 @@ export function ApiCtxRoot ({ apiUrl, children, isElectron, store }: Props): Rea
   );
 
   useEffect((): void => {
-    if (!wallet.account) return
-      /* eslint-disable @typescript-eslint/no-unsafe-assignment */
+    if (!wallet.account) {
+      return;
+    }
+
+    /* eslint-disable @typescript-eslint/no-unsafe-assignment */
     const metaMaskAcc: string[] = localStore.get('METAMASK_ACCOUNTS') || [];
+
     metaMaskAcc.push(wallet.account);
-    if (metaMaskAcc.length == 0) return;
+
+    if (metaMaskAcc.length === 0) {
+      return;
+    }
 
     const uniqueAcc = [...new Set(metaMaskAcc)];
+
     localStore.set('METAMASK_ACCOUNTS', uniqueAcc);
   }, [wallet.account]);
 
