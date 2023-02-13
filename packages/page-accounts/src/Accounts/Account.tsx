@@ -350,7 +350,7 @@ function Account ({ account: { address, meta }, className = '', delegation, filt
       )
     ], t('Identity')),
     createMenuGroup('deriveGroup', [
-      !(isEthereum || isExternal || isHardware || isInjected || isMetaMask || isMultisig || api.isEthereum) && (
+      !(isEthereum || isExternal || isHardware || isInjected || isMultisig || api.isEthereum) && (
         <Menu.Item
           icon='download'
           key='deriveAccount'
@@ -368,7 +368,7 @@ function Account ({ account: { address, meta }, className = '', delegation, filt
       )
     ], t('Derive')),
     createMenuGroup('backupGroup', [
-      !(isExternal || isHardware || isInjected || isMetaMask || isMultisig || isDevelopment) && (
+      !(isExternal || isHardware || isInjected || isMultisig || isDevelopment) && (
         <Menu.Item
           icon='database'
           key='backupJson'
@@ -376,7 +376,7 @@ function Account ({ account: { address, meta }, className = '', delegation, filt
           onClick={toggleBackup}
         />
       ),
-      !(isExternal || isHardware || isInjected || isMetaMask || isMultisig || isDevelopment) && (
+      !(isExternal || isHardware || isInjected || isMultisig || isDevelopment) && (
         <Menu.Item
           icon='edit'
           key='changePassword'
@@ -384,7 +384,7 @@ function Account ({ account: { address, meta }, className = '', delegation, filt
           onClick={togglePassword}
         />
       ),
-      !(isInjected || isMetaMask || isDevelopment) && (
+      !(isInjected || isDevelopment) && (
         <Menu.Item
           icon='trash-alt'
           key='forgetAccount'
@@ -462,7 +462,7 @@ function Account ({ account: { address, meta }, className = '', delegation, filt
       />
     ])
   ].filter((i) => i),
-  [_clearDemocracyLocks, _clearReferendaLocks, _showOnHardware, _vestingVest, api, delegation, democracyUnlockTx, genesisHash, identity, isDevelopment, isEditable, isEthereum, isExternal, isHardware, isInjected, isMetaMask, isMultisig, multiInfos, onSetGenesisHash, proxy, referendaUnlockTx, recoveryInfo, t, toggleBackup, toggleDelegate, toggleDerive, toggleForget, toggleIdentityMain, toggleIdentitySub, toggleMultisig, togglePassword, toggleProxyOverview, toggleRecoverAccount, toggleRecoverSetup, toggleUndelegate, vestingVestTx]);
+  [_clearDemocracyLocks, _clearReferendaLocks, _showOnHardware, _vestingVest, api, delegation, democracyUnlockTx, genesisHash, identity, isDevelopment, isEditable, isEthereum, isExternal, isHardware, isInjected, isMultisig, multiInfos, onSetGenesisHash, proxy, referendaUnlockTx, recoveryInfo, t, toggleBackup, toggleDelegate, toggleDerive, toggleForget, toggleIdentityMain, toggleIdentitySub, toggleMultisig, togglePassword, toggleProxyOverview, toggleRecoverAccount, toggleRecoverSetup, toggleUndelegate, vestingVestTx]);
 
   if (!isVisible) {
     return null;
@@ -594,11 +594,7 @@ function Account ({ account: { address, meta }, className = '', delegation, filt
                 )
                 : isMetaMask
                   ? (
-                    <Badge
-                      className='warning'
-                      hover={t<string>('This is a Metamask account.')}
-                      icon='wrench'
-                    />
+                    <></>
                   )
                   : (
                     <Badge
@@ -700,14 +696,19 @@ function Account ({ account: { address, meta }, className = '', delegation, filt
                 onClick={toggleTransfer}
               />
             )}
-            <Popup
-              isDisabled={!menuItems.length}
-              value={
-                <Menu>
-                  {menuItems}
-                </Menu>
-              }
-            />
+            {isMetaMask
+              ? <></>
+              : (
+                <Popup
+                  isDisabled={!menuItems.length}
+                  value={
+                    <Menu>
+                      {menuItems}
+                    </Menu>
+                  }
+                />
+              )
+            }
           </Button.Group>
         </td>
         <Table.Column.Expand

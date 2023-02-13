@@ -22,11 +22,11 @@ interface Known {
 const known: Known[] = [
   {
     all: {
-      chrome: 'https://chrome.google.com/webstore/detail/polkadot%7Bjs%7D-extension/mopnmbcafieddcagagdcbnhejhlodfdd',
-      firefox: 'https://addons.mozilla.org/en-US/firefox/addon/polkadot-js-extension/'
+      chrome: 'https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn',
+      firefox: 'https://addons.mozilla.org/en-US/firefox/addon/ether-metamask/'
     },
     desc: 'Basic account injection and signer',
-    name: 'polkadot-js extension'
+    name: 'MetaMask extension'
   }
 ];
 

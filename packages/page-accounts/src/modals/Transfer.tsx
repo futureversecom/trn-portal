@@ -60,7 +60,7 @@ function Transfer ({ className = '', isMetaMask, onClose, recipientId: propRecip
 
   useEffect((): void => {
     if (metaMaskWallet.account && isMetaMask && propSenderId && propSenderId !== metaMaskWallet.account) {
-      setMetaMaskAddressError(`Please select ${propSenderId} in your MetaMask wallet`);
+      setMetaMaskAddressError(`Please select ${propSenderId} in your MetaMask wallet to sign this extrinsic. Or select the current active account in the dropdown`);
     } else {
       setMetaMaskAddressError(null);
     }
