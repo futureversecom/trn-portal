@@ -8,7 +8,7 @@ import React, {useCallback, useEffect, useState} from 'react';
 import styled from 'styled-components';
 
 import { Button, Extrinsic, Icon, InputNumber, Toggle, TxButton } from '@polkadot/react-components';
-import {useApi, useMetaMask, useToggle} from '@polkadot/react-hooks';
+import {useApi, useToggle} from '@polkadot/react-hooks';
 import { BN_ZERO, isFunction } from '@polkadot/util';
 
 import { useTranslation } from './translate';
