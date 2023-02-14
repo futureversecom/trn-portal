@@ -91,7 +91,6 @@ async function getInjectedAccounts (injectedPromise: Promise<InjectedExtension[]
     const metamaskAccounts: string[] = localStore.get('METAMASK_ACCOUNTS');
 
     metamaskAccounts && metamaskAccounts.forEach((acc: string, index) => {
-
       injectedAccounts.push(({ address: acc, meta: { name: `MetaMask #${index}`, source: 'isMetaMask', whenCreated: Date.now() } }));
     });
 
