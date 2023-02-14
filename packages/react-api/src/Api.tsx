@@ -90,10 +90,9 @@ async function getInjectedAccounts (injectedPromise: Promise<InjectedExtension[]
     /* eslint-disable @typescript-eslint/no-unsafe-assignment */
     const metamaskAccounts: string[] = localStore.get('METAMASK_ACCOUNTS');
 
-    metamaskAccounts && metamaskAccounts.forEach((acc: string) => {
-      const displayAcc = `${acc?.slice(0, 5)}..${acc?.slice(-4)}`;
+    metamaskAccounts && metamaskAccounts.forEach((acc: string, index) => {
 
-      injectedAccounts.push(({ address: acc, meta: { name: `MetaMask (${displayAcc})`, source: 'isMetaMask', whenCreated: Date.now() } }));
+      injectedAccounts.push(({ address: acc, meta: { name: `MetaMask ${index}`, source: 'isMetaMask', whenCreated: Date.now() } }));
     });
 
     return injectedAccounts;
