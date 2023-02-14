@@ -4,15 +4,15 @@
 import type { SubmittableExtrinsic } from '@polkadot/api/types';
 import type { BN } from '@polkadot/util';
 
-import React, {useCallback, useEffect, useState} from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
+import localStore from 'store';
 import styled from 'styled-components';
 
 import { Button, Extrinsic, Icon, InputNumber, Toggle, TxButton } from '@polkadot/react-components';
-import {useApi, useToggle} from '@polkadot/react-hooks';
+import { useApi, useToggle } from '@polkadot/react-hooks';
 import { BN_ZERO, isFunction } from '@polkadot/util';
 
 import { useTranslation } from './translate';
-import localStore from "store";
 
 interface Props {
   className?: string;
@@ -76,9 +76,9 @@ function Sudo ({ className, isMine, sudoKey }: Props): React.ReactElement<Props>
         <Button.Group>
           <TxButton
             accountId={sudoKey}
-            isMetaMask={isMetaMask}
             icon='sign-in-alt'
             isDisabled={!method || (withWeight ? weight.eq(BN_ZERO) : false)}
+            isMetaMask={isMetaMask}
             label={
               withWeight
                 ? t<string>('Submit Sudo Unchecked')
