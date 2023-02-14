@@ -16,7 +16,7 @@ import styled from 'styled-components';
 import { ApiPromise } from '@polkadot/api';
 import useAccountLocks from '@polkadot/app-referenda/useAccountLocks';
 import { AddressInfo, AddressSmall, Badge, Button, ChainLock, Columar, CryptoType, Forget, LinkExternal, Menu, Popup, Table, Tags } from '@polkadot/react-components';
-import { useAccountInfo, useApi, useBalancesAll, useBestNumber, useCall, useLedger, useQueue, useStakingInfo, useToggle } from '@polkadot/react-hooks';
+import { useAccountInfo, useApi, useBalancesAll, useBestNumber, useCall, useLedger, useMetaMask, useQueue, useStakingInfo, useToggle } from '@polkadot/react-hooks';
 import { keyring } from '@polkadot/ui-keyring';
 import { BN, BN_ZERO, formatBalance, formatNumber, isFunction } from '@polkadot/util';
 
@@ -161,7 +161,7 @@ function Account ({ account: { address, meta }, className = '', delegation, filt
   const recoveryInfo = useCall<RecoveryConfig | null>(api.api.query.recovery?.recoverable, [address], transformRecovery);
   const multiInfos = useMultisigApprovals(address);
   const proxyInfo = useProxies(address);
-  const { flags: { isDevelopment, isEditable, isEthereum, isExternal, isHardware, isInjected, isMultisig, isProxied }, genesisHash, identity, name: accName, onSetGenesisHash, tags } = useAccountInfo(address);
+  const { flags: { isDevelopment, isEditable, isEthereum, isExternal, isHardware, isInjected, isMetaMask, isMultisig, isProxied }, genesisHash, identity, name: accName, onSetGenesisHash, tags } = useAccountInfo(address);
   const convictionLocks = useAccountLocks('referenda', 'convictionVoting', address);
   const [{ democracyUnlockTx }, setDemocracyUnlock] = useState<DemocracyUnlockable>({ democracyUnlockTx: null, ids: [] });
   const [{ referendaUnlockTx }, setReferandaUnlock] = useState<ReferendaUnlockable>({ ids: [], referendaUnlockTx: null });
@@ -179,6 +179,11 @@ function Account ({ account: { address, meta }, className = '', delegation, filt
   const [isTransferOpen, toggleTransfer] = useToggle();
   const [isDelegateOpen, toggleDelegate] = useToggle();
   const [isUndelegateOpen, toggleUndelegate] = useToggle();
+  const { connectWallet } = useMetaMask();
+
+  useEffect((): void => {
+    connectWallet();
+  }, [connectWallet]);
 
   useEffect((): void => {
     if (balancesAll) {
@@ -587,18 +592,22 @@ function Account ({ account: { address, meta }, className = '', delegation, filt
                     icon='wrench'
                   />
                 )
-                : (
-                  <Badge
-                    className='warning'
-                    hover={
-                      <div>
-                        <p>{t<string>('This account is available on all networks. It is recommended to link to a specific network via the account options ("only this network" option) to limit availability. For accounts from an extension, set the network on the extension.')}</p>
-                        <p>{t<string>('This does not send any transaction, rather it only sets the genesis in the account JSON.')}</p>
-                      </div>
-                    }
-                    icon='exclamation-triangle'
-                  />
-                )
+                : isMetaMask
+                  ? (
+                    <></>
+                  )
+                  : (
+                    <Badge
+                      className='warning'
+                      hover={
+                        <div>
+                          <p>{t<string>('This account is available on all networks. It is recommended to link to a specific network via the account options ("only this network" option) to limit availability. For accounts from an extension, set the network on the extension.')}</p>
+                          <p>{t<string>('This does not send any transaction, rather it only sets the genesis in the account JSON.')}</p>
+                        </div>
+                      }
+                      icon='exclamation-triangle'
+                    />
+                  )
             }
             {recoveryInfo && (
               <Badge
@@ -687,14 +696,19 @@ function Account ({ account: { address, meta }, className = '', delegation, filt
                 onClick={toggleTransfer}
               />
             )}
-            <Popup
-              isDisabled={!menuItems.length}
-              value={
-                <Menu>
-                  {menuItems}
-                </Menu>
-              }
-            />
+            {isMetaMask
+              ? <></>
+              : (
+                <Popup
+                  isDisabled={!menuItems.length}
+                  value={
+                    <Menu>
+                      {menuItems}
+                    </Menu>
+                  }
+                />
+              )
+            }
           </Button.Group>
         </td>
         <Table.Column.Expand

@@ -8,17 +8,15 @@ import type { KeyringStore } from '@polkadot/ui-keyring/types';
 import type { ApiProps, ApiState } from './types';
 
 import * as Sc from '@substrate/connect';
-import { Web3ReactProvider } from '@web3-react/core';
 import React, { useEffect, useMemo, useState } from 'react';
-import store from 'store';
+import localStore from 'store';
 
 import { ApiPromise, ScProvider, WsProvider } from '@polkadot/api';
 import { deriveMapCache, setDeriveCache } from '@polkadot/api-derive/util';
 import { ethereumChains, typesBundle } from '@polkadot/apps-config';
 import { web3Accounts, web3Enable } from '@polkadot/extension-dapp';
 import { TokenUnit } from '@polkadot/react-components/InputNumber';
-import { useApiUrl, useEndpoint, useQueue } from '@polkadot/react-hooks';
-import { metaMaskConnectors } from '@polkadot/react-hooks/useMetaMask';
+import { useApiUrl, useEndpoint, useMetaMask, useQueue } from '@polkadot/react-hooks';
 import ApiSigner from '@polkadot/react-signer/signers/ApiSigner';
 import { keyring } from '@polkadot/ui-keyring';
 import { settings } from '@polkadot/ui-settings';
@@ -67,16 +65,8 @@ let api: ApiPromise;
 
 export { api };
 
-function isKeyringLoaded () {
-  try {
-    return !!keyring.keyring;
-  } catch {
-    return false;
-  }
-}
-
 function getDevTypes (): Record<string, Record<string, string>> {
-  const types = decodeUrlTypes() || store.get('types', {}) as Record<string, Record<string, string>>;
+  const types = decodeUrlTypes() || localStore.get('types', {}) as Record<string, Record<string, string>>;
   const names = Object.keys(types);
 
   names.length && console.log('Injected types:', names.join(', '));
@@ -90,13 +80,21 @@ async function getInjectedAccounts (injectedPromise: Promise<InjectedExtension[]
 
     const accounts = await web3Accounts();
 
-    return accounts.map(({ address, meta }, whenCreated): InjectedAccountExt => ({
+    const injectedAccounts = accounts.map(({ address, meta }, whenCreated): InjectedAccountExt => ({
       address,
       meta: objectSpread({}, meta, {
         name: `${meta.name || 'unknown'} (${meta.source === 'polkadot-js' ? 'extension' : meta.source})`,
         whenCreated
       })
     }));
+    /* eslint-disable @typescript-eslint/no-unsafe-assignment */
+    const metamaskAccounts: string[] = localStore.get('METAMASK_ACCOUNTS');
+
+    metamaskAccounts && metamaskAccounts.forEach((acc: string, index) => {
+      injectedAccounts.push(({ address: acc, meta: { name: `MetaMask #${index}`, source: 'isMetaMask', whenCreated: Date.now() } }));
+    });
+
+    return injectedAccounts;
   } catch (error) {
     console.error('web3Accounts', error);
 
@@ -165,7 +163,7 @@ async function loadOnReady (api: ApiPromise, endpoint: LinkOption | null, inject
   TokenUnit.setAbbr(tokenSymbol[0].toString());
 
   // finally load the keyring
-  isKeyringLoaded() || keyring.loadAll({
+  keyring.loadAll({
     genesisHash: api.genesisHash,
     genesisHashAdd: endpoint && isNumber(endpoint.paraId) && (endpoint.paraId < 2000) && endpoint.genesisHashRelay
       ? [endpoint.genesisHashRelay]
@@ -264,6 +262,8 @@ export function ApiCtxRoot ({ apiUrl, children, isElectron, store }: Props): Rea
   const [apiError, setApiError] = useState<null | string>(null);
   const [extensions, setExtensions] = useState<InjectedExtension[] | undefined>();
   const apiEndpoint = useEndpoint(apiUrl);
+  const { wallet } = useMetaMask();
+
   const relayUrls = useMemo(
     () => (apiEndpoint && apiEndpoint.valueRelay && isNumber(apiEndpoint.paraId) && (apiEndpoint.paraId < 2000))
       ? apiEndpoint.valueRelay
@@ -279,6 +279,25 @@ export function ApiCtxRoot ({ apiUrl, children, isElectron, store }: Props): Rea
     () => objectSpread({}, state, { api, apiEndpoint, apiError, apiRelay, apiUrl, createLink, extensions, isApiConnected, isApiInitialized, isElectron, isWaitingInjected: !extensions }),
     [apiError, createLink, extensions, isApiConnected, isApiInitialized, isElectron, state, apiEndpoint, apiRelay, apiUrl]
   );
+
+  useEffect((): void => {
+    if (!wallet.account) {
+      return;
+    }
+
+    /* eslint-disable @typescript-eslint/no-unsafe-assignment */
+    const metaMaskAcc: string[] = localStore.get('METAMASK_ACCOUNTS') || [];
+
+    metaMaskAcc.push(wallet.account);
+
+    if (metaMaskAcc.length === 0) {
+      return;
+    }
+
+    const uniqueAcc = [...new Set(metaMaskAcc)];
+
+    localStore.set('METAMASK_ACCOUNTS', uniqueAcc);
+  }, [wallet.account]);
 
   // initial initialization
   useEffect((): void => {
@@ -302,23 +321,21 @@ export function ApiCtxRoot ({ apiUrl, children, isElectron, store }: Props): Rea
 
           loadOnReady(api, apiEndpoint, injectedPromise, store, types)
             .then(setState)
-            .catch(onError);
+            .catch(console.error);
         });
 
         setIsApiInitialized(true);
       })
       .catch(onError);
-  }, [apiEndpoint, apiUrl, queuePayload, queueSetTxStatus, store]);
+  }, [apiEndpoint, apiUrl, queuePayload, queueSetTxStatus, store, wallet.account]);
 
   if (!value.isApiInitialized) {
     return null;
   }
 
   return (
-    <Web3ReactProvider connectors={[metaMaskConnectors as any]}>
-      <ApiCtx.Provider value={value}>
-        {children}
-      </ApiCtx.Provider>
-    </Web3ReactProvider>
+    <ApiCtx.Provider value={value}>
+      {children}
+    </ApiCtx.Provider>
   );
 }

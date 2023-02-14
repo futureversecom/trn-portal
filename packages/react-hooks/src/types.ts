@@ -97,6 +97,7 @@ export interface AddressFlags extends DeriveAccountFlags {
   isHardware: boolean;
   isInContacts: boolean;
   isInjected: boolean;
+  isMetaMask: boolean;
   isMultisig: boolean;
   isProxied: boolean;
   isOwned: boolean;

@@ -4,12 +4,13 @@
 import type { ThemeDef } from '@polkadot/react-hooks/ctx/types';
 import type { KeyringStore } from '@polkadot/ui-keyring/types';
 
+import { Web3ReactProvider } from '@web3-react/core';
 import React, { Suspense, useEffect, useState } from 'react';
 import { HashRouter } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 
 import { ApiCtxRoot } from '@polkadot/react-api';
-import { ApiStatsCtxRoot, BlockAuthorsCtxRoot, BlockEventsCtxRoot, KeyringCtxRoot, QueueCtxRoot, WindowSizeCtxRoot } from '@polkadot/react-hooks';
+import { ApiStatsCtxRoot, BlockAuthorsCtxRoot, BlockEventsCtxRoot, KeyringCtxRoot, metaMaskConnectors, QueueCtxRoot, WindowSizeCtxRoot } from '@polkadot/react-hooks';
 import { settings } from '@polkadot/ui-settings';
 
 import Apps from './Apps';
@@ -42,29 +43,31 @@ function Root ({ isElectron, store }: Props): React.ReactElement<Props> {
   // i.e. Block* could from Api. Certainly no cross-deps allowed
   return (
     <Suspense fallback='...'>
-      <ThemeProvider theme={theme}>
-        <KeyringCtxRoot>
-          <QueueCtxRoot>
-            <ApiCtxRoot
-              apiUrl={settings.apiUrl}
-              isElectron={isElectron}
-              store={store}
-            >
-              <ApiStatsCtxRoot>
-                <BlockAuthorsCtxRoot>
-                  <BlockEventsCtxRoot>
-                    <HashRouter>
-                      <WindowSizeCtxRoot>
-                        <Apps />
-                      </WindowSizeCtxRoot>
-                    </HashRouter>
-                  </BlockEventsCtxRoot>
-                </BlockAuthorsCtxRoot>
-              </ApiStatsCtxRoot>
-            </ApiCtxRoot>
-          </QueueCtxRoot>
-        </KeyringCtxRoot>
-      </ThemeProvider>
+      <Web3ReactProvider connectors={[metaMaskConnectors as any]}>
+        <ThemeProvider theme={theme}>
+          <KeyringCtxRoot>
+            <QueueCtxRoot>
+              <ApiCtxRoot
+                apiUrl={settings.apiUrl}
+                isElectron={isElectron}
+                store={store}
+              >
+                <ApiStatsCtxRoot>
+                  <BlockAuthorsCtxRoot>
+                    <BlockEventsCtxRoot>
+                      <HashRouter>
+                        <WindowSizeCtxRoot>
+                          <Apps />
+                        </WindowSizeCtxRoot>
+                      </HashRouter>
+                    </BlockEventsCtxRoot>
+                  </BlockAuthorsCtxRoot>
+                </ApiStatsCtxRoot>
+              </ApiCtxRoot>
+            </QueueCtxRoot>
+          </KeyringCtxRoot>
+        </ThemeProvider>
+      </Web3ReactProvider>
     </Suspense>
   );
 }

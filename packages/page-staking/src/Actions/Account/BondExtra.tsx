@@ -4,11 +4,11 @@
 import type { DeriveBalancesAll, DeriveStakingAccount } from '@polkadot/api-derive/types';
 import type { AmountValidateState } from '../types';
 
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import { ApiPromise } from '@polkadot/api';
-import { InputAddress, InputBalance, Modal, TxButton } from '@polkadot/react-components';
-import { useApi, useCall } from '@polkadot/react-hooks';
+import { InputAddress, InputBalance, MarkError, Modal, TxButton } from '@polkadot/react-components';
+import { useApi, useCall, useMetaMask } from '@polkadot/react-hooks';
 import { BalanceFree } from '@polkadot/react-query';
 import { BN, BN_ZERO } from '@polkadot/util';
 
@@ -20,6 +20,7 @@ interface Props {
   onClose: () => void;
   stakingInfo?: DeriveStakingAccount;
   stashId: string;
+  isMetaMask?: boolean
 }
 
 function calcBalance (api: ApiPromise, stakingInfo?: DeriveStakingAccount, stashBalance?: DeriveBalancesAll): BN | null {
@@ -36,11 +37,22 @@ function calcBalance (api: ApiPromise, stakingInfo?: DeriveStakingAccount, stash
   return null;
 }
 
-function BondExtra ({ controllerId, onClose, stakingInfo, stashId }: Props): React.ReactElement<Props> {
+function BondExtra ({ controllerId, isMetaMask, onClose, stakingInfo, stashId }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
   const { api } = useApi();
   const [amountError, setAmountError] = useState<AmountValidateState | null>(null);
   const [maxAdditional, setMaxAdditional] = useState<BN | undefined>();
+  const { wallet } = useMetaMask();
+  const [addressError, setAddressError] = useState<string | null>(null);
+
+  useEffect((): void => {
+    if (wallet.account && isMetaMask && stashId !== wallet.account) {
+      setAddressError(`Please select ${stashId} in your MetaMask wallet`);
+    } else {
+      setAddressError(null);
+    }
+  }, [wallet.account, isMetaMask, stashId]);
+
   const stashBalance = useCall<DeriveBalancesAll>(api.derive.balances?.all, [stashId]);
   const currentAmount = useMemo(
     () => stakingInfo && stakingInfo.stakingLedger?.active?.unwrap(),
@@ -92,10 +104,14 @@ function BondExtra ({ controllerId, onClose, stakingInfo, stashId }: Props): Rea
         )}
       </Modal.Content>
       <Modal.Actions>
+        {addressError && (
+          <MarkError content={addressError} />
+        )}
         <TxButton
           accountId={stashId}
           icon='sign-in-alt'
-          isDisabled={!maxAdditional?.gt(BN_ZERO) || !!amountError?.error}
+          isDisabled={!maxAdditional?.gt(BN_ZERO) || !!amountError?.error || !!addressError}
+          isMetaMask={isMetaMask}
           label={t<string>('Bond more')}
           onStart={onClose}
           params={[maxAdditional]}

@@ -5,10 +5,11 @@ import type { BN } from '@polkadot/util';
 import type { SortedTargets } from '../../types';
 import type { NominateInfo } from '../partials/types';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
-import { Modal, TxButton } from '@polkadot/react-components';
+import { MarkError, Modal, TxButton } from '@polkadot/react-components';
+import { useMetaMask } from '@polkadot/react-hooks';
 
 import { useTranslation } from '../../translate';
 import NominatePartial from '../partials/Nominate';
@@ -16,6 +17,7 @@ import NominatePartial from '../partials/Nominate';
 interface Props {
   className?: string;
   controllerId: string;
+  isMetaMask?: boolean
   nominating?: string[];
   onClose: () => void;
   poolId?: BN;
@@ -23,9 +25,21 @@ interface Props {
   targets: SortedTargets;
 }
 
-function Nominate ({ className = '', controllerId, nominating, onClose, poolId, stashId, targets }: Props): React.ReactElement<Props> | null {
+function Nominate ({ className = '', controllerId, isMetaMask, nominating, onClose, poolId, stashId, targets }: Props): React.ReactElement<Props> | null {
   const { t } = useTranslation();
   const [{ nominateTx }, setTx] = useState<NominateInfo>({});
+  const { wallet } = useMetaMask();
+  const [addressError, setAddressError] = useState<string | null>(null);
+
+  useEffect((): void => {
+    if (wallet.account && isMetaMask && controllerId !== wallet.account) {
+      setAddressError(`Please select ${controllerId} in your MetaMask wallet`);
+    } else {
+      setAddressError(null);
+    }
+  }, [wallet.account, isMetaMask, controllerId]);
+
+  const isDisabled = !nominateTx || !!addressError;
 
   return (
     <StyledModal
@@ -47,11 +61,15 @@ function Nominate ({ className = '', controllerId, nominating, onClose, poolId, 
         />
       </Modal.Content>
       <Modal.Actions>
+        {addressError && (
+          <MarkError content={addressError} />
+        )}
         <TxButton
           accountId={controllerId}
           extrinsic={nominateTx}
           icon='hand-paper'
-          isDisabled={!nominateTx}
+          isDisabled={isDisabled}
+          isMetaMask={isMetaMask}
           label={t<string>('Nominate')}
           onStart={onClose}
         />

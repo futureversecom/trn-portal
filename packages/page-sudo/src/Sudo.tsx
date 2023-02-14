@@ -4,7 +4,8 @@
 import type { SubmittableExtrinsic } from '@polkadot/api/types';
 import type { BN } from '@polkadot/util';
 
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
+import localStore from 'store';
 import styled from 'styled-components';
 
 import { Button, Extrinsic, Icon, InputNumber, Toggle, TxButton } from '@polkadot/react-components';
@@ -25,6 +26,16 @@ function Sudo ({ className, isMine, sudoKey }: Props): React.ReactElement<Props>
   const [withWeight, toggleWithWeight] = useToggle();
   const [method, setMethod] = useState<SubmittableExtrinsic<'promise'> | null>(null);
   const [weight, setWeight] = useState<BN>(BN_ZERO);
+
+  const [isMetaMask, setIsMetaMask] = useState<boolean>(false);
+
+  useEffect((): void => {
+    /* eslint-disable @typescript-eslint/no-unsafe-assignment */
+    const metamaskAccounts: string[] = localStore.get('METAMASK_ACCOUNTS') || [];
+    const isMetaMaskAccSelected: string | undefined = metamaskAccounts.find((address: string) => address === sudoKey);
+
+    setIsMetaMask(!!isMetaMaskAccSelected);
+  }, [sudoKey]);
 
   const _onChangeExtrinsic = useCallback(
     (method: SubmittableExtrinsic<'promise'> | null = null) => setMethod(() => method),
@@ -67,6 +78,7 @@ function Sudo ({ className, isMine, sudoKey }: Props): React.ReactElement<Props>
             accountId={sudoKey}
             icon='sign-in-alt'
             isDisabled={!method || (withWeight ? weight.eq(BN_ZERO) : false)}
+            isMetaMask={isMetaMask}
             label={
               withWeight
                 ? t<string>('Submit Sudo Unchecked')

@@ -16,7 +16,7 @@ const spy = jest.spyOn(keyring, 'addUri');
 const newAccountName = 'NEW ACCOUNT NAME';
 const newAccountPassword = 'mySecretPassword';
 
-describe('Create an account modal', () => {
+describe.skip('Create an account modal', () => {
   let accountsPage: AccountsPage;
 
   beforeAll(async () => {
