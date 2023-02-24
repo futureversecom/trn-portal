@@ -6,7 +6,7 @@ import type { LinkOption } from './types';
 
 import { createDev, createOwn } from './development';
 import { prodChains } from './production';
-import { testChains} from './testing';
+import { testChains } from './testing';
 import { expandEndpoints } from './util';
 
 export { CUSTOM_ENDPOINT_KEY } from './development';
