@@ -1,20 +1,12 @@
 {
-  "author": "Jaco Greeff <jacogr@gmail.com>",
-  "bugs": "https://github.com/polkadot-js/apps/issues",
-  "description": "An Apps portal into the Polkadot network",
+  "name": "@futureverse/trnsp",
+  "description": "A portal into the Root Network",
   "engines": {
     "node": ">=14.0.0"
   },
-  "homepage": "https://github.com/polkadot-js/apps#readme",
   "license": "Apache-2.0",
-  "name": "polkadot-apps",
   "packageManager": "yarn@3.2.0",
   "private": true,
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/polkadot-js/apps.git"
-  },
-  "sideEffects": false,
   "version": "0.124.2-96-x",
   "versions": {
     "git": "0.124.2-96-x",
