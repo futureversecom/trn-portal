@@ -1,5 +1,13 @@
-name: PR
-on: [pull_request]
+name: Check | PR
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches: ["*"]
+
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   pr:
