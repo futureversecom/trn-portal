@@ -11,6 +11,7 @@ import { MarkError, MarkWarning } from '@polkadot/react-components';
 import { useApi, useCall } from '@polkadot/react-hooks';
 
 import { useTranslation } from '../../translate';
+import {PalletAssetsAssetAccount} from "@polkadot/types/lookup";
 
 interface Props {
   accountId: string | null;
@@ -41,9 +42,12 @@ const OPT_STASH = {
 function ValidateController ({ accountId, controllerId, defaultController, onError }: Props): React.ReactElement<Props> | null {
   const { t } = useTranslation();
   const { api } = useApi();
+  const feeAssetId = 2;
   const bondedId = useCall<string | null>(controllerId ? api.query.staking.bonded : null, [controllerId], OPT_BOND);
   const stashId = useCall<string | null>(controllerId ? api.query.staking.ledger : null, [controllerId], OPT_STASH);
   const allBalances = useCall<DeriveBalancesAll>(controllerId ? api.derive.balances?.all : null, [controllerId]);
+  const gasFee = useCall<Option<PalletAssetsAssetAccount>>(controllerId ? api.query.assets.account : null, [feeAssetId, controllerId]);
+
   const [{ error, isFatal }, setError] = useState<ErrorState>({ error: null, isFatal: false });
 
   useEffect((): void => {
@@ -59,7 +63,7 @@ function ValidateController ({ accountId, controllerId, defaultController, onErr
       } else if (stashId) {
         isFatal = true;
         newError = t('A controller account should not be set to manage multiple stashes. The selected controller is already controlling {{stashId}}', { replace: { stashId } });
-      } else if (allBalances?.freeBalance.isZero()) {
+      } else if (gasFee?.unwrap()?.balance?.toNumber() === 0) {
         isFatal = true;
         newError = t('The controller does not have sufficient funds available to cover transaction fees. Ensure that a funded controller is used.');
       } else if (controllerId === accountId) {
