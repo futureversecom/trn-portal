@@ -7,10 +7,9 @@ import type { AccountId, StakingLedger } from '@polkadot/types/interfaces';
 
 import React, { useEffect, useState } from 'react';
 
-import { PalletAssetsAssetAccount } from '@polkadot/types/lookup';
-
 import { MarkError, MarkWarning } from '@polkadot/react-components';
 import { useApi, useCall } from '@polkadot/react-hooks';
+import { PalletAssetsAssetAccount } from '@polkadot/types/lookup';
 
 import { useTranslation } from '../../translate';
 
