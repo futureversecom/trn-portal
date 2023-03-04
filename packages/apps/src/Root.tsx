@@ -11,6 +11,7 @@ import { ThemeProvider } from 'styled-components';
 import { ApiCtxRoot } from '@polkadot/react-api';
 import { ApiStatsCtxRoot, BlockAuthorsCtxRoot, BlockEventsCtxRoot, KeyringCtxRoot, QueueCtxRoot, WindowSizeCtxRoot } from '@polkadot/react-hooks';
 import { settings } from '@polkadot/ui-settings';
+import { EthereumWalletCtxRoot } from '@trnsp/custom/providers/EthereumWallet';
 
 import Apps from './Apps';
 import { darkTheme, lightTheme } from './themes';
@@ -55,7 +56,9 @@ function Root ({ isElectron, store }: Props): React.ReactElement<Props> {
                   <BlockEventsCtxRoot>
                     <HashRouter>
                       <WindowSizeCtxRoot>
-                        <Apps />
+                        <EthereumWalletCtxRoot>
+                          <Apps />
+                        </EthereumWalletCtxRoot>
                       </WindowSizeCtxRoot>
                     </HashRouter>
                   </BlockEventsCtxRoot>

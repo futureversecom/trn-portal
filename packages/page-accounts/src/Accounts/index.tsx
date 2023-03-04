@@ -28,6 +28,7 @@ import Account from './Account';
 import BannerClaims from './BannerClaims';
 import BannerExtension from './BannerExtension';
 import Summary from './Summary';
+import { useEthereumWallet } from '@trnsp/custom/providers/EthereumWallet';
 
 interface Balances {
   accounts: Record<string, AccountBalance>;
@@ -142,6 +143,12 @@ function Overview ({ className = '', onStatusChange }: Props): React.ReactElemen
       }),
     []
   );
+
+  const { requestAccounts, hasEthereumWallet } = useEthereumWallet();
+
+  const onEthereumWallet = useCallback(async () => {
+    await requestAccounts?.();
+  }, []);
 
   const canStoreAccounts = useMemo(
     () => isElectron || (!isIpfs && settings.get().storage === 'on'),
@@ -347,6 +354,12 @@ function Overview ({ className = '', onStatusChange }: Props): React.ReactElemen
               />
             </>
           )}
+          {hasEthereumWallet && <Button
+            icon='wallet'
+            label={t<string>('From Ethereum Wallet')}
+            onClick={onEthereumWallet}
+          />
+          }
           <Button
             icon='qrcode'
             label={t<string>('From Qr')}
