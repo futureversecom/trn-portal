@@ -26,7 +26,7 @@ import { useTranslation } from '../translate';
 import { SORT_CATEGORY, sortAccounts } from '../util';
 import Account from './Account';
 import BannerClaims from './BannerClaims';
-import BannerExtension from './BannerExtension';
+// import BannerExtension from './BannerExtension';
 import Summary from './Summary';
 import { useEthereumWallet } from '@trnsp/custom/providers/EthereumWallet';
 
@@ -312,7 +312,7 @@ function Overview ({ className = '', onStatusChange }: Props): React.ReactElemen
           onStatusChange={onStatusChange}
         />
       )}
-      <BannerExtension />
+      {/*<BannerExtension />*/}
       <BannerClaims />
       <Summary balance={balances.summary} />
       <SummaryBox className='header-box'>
