@@ -10,7 +10,7 @@ import { Tabs } from '@polkadot/react-components';
 import { useApi } from '@polkadot/react-hooks';
 
 import Developer from './Developer';
-import General from './General.trn';
+import General from './General';
 import I18n from './I18n';
 import Metadata from './Metadata';
 import { useTranslation } from './translate';
