@@ -7,21 +7,11 @@ import { useApi } from '@polkadot/react-hooks/useApi';
 
 interface EthereumWallet {
   hasEthereumWallet: boolean;
-  connectedAccounts: ConnectedAccount[];
+  connectedAccounts: string[];
   requestAccounts?: () => Promise<void>
 }
 
-export interface ConnectedAccount {
-  address: string;
-  meta: {
-    name: string;
-    source: string;
-    whenCreated: number;
-  };
-}
-
 export const STORAGE_KEY = "ETHEREUM_WALLET_ACCOUNTS";
-
 
 declare global {
   interface Window {
@@ -39,7 +29,7 @@ interface Props {
 }
 
 export function EthereumWalletCtxRoot ({ children }: Props): React.ReactElement<Props> {
-  const [connectedAccounts, setConnectedAccounts] = useLocalStorage<ConnectedAccount[]>(
+  const [connectedAccounts, setConnectedAccounts] = useLocalStorage<string[]>(
     STORAGE_KEY, []
   );
 
@@ -62,17 +52,7 @@ export function EthereumWalletCtxRoot ({ children }: Props): React.ReactElement<
 
       const accounts = result[0]?.caveats?.[0]?.value as unknown as string[] ?? [];
 
-      setConnectedAccounts(accounts.map((address) => {
-        const hex = address.replace("0x", "");
-        return {
-          address,
-          meta: {
-            name: `${hex.substring(0, 4)}..${hex.substring(hex.length - 4, hex.length)}`,
-            source: "isEthereumWallet",
-            whenCreated: Date.now()
-          }
-        }
-      }))
+      setConnectedAccounts(accounts)
     } catch (error: any) {
       // user reject with 4001, ignore
       if (error?.code === 4001) return;
@@ -82,13 +62,25 @@ export function EthereumWalletCtxRoot ({ children }: Props): React.ReactElement<
   useEffect(() => {
     if (!isApiReady) return
 
-    connectedAccounts.forEach(({ address, meta }) => {
+    connectedAccounts.forEach((address) => {
+      const hex = address.replace("0x", "");
+      const meta = {
+        name: `${hex.substring(0, 4)}..${hex.substring(hex.length - 4, hex.length)}`,
+        // add `isInjected` so the account can show up in `extension` group
+        isInjected: true,
+        // add `isEthereumWallet` to easily target the account
+        isEthereumWallet: true,
+        whenCreated: Date.now()
+      }
+
       keyring.addExternal(address, meta)
     });
 
   }, [isApiReady, connectedAccounts])
 
-  return <EthereumWalletCtx.Provider value={{ connectedAccounts, requestAccounts, hasEthereumWallet }}>
+  return <EthereumWalletCtx.Provider value={{
+    connectedAccounts, requestAccounts, hasEthereumWallet
+  }}>
     {children}
   </EthereumWalletCtx.Provider>;
 }
