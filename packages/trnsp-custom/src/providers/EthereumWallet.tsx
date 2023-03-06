@@ -5,7 +5,7 @@ import { useLocalStorage } from '../hooks/useLocalStorage';
 import { keyring } from '@polkadot/ui-keyring';
 import { useApi } from '@polkadot/react-hooks/useApi';
 
-interface EthereumWallet {
+export interface EthereumWallet {
   hasEthereumWallet: boolean;
   connectedAccounts: string[];
   activeAccount?: string;

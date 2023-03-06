@@ -70,6 +70,7 @@ function Selection ({ className, defaultValue }: Props): React.ReactElement<Prop
         }
         onChange={setAccountId}
         type='account'
+        isSigner={true}
       />
       <Extrinsic
         defaultArgs={defaultArgs}

@@ -20,6 +20,8 @@ import { styled } from '../styled';
 import { getAddressName, toAddress } from '../util';
 import createHeader from './createHeader';
 import createItem from './createItem';
+import MarkError from "../MarkError";
+import { EthereumWallet, EthereumWalletCtx } from '@trnsp/custom/providers/EthereumWallet';
 
 interface Props {
   className?: string;
@@ -42,6 +44,7 @@ interface Props {
   withEllipsis?: boolean;
   withExclude?: boolean;
   withLabel?: boolean;
+  isSigner?: boolean;
 }
 
 type ExportedType = React.ComponentType<Props> & {
@@ -52,6 +55,7 @@ type ExportedType = React.ComponentType<Props> & {
 interface State {
   lastValue?: string;
   value?: string | string[];
+  innerValue?: string;
 }
 
 const STORAGE_KEY = 'options:InputAddress';
@@ -191,6 +195,12 @@ class InputAddress extends React.PureComponent<Props, State> {
       ? undefined
       : actualValue;
 
+    const { activeAccount } = this.context as EthereumWallet;
+    const { isSigner } = this.props;
+    const { innerValue } = this.state;
+    const innerNode = isSigner && activeAccount && activeAccount?.toLowerCase() !== innerValue?.toLowerCase() ? <MarkError content={`Please select ${activeAccount} in your MetaMask wallet to sign this extrinsic`} /> : null;
+    ;
+
     return (
       <StyledDropdown
         className={`${className} ui--InputAddress ${hideAddress ? 'hideAddress' : ''}`}
@@ -220,7 +230,9 @@ class InputAddress extends React.PureComponent<Props, State> {
         }
         withEllipsis={withEllipsis}
         withLabel={withLabel}
-      />
+      >
+        {innerNode}
+      </StyledDropdown>
     );
   }
 
@@ -271,7 +283,9 @@ class InputAddress extends React.PureComponent<Props, State> {
   }
 
   private onChange = (address: string): void => {
-    const { filter, onChange, type } = this.props;
+    const { filter, onChange, type, isSigner } = this.props;
+
+    if(isSigner) this.setState({innerValue: address});
 
     !filter && setLastValue(type, address);
 
@@ -374,6 +388,8 @@ const StyledDropdown = styled(Dropdown)`
     max-width: 0;
   }
 `;
+
+InputAddress.contextType = EthereumWalletCtx;
 
 const ExportedComponent = withMulti(
   InputAddress,
