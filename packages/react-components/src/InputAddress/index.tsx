@@ -5,6 +5,7 @@ import type { DropdownItemProps } from 'semantic-ui-react';
 import type { KeyringOption$Type, KeyringOptions, KeyringSectionOption, KeyringSectionOptions } from '@polkadot/ui-keyring/options/types';
 import type { Option } from './types';
 
+import { EthereumWallet, EthereumWalletCtx } from '@trnsp/custom/providers/EthereumWallet';
 import React from 'react';
 import store from 'store';
 
@@ -15,13 +16,12 @@ import { isNull, isUndefined } from '@polkadot/util';
 import { isAddress } from '@polkadot/util-crypto';
 
 import Dropdown from '../Dropdown';
+import MarkError from '../MarkError';
 import Static from '../Static';
 import { styled } from '../styled';
 import { getAddressName, toAddress } from '../util';
 import createHeader from './createHeader';
 import createItem from './createItem';
-import MarkError from "../MarkError";
-import { EthereumWallet, EthereumWalletCtx } from '@trnsp/custom/providers/EthereumWallet';
 
 interface Props {
   className?: string;
@@ -195,11 +195,23 @@ class InputAddress extends React.PureComponent<Props, State> {
       ? undefined
       : actualValue;
 
-    const { activeAccount } = this.context as EthereumWallet;
-    const { isSigner } = this.props;
-    const { innerValue } = this.state;
-    const innerNode = isSigner && activeAccount && activeAccount?.toLowerCase() !== innerValue?.toLowerCase() ? <MarkError content={`Please select ${activeAccount} in your MetaMask wallet to sign this extrinsic`} /> : null;
-    ;
+    const innerNode = (() => {
+      const { activeAccount } = this.context as EthereumWallet;
+      const { isSigner } = this.props;
+      const { innerValue } = this.state;
+
+      if (!isSigner || !innerValue || !activeAccount || activeAccount.toLowerCase() === innerValue.toLowerCase()) {
+        return null;
+      }
+
+      const account = keyring.getAccount(innerValue);
+
+      if (!account?.meta?.isEthereumWallet) {
+        return null;
+      }
+
+      return <MarkError content={`Please select ${activeAccount} in your MetaMask wallet to sign this extrinsic`} />;
+    })();
 
     return (
       <StyledDropdown
@@ -283,9 +295,11 @@ class InputAddress extends React.PureComponent<Props, State> {
   }
 
   private onChange = (address: string): void => {
-    const { filter, onChange, type, isSigner } = this.props;
+    const { filter, isSigner, onChange, type } = this.props;
 
-    if(isSigner) this.setState({innerValue: address});
+    if (isSigner) {
+      this.setState({ innerValue: address });
+    }
 
     !filter && setLastValue(type, address);
 

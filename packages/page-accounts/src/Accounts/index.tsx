@@ -7,6 +7,7 @@ import type { BN } from '@polkadot/util';
 import type { AccountBalance, Delegation, SortedAccount } from '../types';
 import type { SortCategory } from '../util';
 
+import { useEthereumWallet } from '@trnsp/custom/providers/EthereumWallet';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { Button, FilterInput, SortDropdown, styled, SummaryBox, Table } from '@polkadot/react-components';
@@ -28,7 +29,6 @@ import Account from './Account';
 import BannerClaims from './BannerClaims';
 // import BannerExtension from './BannerExtension';
 import Summary from './Summary';
-import { useEthereumWallet } from '@trnsp/custom/providers/EthereumWallet';
 
 interface Balances {
   accounts: Record<string, AccountBalance>;
@@ -144,7 +144,7 @@ function Overview ({ className = '', onStatusChange }: Props): React.ReactElemen
     []
   );
 
-  const { requestAccounts, hasEthereumWallet } = useEthereumWallet();
+  const { hasEthereumWallet, requestAccounts } = useEthereumWallet();
 
   const onEthereumWallet = useCallback(async () => {
     await requestAccounts?.();
@@ -312,7 +312,7 @@ function Overview ({ className = '', onStatusChange }: Props): React.ReactElemen
           onStatusChange={onStatusChange}
         />
       )}
-      {/*<BannerExtension />*/}
+      {/* <BannerExtension />*/}
       <BannerClaims />
       <Summary balance={balances.summary} />
       <SummaryBox className='header-box'>
@@ -358,7 +358,7 @@ function Overview ({ className = '', onStatusChange }: Props): React.ReactElemen
             icon='wallet'
             label={t<string>('From Ethereum Wallet')}
             onClick={onEthereumWallet}
-          />
+                                />
           }
           <Button
             icon='qrcode'
