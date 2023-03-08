@@ -210,7 +210,7 @@ class InputAddress extends React.PureComponent<Props, State> {
         return null;
       }
 
-      return <MarkError content={`Please select ${activeAccount} in your MetaMask wallet to sign this extrinsic`} />;
+      return <MarkError content={`Please select ${innerValue} in your MetaMask wallet to sign this extrinsic`} />;
     })();
 
     return (
