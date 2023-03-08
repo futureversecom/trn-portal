@@ -36,6 +36,7 @@ function TxSigned ({ className, currentItem, requestAddress }: Props): React.Rea
   const { queueSetTxStatus } = useQueue();
   const [error, setError] = useState<Error | null>(null);
   const [isBusy, setBusy] = useState(false);
+  const [passwordError, setPasswordError] = useState<string | null>(null);
   const [isRenderError, toggleRenderError] = useToggle();
   const [senderInfo, setSenderInfo] = useState<AddressProxy>(() => ({ isMultiCall: false, isUnlockCached: false, multiRoot: null, proxyRoot: null, signAddress: requestAddress, signPassword: '' }));
   const [{ innerHash }, setCallInfo] = useState<InnerTx>(EMPTY_INNER);
@@ -65,6 +66,18 @@ function TxSigned ({ className, currentItem, requestAddress }: Props): React.Rea
     (): void => {
       setBusy(true);
       nextTick(async () => {
+        const errorHandler = (error: Error): void => {
+          console.error(error);
+
+          setBusy(false);
+          setError(error);
+        };
+
+        const externalErrorHandler = (message: string): void => {
+          setBusy(false);
+          setPasswordError(message);
+        };
+
         if (!senderInfo.signAddress) {
           return setError(new Error(`Invalid signing address: ${JSON.stringify(senderInfo.signAddress)}`));
         }
@@ -79,7 +92,13 @@ function TxSigned ({ className, currentItem, requestAddress }: Props): React.Rea
           queueSetTxStatus(currentItem.id, 'sending');
           const unsubscribe: () => void = await signedExtrinsic.send(handleTxResults('signAndSend', queueSetTxStatus, currentItem, () => unsubscribe()));
         } catch (error) {
-          console.log(error);
+          const { code, message } = error as {code: number, message: string};
+
+          if (code) {
+            return externalErrorHandler(`${code}: ${message}`);
+          }
+
+          errorHandler(error as Error);
         }
       });
     },
@@ -102,7 +121,7 @@ function TxSigned ({ className, currentItem, requestAddress }: Props): React.Rea
             currentItem={currentItem}
             onChange={setSenderInfo}
             onEnter={_doStart}
-            passwordError={null}
+            passwordError={passwordError}
             requestAddress={requestAddress}
           />
           {!currentItem.payload && (
