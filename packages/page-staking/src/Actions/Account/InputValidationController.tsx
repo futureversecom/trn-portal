@@ -9,8 +9,10 @@ import React, { useEffect, useState } from 'react';
 
 import { MarkError, MarkWarning } from '@polkadot/react-components';
 import { useApi, useCall } from '@polkadot/react-hooks';
+import { PalletAssetsAssetAccount } from '@polkadot/types/lookup';
 
 import { useTranslation } from '../../translate';
+import { useFeeAssetBalance } from '@trnsp/custom/hooks/useFeeAssetBalance';
 
 interface Props {
   accountId: string | null;
@@ -45,6 +47,7 @@ function ValidateController ({ accountId, controllerId, defaultController, onErr
   const stashId = useCall<string | null>(controllerId ? api.query.staking.ledger : null, [controllerId], OPT_STASH);
   const allBalances = useCall<DeriveBalancesAll>(controllerId ? api.derive.balances?.all : null, [controllerId]);
   const [{ error, isFatal }, setError] = useState<ErrorState>({ error: null, isFatal: false });
+  const [, feeAssetBalance] = useFeeAssetBalance(controllerId);
 
   useEffect((): void => {
     // don't show an error if the selected controller is the default
@@ -59,7 +62,7 @@ function ValidateController ({ accountId, controllerId, defaultController, onErr
       } else if (stashId) {
         isFatal = true;
         newError = t<string>('A controller account should not be set to manage multiple stashes. The selected controller is already controlling {{stashId}}', { replace: { stashId } });
-      } else if (allBalances?.freeBalance.isZero()) {
+      } else if (feeAssetBalance?.isZero()) {
         isFatal = true;
         newError = t<string>('The controller does not have sufficient funds available to cover transaction fees. Ensure that a funded controller is used.');
       } else if (controllerId === accountId) {
@@ -69,7 +72,7 @@ function ValidateController ({ accountId, controllerId, defaultController, onErr
       onError(newError, isFatal);
       setError((state) => state.error !== newError ? { error: newError, isFatal } : state);
     }
-  }, [accountId, allBalances, bondedId, controllerId, defaultController, onError, stashId, t]);
+  }, [accountId, allBalances, bondedId, controllerId, defaultController, feeAssetBalance, onError, stashId, t]);
 
   if (!error || !accountId) {
     return null;
