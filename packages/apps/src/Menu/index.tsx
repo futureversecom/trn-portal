@@ -26,20 +26,7 @@ interface Props {
 }
 
 function createExternals (t: TFunction): ItemRoute[] {
-  return [
-    {
-      href: 'https://github.com/polkadot-js/apps',
-      icon: 'code-branch',
-      name: 'github',
-      text: t<string>('nav.github', 'GitHub', { ns: 'apps-routing' })
-    },
-    {
-      href: 'https://wiki.polkadot.network',
-      icon: 'book',
-      name: 'wiki',
-      text: t<string>('nav.wiki', 'Wiki', { ns: 'apps-routing' })
-    }
-  ];
+  return [];
 }
 
 function checkVisible ({ api, isApiConnected, isApiReady, isDevelopment: isApiDevelopment }: ApiProps, allowTeleport: boolean, hasAccounts: boolean, hasSudo: boolean, { isDevelopment, isHidden, needsAccounts, needsApi, needsApiCheck, needsApiInstances, needsSudo, needsTeleport }: Route['display']): boolean {
@@ -152,7 +139,7 @@ function Menu ({ className = '' }: Props): React.ReactElement<Props> {
             ))}
           </ul>
         </div>
-        <NodeInfo className='media--1400' />
+        <NodeInfo className='media--800' />
       </div>
     </StyledDiv>
   );
