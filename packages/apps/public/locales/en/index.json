@@ -41,5 +41,6 @@
   "react-components.json",
   "react-params.json",
   "react-query.json",
-  "react-signer.json"
+  "react-signer.json",
+  "trnsp-custom.json"
 ]

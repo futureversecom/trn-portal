@@ -1,13 +1,13 @@
 {
-  "bugs": "https://github.com/polkadot-js/apps/issues",
-  "homepage": "https://github.com/polkadot-js/apps/tree/master/packages/react-params#readme",
+  "bugs": "https://github.com/futureversecom/trn-substrate-portal/issues",
+  "homepage": "https://github.com/futureversecom/trn-substrate-portal/tree/master/packages/react-params#readme",
   "license": "Apache-2.0",
   "name": "@polkadot/react-params",
   "private": true,
   "repository": {
     "directory": "packages/react-params",
     "type": "git",
-    "url": "https://github.com/polkadot-js/apps.git"
+    "url": "https://github.com/futureversecom/trn-substrate-portal.git"
   },
   "sideEffects": false,
   "type": "module",

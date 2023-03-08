@@ -1,12 +1,19 @@
 {
-  "name": "@futureverse/trnsp",
+  "bugs": "https://github.com/futureversecom/trn-substrate-portal/issues",
   "description": "A portal into the Root Network",
   "engines": {
     "node": ">=14.0.0"
   },
+  "homepage": "https://github.com/futureversecom/trn-substrate-portal#readme",
   "license": "Apache-2.0",
+  "name": "@futureverse/trnsp",
   "packageManager": "yarn@3.2.0",
   "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/futureversecom/trn-substrate-portal.git"
+  },
+  "sideEffects": false,
   "version": "0.124.2-96-x",
   "versions": {
     "git": "0.124.2-96-x",
@@ -25,7 +32,6 @@
     "build:electron": "yarn clean:electronBuild && yarn build:electronMain && yarn build:electronRenderer",
     "build:electronMain": "cd packages/apps-electron && NODE_ENV=production yarn polkadot-exec-webpack --config webpack.main.cjs",
     "build:electronRenderer": "cd packages/apps-electron && NODE_ENV=production yarn polkadot-exec-webpack --config webpack.renderer.cjs",
-    "build:extra": "yarn build:images && yarn build:typesBundle",
     "build:i18n": "i18next-scanner --config i18next-scanner.config.cjs && node ./scripts/i18nSort.cjs",
     "build:images": "node scripts/imgConvert.mjs",
     "build:release:electron": "yarn build && yarn build:electron && yarn postinstall:electron",

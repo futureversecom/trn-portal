@@ -5,14 +5,13 @@ import type { DeriveBalancesAll } from '@polkadot/api-derive/types';
 import type { Option } from '@polkadot/types';
 import type { AccountId, StakingLedger } from '@polkadot/types/interfaces';
 
+import { useFeeAssetBalance } from '@trnsp/custom/hooks/useFeeAssetBalance';
 import React, { useEffect, useState } from 'react';
 
 import { MarkError, MarkWarning } from '@polkadot/react-components';
 import { useApi, useCall } from '@polkadot/react-hooks';
-import { PalletAssetsAssetAccount } from '@polkadot/types/lookup';
 
 import { useTranslation } from '../../translate';
-import { useFeeAssetBalance } from '@trnsp/custom/hooks/useFeeAssetBalance';
 
 interface Props {
   accountId: string | null;

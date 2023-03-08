@@ -1,13 +1,13 @@
 {
-  "bugs": "https://github.com/polkadot-js/apps/issues",
-  "homepage": "https://github.com/polkadot-js/apps/tree/master/packages/page-whitelist#readme",
+  "bugs": "https://github.com/futureversecom/trn-substrate-portal/issues",
+  "homepage": "https://github.com/futureversecom/trn-substrate-portal/tree/master/packages/page-whitelist#readme",
   "license": "Apache-2.0",
   "name": "@polkadot/app-whitelist",
   "private": true,
   "repository": {
     "directory": "packages/page-whitelist",
     "type": "git",
-    "url": "https://github.com/polkadot-js/apps.git"
+    "url": "https://github.com/futureversecom/trn-substrate-portal.git"
   },
   "sideEffects": false,
   "type": "module",

@@ -1,13 +1,13 @@
 {
-  "bugs": "https://github.com/polkadot-js/apps/issues",
-  "homepage": "https://github.com/polkadot-js/apps/tree/master/packages/page-ranked#readme",
+  "bugs": "https://github.com/futureversecom/trn-substrate-portal/issues",
+  "homepage": "https://github.com/futureversecom/trn-substrate-portal/tree/master/packages/page-ranked#readme",
   "license": "Apache-2.0",
   "name": "@polkadot/app-ranked",
   "private": true,
   "repository": {
     "directory": "packages/page-ranked",
     "type": "git",
-    "url": "https://github.com/polkadot-js/apps.git"
+    "url": "https://github.com/futureversecom/trn-substrate-portal.git"
   },
   "sideEffects": false,
   "type": "module",
