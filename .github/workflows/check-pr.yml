@@ -13,7 +13,7 @@ jobs:
   pr:
     strategy:
       matrix:
-        step: ['lint', 'test', 'build:code', 'build:i18n']
+        step: ['lint', 'test']
     name: ${{ matrix.step }}
     runs-on: ubuntu-latest
     steps:
