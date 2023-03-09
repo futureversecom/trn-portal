@@ -1,13 +1,13 @@
 {
-  "bugs": "https://github.com/futureversecom/trn-substrate-portal/issues",
-  "homepage": "https://github.com/futureversecom/trn-substrate-portal/tree/master/packages/react-components#readme",
+  "bugs": "https://github.com/polkadot-js/apps/issues",
+  "homepage": "https://github.com/polkadot-js/apps/tree/master/packages/react-components#readme",
   "license": "Apache-2.0",
   "name": "@polkadot/react-components",
   "private": true,
   "repository": {
     "directory": "packages/react-components",
     "type": "git",
-    "url": "https://github.com/futureversecom/trn-substrate-portal.git"
+    "url": "https://github.com/polkadot-js/apps.git"
   },
   "sideEffects": true,
   "type": "module",

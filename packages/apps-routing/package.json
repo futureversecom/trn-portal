@@ -1,13 +1,13 @@
 {
-  "bugs": "https://github.com/futureversecom/trn-substrate-portal/issues",
-  "homepage": "https://github.com/futureversecom/trn-substrate-portal/tree/master/packages/apps-routing#readme",
+  "bugs": "https://github.com/polkadot-js/apps/issues",
+  "homepage": "https://github.com/polkadot-js/apps/tree/master/packages/apps-routing#readme",
   "license": "Apache-2.0",
   "name": "@polkadot/apps-routing",
   "private": true,
   "repository": {
     "directory": "packages/apps-routing",
     "type": "git",
-    "url": "https://github.com/futureversecom/trn-substrate-portal.git"
+    "url": "https://github.com/polkadot-js/apps.git"
   },
   "sideEffects": false,
   "type": "module",

@@ -1,13 +1,13 @@
 {
-  "bugs": "https://github.com/futureversecom/trn-substrate-portal/issues",
-  "homepage": "https://github.com/futureversecom/trn-substrate-portal/tree/master/packages/page-staking2#readme",
+  "bugs": "https://github.com/polkadot-js/apps/issues",
+  "homepage": "https://github.com/polkadot-js/apps/tree/master/packages/page-staking2#readme",
   "license": "Apache-2.0",
   "name": "@polkadot/app-staking2",
   "private": true,
   "repository": {
     "directory": "packages/page-staking2",
     "type": "git",
-    "url": "https://github.com/futureversecom/trn-substrate-portal.git"
+    "url": "https://github.com/polkadot-js/apps.git"
   },
   "sideEffects": false,
   "type": "module",
