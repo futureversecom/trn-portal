@@ -4,7 +4,7 @@ import { ExternalProvider } from '@ethersproject/providers';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 
 import { useApi } from '@polkadot/react-hooks/useApi';
-import keyring from '@polkadot/ui-keyring';
+import { Keyring, keyring } from '@polkadot/ui-keyring';
 
 import { useLocalStorage } from '../hooks/useLocalStorage';
 
@@ -130,5 +130,5 @@ function addAddress (address: string) {
     whenCreated: Date.now()
   };
 
-  keyring.addExternal(address, meta);
+  (keyring as unknown as Keyring).addExternal(address, meta);
 }

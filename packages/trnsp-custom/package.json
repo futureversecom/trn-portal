@@ -4,9 +4,13 @@
   "license": "Apache-2.0",
   "private": true,
   "type": "module",
+  "sideEffects": true,
+  "browser": {
+    "fs": false,
+    "path": false
+  },
   "dependencies": {
     "@ethersproject/providers": "^5.7.2",
-    "@polkadot/react-signer": "*",
     "ethers": "^6.0.8"
   }
 }
