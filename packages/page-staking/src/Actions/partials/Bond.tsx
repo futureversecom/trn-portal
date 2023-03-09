@@ -106,10 +106,10 @@ function Bond ({ className = '', isNominating, minNominated, minNominatorBond, m
         }
       >
         <InputAddress
+          isSigner={true}
           label={t<string>('stash account')}
           onChange={setStashId}
           type='account'
-          isSigner={true}
           value={stashId}
         />
         <InputAddress

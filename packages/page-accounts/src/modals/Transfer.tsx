@@ -106,6 +106,7 @@ function Transfer ({ className = '', onClose, recipientId: propRecipientId, send
             <InputAddress
               defaultValue={propSenderId}
               isDisabled={!!propSenderId}
+              isSigner={true}
               label={t<string>('send from account')}
               labelExtra={
                 <Available
@@ -115,7 +116,6 @@ function Transfer ({ className = '', onClose, recipientId: propRecipientId, send
               }
               onChange={setSenderId}
               type='account'
-              isSigner={true}
             />
           </Modal.Columns>
           <Modal.Columns hint={t<string>('The beneficiary will have access to the transferred fees when the transaction is included in a block.')}>

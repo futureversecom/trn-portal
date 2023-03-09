@@ -4,7 +4,7 @@ import { ExternalProvider } from '@ethersproject/providers';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 
 import { useApi } from '@polkadot/react-hooks/useApi';
-import { keyring } from '@polkadot/ui-keyring';
+import keyring from '@polkadot/ui-keyring';
 
 import { useLocalStorage } from '../hooks/useLocalStorage';
 

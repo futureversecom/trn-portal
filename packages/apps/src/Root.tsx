@@ -4,6 +4,7 @@
 import type { ThemeDef } from '@polkadot/react-hooks/ctx/types';
 import type { KeyringStore } from '@polkadot/ui-keyring/types';
 
+import { EthereumWalletCtxRoot } from '@trnsp/custom/providers/EthereumWallet';
 import React, { Suspense, useEffect, useState } from 'react';
 import { HashRouter } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
@@ -11,7 +12,6 @@ import { ThemeProvider } from 'styled-components';
 import { ApiCtxRoot } from '@polkadot/react-api';
 import { ApiStatsCtxRoot, BlockAuthorsCtxRoot, BlockEventsCtxRoot, KeyringCtxRoot, QueueCtxRoot, WindowSizeCtxRoot } from '@polkadot/react-hooks';
 import { settings } from '@polkadot/ui-settings';
-import { EthereumWalletCtxRoot } from '@trnsp/custom/providers/EthereumWallet';
 
 import Apps from './Apps';
 import { darkTheme, lightTheme } from './themes';
