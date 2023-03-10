@@ -21,6 +21,7 @@ import { styled } from '../styled.js';
 import { getAddressName, toAddress } from '../util/index.js';
 import createHeader from './createHeader.js';
 import createItem from './createItem.js';
+import MarkError from '../MarkError.js';
 
 interface Props {
   className?: string;
