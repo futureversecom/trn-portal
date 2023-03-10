@@ -4,6 +4,7 @@
 import type { ThemeDef } from '@polkadot/react-components/types';
 import type { KeyringStore } from '@polkadot/ui-keyring/types';
 
+import { EthereumWalletCtxRoot } from '@trnsp/custom/providers/EthereumWallet';
 import React, { Suspense, useEffect, useState } from 'react';
 import { HashRouter } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
@@ -53,7 +54,9 @@ function Root ({ isElectron, store }: Props): React.ReactElement<Props> {
                   <BlockEventsCtxRoot>
                     <HashRouter>
                       <WindowSizeCtxRoot>
-                        <Apps />
+                        <EthereumWalletCtxRoot>
+                          <Apps />
+                        </EthereumWalletCtxRoot>
                       </WindowSizeCtxRoot>
                     </HashRouter>
                   </BlockEventsCtxRoot>

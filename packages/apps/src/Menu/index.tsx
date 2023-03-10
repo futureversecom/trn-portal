@@ -39,6 +39,8 @@ function createExternals (t: (key: string, optionsOrText?: string | { replace: R
       text: t('nav.wiki', 'Wiki', { ns: 'apps-routing' })
     }
   ];
+function createExternals (t: TFunction): ItemRoute[] {
+  return [];
 }
 
 function checkVisible ({ api, isApiConnected, isApiReady, isDevelopment: isApiDevelopment }: ApiProps, allowTeleport: boolean, hasAccounts: boolean, hasSudo: boolean, { isDevelopment, isHidden, needsAccounts, needsApi, needsApiCheck, needsApiInstances, needsSudo, needsTeleport }: Route['display']): boolean {
@@ -151,7 +153,7 @@ function Menu ({ className = '' }: Props): React.ReactElement<Props> {
             ))}
           </ul>
         </div>
-        <NodeInfo className='media--1400' />
+        <NodeInfo className='media--800' />
       </div>
     </StyledDiv>
   );
