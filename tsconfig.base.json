@@ -103,10 +103,9 @@
       "@polkadot/react-signer": ["react-signer/src"],
       "@polkadot/react-signer/*": ["react-signer/src/*"],
       "@polkadot/test-support/": ["test-support/src/"],
-      "@polkadot/test-support/*": ["test-support/src/*"],
-      "@trnsp/custom/*": ["trnsp-custom/src/*"]
+      "@polkadot/test-support/*": ["test-support/src/*.ts", "test-support/src/*.tsx"],
+	  "@trnsp/custom/*": ["trnsp-custom/src/*"]
     },
-    "skipLibCheck": true,
-    "target": "es2020"
+    "skipLibCheck": true
 	}
  }

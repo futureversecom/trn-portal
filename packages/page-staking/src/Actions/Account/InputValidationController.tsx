@@ -11,7 +11,7 @@ import React, { useEffect, useState } from 'react';
 import { MarkError, MarkWarning } from '@polkadot/react-components';
 import { useApi, useCall } from '@polkadot/react-hooks';
 
-import { useTranslation } from '../../translate';
+import { useTranslation } from '../../translate.js';
 
 interface Props {
   accountId: string | null;
