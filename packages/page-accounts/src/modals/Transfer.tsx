@@ -106,6 +106,7 @@ function Transfer ({ className = '', onClose, recipientId: propRecipientId, send
             <InputAddress
               defaultValue={propSenderId}
               isDisabled={!!propSenderId}
+              isSigner={true}
               label={t<string>('send from account')}
               labelExtra={
                 <Available

@@ -61,6 +61,7 @@ function Selection ({ className, defaultValue }: Props): React.ReactElement<Prop
   return (
     <div className={className}>
       <InputAddress
+        isSigner={true}
         label={t<string>('using the selected account')}
         labelExtra={
           <BalanceFree

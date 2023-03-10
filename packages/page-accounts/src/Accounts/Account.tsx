@@ -576,7 +576,7 @@ function Account ({ account: { address, meta }, className = '', delegation, filt
             />
           )}
           <div className='absolute'>
-            {meta.genesisHash
+            {meta.genesisHash || meta.isEthereumWallet
               ? <Badge color='transparent' />
               : isDevelopment
                 ? (

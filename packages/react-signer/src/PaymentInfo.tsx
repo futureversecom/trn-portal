@@ -2,16 +2,16 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import type { SubmittableExtrinsic } from '@polkadot/api/promise/types';
-import type { DeriveBalancesAll } from '@polkadot/api-derive/types';
 import type { RuntimeDispatchInfo } from '@polkadot/types/interfaces';
 import type { BN } from '@polkadot/util';
 
+import { useFeeAssetBalance } from '@trnsp/custom/hooks/useFeeAssetBalance';
 import React, { useEffect, useState } from 'react';
 import { Trans } from 'react-i18next';
 
 import { Expander, MarkWarning } from '@polkadot/react-components';
-import { useApi, useCall, useIsMountedRef } from '@polkadot/react-hooks';
-import { formatBalance, nextTick } from '@polkadot/util';
+import { useApi, useIsMountedRef } from '@polkadot/react-hooks';
+import { nextTick } from '@polkadot/util';
 
 import { useTranslation } from './translate';
 
@@ -28,8 +28,8 @@ function PaymentInfo ({ accountId, className = '', extrinsic, isHeader }: Props)
   const { t } = useTranslation();
   const { api } = useApi();
   const [dispatchInfo, setDispatchInfo] = useState<RuntimeDispatchInfo | null>(null);
-  const balances = useCall<DeriveBalancesAll>(api.derive.balances?.all, [accountId]);
   const mountedRef = useIsMountedRef();
+  const [feeAsset, feeAssetBalance, formatFeeBalance] = useFeeAssetBalance(accountId);
 
   useEffect((): void => {
     accountId && extrinsic && extrinsic.hasPaymentInfo &&
@@ -48,10 +48,7 @@ function PaymentInfo ({ accountId, className = '', extrinsic, isHeader }: Props)
     return null;
   }
 
-  const isFeeError = api.consts.balances && !api.tx.balances?.transfer.is(extrinsic) && balances?.accountId.eq(accountId) && (
-    balances.availableBalance.lte(dispatchInfo.partialFee) ||
-    balances.freeBalance.sub(dispatchInfo.partialFee).lte(api.consts.balances.existentialDeposit)
-  );
+  const isFeeError = feeAsset && feeAssetBalance?.lte(dispatchInfo.partialFee);
 
   return (
     <>
@@ -60,7 +57,7 @@ function PaymentInfo ({ accountId, className = '', extrinsic, isHeader }: Props)
         isHeader={isHeader}
         summary={
           <Trans i18nKey='feesForSubmission'>
-            Fees of <span className='highlight'>{formatBalance(dispatchInfo.partialFee, { withSiFull: true })}</span> will be applied to the submission
+            Fees of <span className='highlight'>{formatFeeBalance(dispatchInfo.partialFee)}</span> will be applied to the submission
           </Trans>
         }
       />

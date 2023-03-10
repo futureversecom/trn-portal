@@ -5,6 +5,7 @@ import type { DropdownItemProps } from 'semantic-ui-react';
 import type { KeyringOption$Type, KeyringOptions, KeyringSectionOption, KeyringSectionOptions } from '@polkadot/ui-keyring/options/types';
 import type { Option } from './types';
 
+import { EthereumWallet, EthereumWalletCtx } from '@trnsp/custom/providers/EthereumWallet';
 import React from 'react';
 import store from 'store';
 
@@ -15,6 +16,7 @@ import { isNull, isUndefined } from '@polkadot/util';
 import { isAddress } from '@polkadot/util-crypto';
 
 import Dropdown from '../Dropdown';
+import MarkError from '../MarkError';
 import Static from '../Static';
 import { styled } from '../styled';
 import { getAddressName, toAddress } from '../util';
@@ -42,6 +44,7 @@ interface Props {
   withEllipsis?: boolean;
   withExclude?: boolean;
   withLabel?: boolean;
+  isSigner?: boolean;
 }
 
 type ExportedType = React.ComponentType<Props> & {
@@ -52,6 +55,7 @@ type ExportedType = React.ComponentType<Props> & {
 interface State {
   lastValue?: string;
   value?: string | string[];
+  innerValue?: string;
 }
 
 const STORAGE_KEY = 'options:InputAddress';
@@ -191,6 +195,24 @@ class InputAddress extends React.PureComponent<Props, State> {
       ? undefined
       : actualValue;
 
+    const innerNode = (() => {
+      const { activeAccount } = this.context as EthereumWallet;
+      const { isSigner } = this.props;
+      const { innerValue } = this.state;
+
+      if (!isSigner || !innerValue || !activeAccount || activeAccount.toLowerCase() === innerValue.toLowerCase()) {
+        return null;
+      }
+
+      const account = keyring.getAccount(innerValue);
+
+      if (!account?.meta?.isEthereumWallet) {
+        return null;
+      }
+
+      return <MarkError content={`Please select ${innerValue} in your MetaMask wallet to sign this extrinsic`} />;
+    })();
+
     return (
       <StyledDropdown
         className={`${className} ui--InputAddress ${hideAddress ? 'hideAddress' : ''}`}
@@ -220,7 +242,9 @@ class InputAddress extends React.PureComponent<Props, State> {
         }
         withEllipsis={withEllipsis}
         withLabel={withLabel}
-      />
+      >
+        {innerNode}
+      </StyledDropdown>
     );
   }
 
@@ -271,7 +295,11 @@ class InputAddress extends React.PureComponent<Props, State> {
   }
 
   private onChange = (address: string): void => {
-    const { filter, onChange, type } = this.props;
+    const { filter, isSigner, onChange, type } = this.props;
+
+    if (isSigner) {
+      this.setState({ innerValue: address });
+    }
 
     !filter && setLastValue(type, address);
 
@@ -374,6 +402,8 @@ const StyledDropdown = styled(Dropdown)`
     max-width: 0;
   }
 `;
+
+InputAddress.contextType = EthereumWalletCtx;
 
 const ExportedComponent = withMulti(
   InputAddress,
