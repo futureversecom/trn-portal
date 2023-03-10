@@ -7,6 +7,7 @@ import type { BN } from '@polkadot/util';
 import type { AccountBalance, Delegation, SortedAccount } from '../types.js';
 import type { SortCategory } from '../util.js';
 
+import { useEthereumWallet } from '@trnsp/custom/providers/EthereumWallet';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { Button, FilterInput, SortDropdown, styled, SummaryBox, Table } from '@polkadot/react-components';
@@ -142,6 +143,12 @@ function Overview ({ className = '', onStatusChange }: Props): React.ReactElemen
       }),
     []
   );
+
+  const { hasEthereumWallet, requestAccounts } = useEthereumWallet();
+
+  const onEthereumWallet = useCallback(async () => {
+    await requestAccounts?.();
+  }, [requestAccounts]);
 
   const canStoreAccounts = useMemo(
     () => isElectron || (!isIpfs && settings.get().storage === 'on'),
@@ -305,7 +312,6 @@ function Overview ({ className = '', onStatusChange }: Props): React.ReactElemen
           onStatusChange={onStatusChange}
         />
       )}
-      <BannerExtension />
       <BannerClaims />
       <Summary balance={balances.summary} />
       <SummaryBox className='header-box'>
@@ -346,6 +352,13 @@ function Overview ({ className = '', onStatusChange }: Props): React.ReactElemen
                 onClick={toggleImport}
               />
             </>
+          )}
+          {hasEthereumWallet && (
+            <Button
+              icon='wallet'
+              label={t<string>('From Ethereum Wallet')}
+              onClick={onEthereumWallet}
+            />
           )}
           <Button
             icon='qrcode'

@@ -6,6 +6,8 @@ import type { QueueTx, QueueTxMessageSetStatus, QueueTxResult } from '@polkadot/
 import type { BareProps as Props } from '@polkadot/react-components/types';
 import type { DefinitionRpcExt } from '@polkadot/types/types';
 
+import TxExternalSigned from '@trnsp/custom/components/TxExternalSigned';
+import { useEthereumWallet } from '@trnsp/custom/providers/EthereumWallet';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Modal, styled } from '@polkadot/react-components';
@@ -121,6 +123,9 @@ function Signer ({ children, className = '' }: Props): React.ReactElement<Props>
     [currentItem, queueSetTxStatus]
   );
 
+  const { connectedAccounts } = useEthereumWallet();
+  const canSignExternally = !!requestAddress && connectedAccounts.indexOf(requestAddress.toLowerCase()) >= 0;
+
   return (
     <>
       {children}
@@ -134,15 +139,20 @@ function Signer ({ children, className = '' }: Props): React.ReactElement<Props>
         >
           {currentItem.isUnsigned
             ? <TxUnsigned currentItem={currentItem} />
-            : (
-              <TxSigned
+            : !canSignExternally
+              ? (
+                <TxSigned
+                  currentItem={currentItem}
+                  isQueueSubmit={isQueueSubmit}
+                  queueSize={queueSize}
+                  requestAddress={requestAddress}
+                  setIsQueueSubmit={setIsQueueSubmit}
+                />
+              )
+              : <TxExternalSigned
                 currentItem={currentItem}
-                isQueueSubmit={isQueueSubmit}
-                queueSize={queueSize}
                 requestAddress={requestAddress}
-                setIsQueueSubmit={setIsQueueSubmit}
               />
-            )
           }
         </StyledModal>
       )}

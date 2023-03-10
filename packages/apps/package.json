@@ -25,6 +25,7 @@
     "@polkadot/react-params": "^0.132.1",
     "@polkadot/react-query": "^0.132.1",
     "@polkadot/react-signer": "^0.132.1",
+    "@trnsp/custom": "*",
     "punycode": "^2.3.0",
     "query-string": "^8.1.0",
     "react": "^18.2.0",

@@ -1,0 +1,16 @@
+{
+  "name": "@trnsp/custom",
+  "version": "1.0.0",
+  "license": "Apache-2.0",
+  "private": true,
+  "type": "module",
+  "sideEffects": true,
+  "browser": {
+    "fs": false,
+    "path": false
+  },
+  "dependencies": {
+    "@ethersproject/providers": "^5.7.2",
+    "ethers": "^6.0.8"
+  }
+}
