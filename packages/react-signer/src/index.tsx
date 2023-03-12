@@ -147,10 +147,12 @@ function Signer ({ children, className = '' }: Props): React.ReactElement<Props>
                   setIsQueueSubmit={setIsQueueSubmit}
                 />
               )
-              : <TxExternalSigned
-                currentItem={currentItem}
-                requestAddress={requestAddress}
-              />
+              : (
+                <TxExternalSigned
+                  currentItem={currentItem}
+                  requestAddress={requestAddress}
+                />
+              )
           }
         </StyledModal>
       )}
