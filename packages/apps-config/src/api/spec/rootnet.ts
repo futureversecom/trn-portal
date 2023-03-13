@@ -20,6 +20,7 @@ const definitions: OverrideBundleDefinition = {
         LookupSource: 'AccountId',
         Lookup0: 'AccountId',
         AssetId: 'u32',
+        Balance: 'u128',
         EventProofId: 'u64',
         ValidatorSetId: 'u64',
         EthereumSignature: {
@@ -92,7 +93,7 @@ const definitions: OverrideBundleDefinition = {
             type: 'u128'
           }
         ],
-        type: 'Json'
+        type: 'Result<u128, DispatchError>'
       },
       getAmountsOut: {
         description: 'Given an array of AssetIds, return amounts out for an amount in',
@@ -106,7 +107,7 @@ const definitions: OverrideBundleDefinition = {
             type: 'Vec<AssetId>'
           }
         ],
-        type: 'Json'
+        type: 'Result<Vec<Balance>, DispatchError>'
       },
       getAmountsIn: {
         description: 'Given an array of AssetIds, return amounts in for an amount out',
@@ -120,7 +121,7 @@ const definitions: OverrideBundleDefinition = {
             type: 'Vec<AssetId>'
           }
         ],
-        type: 'Json'
+        type: 'Result<Vec<Balance>, DispatchError>'
       }
     },
     ethy: {
@@ -170,7 +171,7 @@ const definitions: OverrideBundleDefinition = {
           { name: 'cursor', type: 'SerialNumber' },
           { name: 'limit', type: 'u16' }
         ],
-        type: 'Json'
+        type: '(SerialNumber, Vec<SerialNumber>)'
       },
       tokenUri: {
         description: 'Get the URI of a token',
@@ -180,7 +181,7 @@ const definitions: OverrideBundleDefinition = {
             type: 'TokenId'
           }
         ],
-        type: 'Json'
+        type: 'Vec<u8>'
       }
     }
   }

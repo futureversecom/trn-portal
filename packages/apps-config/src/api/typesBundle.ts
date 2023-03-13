@@ -72125,6 +72125,7 @@ export const typesBundle = {
             "LookupSource": "AccountId",
             "Lookup0": "AccountId",
             "AssetId": "u32",
+            "Balance": "u128",
             "EventProofId": "u64",
             "ValidatorSetId": "u64",
             "EthereumSignature": {
@@ -72196,7 +72197,7 @@ export const typesBundle = {
                 "type": "u128"
               }
             ],
-            "type": "Json"
+            "type": "Result<u128, DispatchError>"
           },
           "getAmountsOut": {
             "description": "Given an array of AssetIds, return amounts out for an amount in",
@@ -72210,7 +72211,7 @@ export const typesBundle = {
                 "type": "Vec<AssetId>"
               }
             ],
-            "type": "Json"
+            "type": "Result<Vec<Balance>, DispatchError>"
           },
           "getAmountsIn": {
             "description": "Given an array of AssetIds, return amounts in for an amount out",
@@ -72224,7 +72225,7 @@ export const typesBundle = {
                 "type": "Vec<AssetId>"
               }
             ],
-            "type": "Json"
+            "type": "Result<Vec<Balance>, DispatchError>"
           }
         },
         "ethy": {
@@ -72274,7 +72275,7 @@ export const typesBundle = {
               { "name": "cursor", "type": "SerialNumber" },
               { "name": "limit", "type": "u16" }
             ],
-            "type": "Json"
+            "type": "(SerialNumber, Vec<SerialNumber>)"
           },
           "tokenUri": {
             "description": "Get the URI of a token",
@@ -72284,7 +72285,7 @@ export const typesBundle = {
                 "type": "TokenId"
               }
             ],
-            "type": "Json"
+            "type": "Vec<u8>"
           }
         }
       }
