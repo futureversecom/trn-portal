@@ -11,6 +11,7 @@ interface Props {
 }
 
 function SummaryBox ({ children, className = '', isSmall }: Props): React.ReactElement<Props> {
+  console.log('Summary box:::', children);
   return (
     <StyledDiv className={`${className}${isSmall ? ' isSmall' : ''}`}>
       {children}

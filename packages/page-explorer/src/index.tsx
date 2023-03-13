@@ -47,6 +47,11 @@ function createItemsRef (t: TFunction): TabItem[] {
       text: t<string>('Chain info')
     },
     {
+      isRoot: true,
+      name: 'forks',
+      text: t<string>('EVM info')
+    },
+    {
       hasParams: true,
       name: 'query',
       text: t<string>('Block details')
@@ -83,6 +88,8 @@ function ExplorerApp ({ basePath, className }: Props): React.ReactElement<Props>
     () => isFunction(api.query.babe?.authorities) ? [] : ['forks'],
     [api]
   );
+  // console.log('pathRef.current::::',pathRef.current);
+  // console.log('basePath:::::',basePath);
 
   return (
     <main className={className}>

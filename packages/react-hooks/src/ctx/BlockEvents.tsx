@@ -65,6 +65,8 @@ async function manageEvents (api: ApiPromise, prev: PrevHashes, records: Vec<Eve
       return combined;
     }, [])
     .reverse();
+
+  console.log('newEvents:::',newEvents);
   const newEventHash = xxhashAsHex(stringToU8a(stringify(newEvents)));
 
   if (newEventHash !== prev.event && newEvents.length) {
@@ -105,6 +107,7 @@ export function BlockEventsCtxRoot ({ children }: Props): React.ReactElement<Pro
   const { api, isApiReady } = useApi();
   const [state, setState] = useState<BlockEvents>(DEFAULT_EVENTS);
   const records = useCall<Vec<EventRecord>>(isApiReady && api.query.system.events);
+  console.log('Inside block events ctx root.....', records?.toHuman());
   const prevHashes = useRef({ block: null, event: null });
 
   useEffect((): void => {

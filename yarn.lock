@@ -16840,6 +16840,7 @@ __metadata:
     electron: ^21.3.5
     electron-builder: 23.6.0
     electron-builder-notarize: ^1.5.1
+    eslint-plugin-simple-import-sort: ^10.0.0
     i18next-scanner: ^4.1.1
     react: ^18.2.0
     react-dom: ^18.2.0
