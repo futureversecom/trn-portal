@@ -95121,15 +95121,161 @@ export const typesBundle = {
             "Address": "AccountId",
             "LookupSource": "AccountId",
             "Lookup0": "AccountId",
+            "AssetId": "u32",
+            "Balance": "u128",
+            "EventProofId": "u64",
+            "ValidatorSetId": "u64",
             "EthereumSignature": {
               "r": "H256",
               "s": "H256",
               "v": "U8"
             },
-            "ExtrinsicSignature": "EthereumSignature"
+            "ExtrinsicSignature": "EthereumSignature",
+            "EthyId": "[u8; 32]",
+            "EthWalletCall": {
+              "nonce": "u32"
+            },
+            "XRPLTxData": {
+              "_enum": {
+                "Payment": {
+                  "amount": "Balance",
+                  "destination": "H160"
+                },
+                "CurrencyPayment": {
+                  "amount": "Balance",
+                  "address": "H160",
+                  "currencyId": "H256"
+                }
+              }
+            },
+            'EthEventProofResponse': {
+              "event_id": "EventProofId",
+              "signatures": "Vec<Bytes>",
+              "validators": "Vec<AccountId20>",
+              "validator_set_id": "ValidatorSetId",
+              "block": "H256",
+              "tag": "Option<Bytes>"
+            },
+            "XrplEventProofResponse": {
+              "event_id": "EventProofId",
+              "signatures": "Vec<Bytes>",
+              "validators": "Vec<Bytes>",
+              "validator_set_id": "ValidatorSetId",
+              "block": "H256",
+              "tag": "Option<Bytes>"
+            },
+            "VersionedEventProof": {
+              "_enum": {
+                "sentinel": null,
+                "EventProof": "EventProof"
+              }
+            },
+            "CollectionUuid": "u32",
+            "SerialNumber": "u32",
+            "TokenId": "(CollectionUuid, SerialNumber)"
           }
         }
-      ]
+      ],
+      "rpc": {
+        "dex": {
+          "quote": {
+            "description": "Given some amount of an asset and pair reserves, returns an equivalent amount of the other asset",
+            "params": [
+              {
+                "name": "amountA",
+                "type": "u128"
+              },
+              {
+                "name": "reserveA",
+                "type": "u128"
+              },
+              {
+                "name": "reserveB",
+                "type": "u128"
+              }
+            ],
+            "type": "Result<u128, DispatchError>"
+          },
+          "getAmountsOut": {
+            "description": "Given an array of AssetIds, return amounts out for an amount in",
+            "params": [
+              {
+                "name": "amountIn",
+                "type": "Balance"
+              },
+              {
+                "name": "path",
+                "type": "Vec<AssetId>"
+              }
+            ],
+            "type": "Result<Vec<Balance>, DispatchError>"
+          },
+          "getAmountsIn": {
+            "description": "Given an array of AssetIds, return amounts in for an amount out",
+            "params": [
+              {
+                "name": "amountOut",
+                "type": "Balance"
+              },
+              {
+                "name": "path",
+                "type": "Vec<AssetId>"
+              }
+            ],
+            "type": "Result<Vec<Balance>, DispatchError>"
+          }
+        },
+        "ethy": {
+          "getEventProof": {
+            "description": "Get ETH event proof for event Id",
+            "params": [
+              {
+                "name": "eventId",
+                "type": "EventProofId"
+              }
+            ],
+            "type": "Option<EthEventProofResponse>"
+          },
+          "getXrplTxProof": {
+            "description": "Get XRPL event proof for event Id",
+            "params": [
+              {
+                "name": "eventId",
+                "type": "EventProofId"
+              }
+            ],
+            "type": "Option<XrplEventProofResponse>"
+          }
+        },
+        "nft": {
+          "ownedTokens": {
+            "description": "Get all NFTs owned by an account",
+            "params": [
+              {
+                "name": "collectionId",
+                "type": "CollectionUuid"
+              },
+              {
+                "name": "who",
+                "type": "AccountId"
+              },
+              { "name": "cursor", "type": "SerialNumber" },
+              { "name": "limit", "type": "u16" }
+            ],
+            "type": "(SerialNumber, Vec<SerialNumber>)"
+          },
+          "tokenUri": {
+            "description": "Get the URI of a token",
+            "params": [
+              {
+                "name": "tokenId",
+                "type": "TokenId"
+              }
+            ],
+            "type": "Vec<u8>"
+          }
+        }
+      }
     },
     "sapphire": {
       "rpc": {
