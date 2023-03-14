@@ -14,6 +14,7 @@ import { xxhashAsHex } from '@polkadot/util-crypto';
 import { useApi } from '../useApi';
 import { useCall } from '../useCall';
 import {BlockEVMEvents} from "./types";
+import {Option} from "@polkadot/types";
 
 interface Props {
   children: React.ReactNode;
@@ -62,10 +63,10 @@ async function manageEvents (api: ApiPromise, prev: PrevHashes, eventsRecords: V
 export function BlockEVMEventsCtxRoot ({ children }: Props): React.ReactElement<Props> {
   const { api, isApiReady } = useApi();
   const [state, setState] = useState<BlockEVMEvents>(DEFAULT_EVENTS);
-  const records = useCall<Vec<EthTransactionStatus>>(isApiReady && api.query.ethereum.currentTransactionStatuses);
+  const records = useCall<Option<Vec<EthTransactionStatus>>>(isApiReady && api.query.ethereum.currentTransactionStatuses);
   console.log('Inside block EVM events ctx root.....', records?.unwrap().toJSON());
   const prevHashes = useRef({ txHash: null, block: null, event: null });
-  const evnts = records?.unwrap().toJSON();
+  const evnts = records?.unwrap().toJSON() as Vec<EthTransactionStatus>;
   useEffect((): void => {
     records && manageEvents(api, prevHashes.current, evnts, setState).catch(console.error);
   }, [api, prevHashes, records, setState]);
