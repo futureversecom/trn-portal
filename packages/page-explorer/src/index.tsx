@@ -19,6 +19,7 @@ import Latency from './Latency';
 import Main from './Main';
 import NodeInfo from './NodeInfo';
 import { useTranslation } from './translate';
+import {useBlockEVMEvents} from "@polkadot/react-hooks/useBlockEVMEvents";
 
 interface Props {
   basePath: string;
@@ -45,6 +46,11 @@ function createItemsRef (t: TFunction): TabItem[] {
       isRoot: true,
       name: 'chain',
       text: t<string>('Chain info')
+    },
+    {
+      isRoot: true,
+      name: 'forks',
+      text: t<string>('EVM info')
     },
     {
       hasParams: true,
@@ -76,6 +82,9 @@ function ExplorerApp ({ basePath, className }: Props): React.ReactElement<Props>
   const { api } = useApi();
   const { lastHeaders } = useBlockAuthors();
   const { eventCount, events } = useBlockEvents();
+  const { evmEventCount, evmEvents } = useBlockEVMEvents();
+  console.log('evem Event count::', evmEventCount);
+  console.log('evmEvents:::',evmEvents);
   const itemsRef = useRef(createItemsRef(t));
   const pathRef = useRef(createPathRef(basePath));
 
@@ -102,6 +111,7 @@ function ExplorerApp ({ basePath, className }: Props): React.ReactElement<Props>
             eventCount={eventCount}
             events={events}
             headers={lastHeaders}
+            evmEvents={evmEvents}
           />
         </Route>
       </Switch>

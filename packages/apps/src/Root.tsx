@@ -10,11 +10,12 @@ import { HashRouter } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 
 import { ApiCtxRoot } from '@polkadot/react-api';
-import { ApiStatsCtxRoot, BlockAuthorsCtxRoot, BlockEventsCtxRoot, KeyringCtxRoot, QueueCtxRoot, WindowSizeCtxRoot } from '@polkadot/react-hooks';
+import { ApiStatsCtxRoot, BlockAuthorsCtxRoot, BlockEventsCtxRoot, BlockEVMEventsCtxRoot, KeyringCtxRoot, QueueCtxRoot, WindowSizeCtxRoot } from '@polkadot/react-hooks';
 import { settings } from '@polkadot/ui-settings';
 
 import Apps from './Apps';
 import { darkTheme, lightTheme } from './themes';
+// import {BlockEVMEventsCtx} from "@polkadot/react-hooks/src/ctx/BlockEVMEvents";
 
 interface Props {
   isElectron: boolean;
@@ -54,6 +55,7 @@ function Root ({ isElectron, store }: Props): React.ReactElement<Props> {
               <ApiStatsCtxRoot>
                 <BlockAuthorsCtxRoot>
                   <BlockEventsCtxRoot>
+                    <BlockEVMEventsCtxRoot>
                     <HashRouter>
                       <WindowSizeCtxRoot>
                         <EthereumWalletCtxRoot>
@@ -61,6 +63,7 @@ function Root ({ isElectron, store }: Props): React.ReactElement<Props> {
                         </EthereumWalletCtxRoot>
                       </WindowSizeCtxRoot>
                     </HashRouter>
+                    </BlockEVMEventsCtxRoot>
                   </BlockEventsCtxRoot>
                 </BlockAuthorsCtxRoot>
               </ApiStatsCtxRoot>

@@ -12,14 +12,17 @@ import BlockHeaders from './BlockHeaders';
 import Events from './Events';
 import Query from './Query';
 import Summary from './Summary';
+import EVMEvents from "@polkadot/app-explorer/EVMEvents";
+import {EthTransactionStatus} from "@polkadot/types/interfaces";
 
 interface Props {
   eventCount: number;
   events: KeyedEvent[];
   headers: HeaderExtended[];
+  evmEvents: EthTransactionStatus[]
 }
 
-function Main ({ eventCount, events, headers }: Props): React.ReactElement<Props> {
+function Main ({ eventCount, events, headers, evmEvents }: Props): React.ReactElement<Props> {
   return (
     <>
       <Query />
@@ -30,6 +33,7 @@ function Main ({ eventCount, events, headers }: Props): React.ReactElement<Props
         </Columar.Column>
         <Columar.Column>
           <Events events={events} />
+          <EVMEvents events={evmEvents}/>
         </Columar.Column>
       </Columar>
     </>
