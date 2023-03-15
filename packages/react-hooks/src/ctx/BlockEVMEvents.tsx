@@ -25,7 +25,7 @@ interface PrevHashes {
   event: string | null;
 }
 
-const DEFAULT_EVENTS: BlockEVMEvents = { eventCount: 0, events: [] };
+const DEFAULT_EVENTS: BlockEVMEvents = { evmEventCount: 0, evmEvents: [] };
 // const MAX_EVENTS = 75;
 
 export const BlockEVMEventsCtx = React.createContext<BlockEVMEvents>(DEFAULT_EVENTS);
