@@ -66,7 +66,7 @@ export function BlockEVMEventsCtxRoot ({ children }: Props): React.ReactElement<
   const records = useCall<Option<Vec<EthTransactionStatus>>>(isApiReady && api.query.ethereum.currentTransactionStatuses);
   console.log('Inside block EVM events ctx root.....', records?.unwrap().toJSON());
   const prevHashes = useRef({ txHash: null, block: null, event: null });
-  const evnts = records?.unwrap().toJSON() as Vec<EthTransactionStatus>;
+  const evnts = records?.unwrap().toJSON() as unknown as Vec<EthTransactionStatus>;
   useEffect((): void => {
     records && manageEvents(api, prevHashes.current, evnts, setState).catch(console.error);
   }, [api, prevHashes, records, setState]);

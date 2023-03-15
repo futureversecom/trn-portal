@@ -1,20 +1,12 @@
 // Copyright 2017-2023 @polkadot/react-components authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { DecodedEvent } from '@polkadot/api-contract/types';
-import type { Bytes } from '@polkadot/types';
-import type { Event } from '@polkadot/types/interfaces';
-import type { Codec } from '@polkadot/types/types';
-
-import React, { useMemo } from 'react';
+import React  from 'react';
 
 import Params from '@polkadot/react-params';
 
-import { balanceEvents, balanceEventsOverrides } from './constants';
 import Input from './Input';
 import { useTranslation } from './translate';
-import { getContractAbi } from './util';
-import {EthTransactionStatus} from "@polkadot/types/interfaces";
 import {Option, u32, Vec} from "@polkadot/types-codec";
 import {EthAddress, EthBloom, EthLog} from "@polkadot/types/interfaces/eth/types";
 import {H256} from "@polkadot/types/interfaces/runtime";
@@ -34,15 +26,6 @@ export interface Props {
   withExpander?: boolean;
 }
 
-interface Value {
-  isValid: boolean;
-  value: Codec;
-
-}
-
-interface AbiEvent extends DecodedEvent {
-  values: Value[];
-}
 
 function EVMEventDisplay ({ children, className = '', transactionIndex, transactionHash, contractAddress, from, to, logs, logsBloom, withExpander }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
