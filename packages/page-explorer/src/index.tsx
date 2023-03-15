@@ -10,6 +10,7 @@ import { Route, Switch } from 'react-router';
 
 import { Tabs } from '@polkadot/react-components';
 import { useApi, useBlockAuthors, useBlockEvents } from '@polkadot/react-hooks';
+import { useBlockEVMEvents } from '@polkadot/react-hooks/useBlockEVMEvents';
 import { isFunction } from '@polkadot/util';
 
 import Api from './Api';
@@ -19,7 +20,6 @@ import Latency from './Latency';
 import Main from './Main';
 import NodeInfo from './NodeInfo';
 import { useTranslation } from './translate';
-import {useBlockEVMEvents} from "@polkadot/react-hooks/useBlockEVMEvents";
 
 interface Props {
   basePath: string;
@@ -83,8 +83,9 @@ function ExplorerApp ({ basePath, className }: Props): React.ReactElement<Props>
   const { lastHeaders } = useBlockAuthors();
   const { eventCount, events } = useBlockEvents();
   const { evmEventCount, evmEvents } = useBlockEVMEvents();
+
   console.log('evem Event count::', evmEventCount);
-  console.log('evmEvents:::',evmEvents);
+  console.log('evmEvents:::', evmEvents);
   const itemsRef = useRef(createItemsRef(t));
   const pathRef = useRef(createPathRef(basePath));
 
@@ -110,8 +111,8 @@ function ExplorerApp ({ basePath, className }: Props): React.ReactElement<Props>
           <Main
             eventCount={eventCount}
             events={events}
-            headers={lastHeaders}
             evmEvents={evmEvents}
+            headers={lastHeaders}
           />
         </Route>
       </Switch>

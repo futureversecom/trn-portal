@@ -6,14 +6,14 @@ import type { KeyedEvent } from '@polkadot/react-hooks/ctx/types';
 
 import React from 'react';
 
+import EVMEvents from '@polkadot/app-explorer/EVMEvents';
 import { Columar } from '@polkadot/react-components';
+import { EthTransactionStatus } from '@polkadot/types/interfaces';
 
 import BlockHeaders from './BlockHeaders';
 import Events from './Events';
 import Query from './Query';
 import Summary from './Summary';
-import EVMEvents from "@polkadot/app-explorer/EVMEvents";
-import {EthTransactionStatus} from "@polkadot/types/interfaces";
 
 interface Props {
   eventCount: number;
@@ -22,7 +22,7 @@ interface Props {
   evmEvents: EthTransactionStatus[]
 }
 
-function Main ({ eventCount, events, headers, evmEvents }: Props): React.ReactElement<Props> {
+function Main ({ eventCount, events, evmEvents, headers }: Props): React.ReactElement<Props> {
   return (
     <>
       <Query />
@@ -33,7 +33,7 @@ function Main ({ eventCount, events, headers, evmEvents }: Props): React.ReactEl
         </Columar.Column>
         <Columar.Column>
           <Events events={events} />
-          <EVMEvents events={evmEvents}/>
+          <EVMEvents events={evmEvents} />
         </Columar.Column>
       </Columar>
     </>

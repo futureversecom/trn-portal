@@ -1,16 +1,16 @@
 // Copyright 2017-2023 @polkadot/react-components authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import React  from 'react';
+import React from 'react';
 
 import Params from '@polkadot/react-params';
+import { RawParam } from '@polkadot/react-params/types';
+import { EthAddress, EthBloom, EthLog } from '@polkadot/types/interfaces/eth/types';
+import { H256 } from '@polkadot/types/interfaces/runtime';
+import { Option, u32, Vec } from '@polkadot/types-codec';
 
 import Input from './Input';
 import { useTranslation } from './translate';
-import {Option, u32, Vec} from "@polkadot/types-codec";
-import {EthAddress, EthBloom, EthLog} from "@polkadot/types/interfaces/eth/types";
-import {H256} from "@polkadot/types/interfaces/runtime";
-import {RawParam} from "@polkadot/react-params/types";
 
 export interface Props {
   children?: React.ReactNode;
@@ -26,8 +26,7 @@ export interface Props {
   withExpander?: boolean;
 }
 
-
-function EVMEventDisplay ({ children, className = '', transactionIndex, transactionHash, contractAddress, from, to, logs, logsBloom, withExpander }: Props): React.ReactElement<Props> {
+function EVMEventDisplay ({ children, className = '', contractAddress, from, logs, logsBloom, to, transactionHash, transactionIndex, withExpander }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
   // const names = value.data.names;
   // const params = value.typeDef.map((type, i) => ({
@@ -80,48 +79,48 @@ function EVMEventDisplay ({ children, className = '', transactionIndex, transact
         // overrides={overrides}
         params={[]}
         // registry={value.registry}
-        values={[{ isValid: true, value: transactionIndex.toString()}, { isValid: true, value: transactionHash.toString()}, { isValid: true, value: contractAddress.toString()},
-          { isValid: true, value: transactionIndex.toString()}, { isValid: true, value: transactionIndex.toString()} ] as RawParam[]}
+        values={[{ isValid: true, value: transactionIndex.toString() }, { isValid: true, value: transactionHash.toString() }, { isValid: true, value: contractAddress.toString() },
+          { isValid: true, value: transactionIndex.toString() }, { isValid: true, value: transactionIndex.toString() }] as RawParam[]}
         withExpander={withExpander}
       >
-          <>
-            <Input
-              isDisabled
-              label={t<string>('TransactionHash')}
-              value={transactionHash?.toString()}
-            />
-            <Input
-              isDisabled
-              label={t<string>('ContractAddress')}
-              value={contractAddress?.toString()}
-            />
-            <Input
-              isDisabled
-              label={t<string>('To')}
-              value={to?.toString()}
-            />
-            <Input
-              isDisabled
-              label={t<string>('From')}
-              value={from?.toString()}
-            />
-            <Input
-              isDisabled
-              label={t<string>('Log')}
-              value={JSON.stringify(logs?.toString())}
-            />
-            <Input
-              isDisabled
-              label={t<string>('LogsBloom')}
-              value={logsBloom?.toString()}
-            />
-            {/*<Params*/}
-            {/*  isDisabled*/}
-            {/*  params={abiEvent.event.args}*/}
-            {/*  registry={value.registry}*/}
-            {/*  values={abiEvent.values}*/}
-            {/*/>*/}
-          </>
+        <>
+          <Input
+            isDisabled
+            label={t<string>('TransactionHash')}
+            value={transactionHash?.toString()}
+          />
+          <Input
+            isDisabled
+            label={t<string>('ContractAddress')}
+            value={contractAddress?.toString()}
+          />
+          <Input
+            isDisabled
+            label={t<string>('To')}
+            value={to?.toString()}
+          />
+          <Input
+            isDisabled
+            label={t<string>('From')}
+            value={from?.toString()}
+          />
+          <Input
+            isDisabled
+            label={t<string>('Log')}
+            value={JSON.stringify(logs?.toString())}
+          />
+          <Input
+            isDisabled
+            label={t<string>('LogsBloom')}
+            value={logsBloom?.toString()}
+          />
+          {/* <Params*/}
+          {/*  isDisabled*/}
+          {/*  params={abiEvent.event.args}*/}
+          {/*  registry={value.registry}*/}
+          {/*  values={abiEvent.values}*/}
+          {/* />*/}
+        </>
 
       </Params>
     </div>
