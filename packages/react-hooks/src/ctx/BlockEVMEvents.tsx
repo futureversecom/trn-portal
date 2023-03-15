@@ -61,7 +61,7 @@ function manageEvents (api: ApiPromise, prev: PrevHashes, eventsRecords: Vec<Eth
 export function BlockEVMEventsCtxRoot ({ children }: Props): React.ReactElement<Props> {
   const { api, isApiReady } = useApi();
   const [state, setState] = useState<BlockEVMEvents>(DEFAULT_EVENTS);
-  const records = useCall<Option<Vec<EthTransactionStatus>>>(isApiReady && api.query.ethereum.currentTransactionStatuses);
+  const records = useCall<Option<Vec<EthTransactionStatus>>>(isApiReady && api.query.ethereum.currentTransactionStatuses, []);
 
   console.log('Inside block EVM events ctx root.....', records?.unwrap().toJSON());
   const prevHashes = useRef({ block: null, event: null, txHash: null });

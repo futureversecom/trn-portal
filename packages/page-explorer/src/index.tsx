@@ -10,7 +10,7 @@ import { Route, Switch } from 'react-router';
 
 import { Tabs } from '@polkadot/react-components';
 import { useApi, useBlockAuthors, useBlockEvents } from '@polkadot/react-hooks';
-import { useBlockEVMEvents } from '@polkadot/react-hooks/useBlockEVMEvents';
+// import { useBlockEVMEvents } from '@polkadot/react-hooks/useBlockEVMEvents';
 import { isFunction } from '@polkadot/util';
 
 import Api from './Api';
@@ -19,6 +19,7 @@ import Forks from './Forks';
 import Latency from './Latency';
 import Main from './Main';
 import NodeInfo from './NodeInfo';
+import EVM from './EVM';
 import { useTranslation } from './translate';
 
 interface Props {
@@ -33,6 +34,7 @@ function createPathRef (basePath: string): Record<string, string | string[]> {
     forks: `${basePath}/forks`,
     latency: `${basePath}/latency`,
     node: `${basePath}/node`,
+    evm: `${basePath}/evm`,
     query: [
       `${basePath}/query/:value`,
       `${basePath}/query/`
@@ -48,8 +50,7 @@ function createItemsRef (t: TFunction): TabItem[] {
       text: t<string>('Chain info')
     },
     {
-      isRoot: true,
-      name: 'forks',
+      name: 'evm',
       text: t<string>('EVM info')
     },
     {
@@ -82,10 +83,7 @@ function ExplorerApp ({ basePath, className }: Props): React.ReactElement<Props>
   const { api } = useApi();
   const { lastHeaders } = useBlockAuthors();
   const { eventCount, events } = useBlockEvents();
-  const { evmEventCount, evmEvents } = useBlockEVMEvents();
 
-  console.log('evem Event count::', evmEventCount);
-  console.log('evmEvents:::', evmEvents);
   const itemsRef = useRef(createItemsRef(t));
   const pathRef = useRef(createPathRef(basePath));
 
@@ -102,6 +100,7 @@ function ExplorerApp ({ basePath, className }: Props): React.ReactElement<Props>
         items={itemsRef.current}
       />
       <Switch>
+        <Route path={pathRef.current.evm}><EVM /></Route>
         <Route path={pathRef.current.api}><Api /></Route>
         <Route path={pathRef.current.forks}><Forks /></Route>
         <Route path={pathRef.current.latency}><Latency /></Route>
@@ -111,7 +110,7 @@ function ExplorerApp ({ basePath, className }: Props): React.ReactElement<Props>
           <Main
             eventCount={eventCount}
             events={events}
-            evmEvents={evmEvents}
+            // evmEvents={evmEvents}
             headers={lastHeaders}
           />
         </Route>
