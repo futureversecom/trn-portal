@@ -3,18 +3,18 @@
 
 import type { ApiPromise } from '@polkadot/api';
 import type { Vec } from '@polkadot/types';
-import type {EthTransactionStatus } from '@polkadot/types/interfaces';
-// import type { BlockEvents, IndexedEvent, KeyedEvent } from './types';
+import type { EthTransactionStatus } from '@polkadot/types/interfaces';
 
+// import type { BlockEvents, IndexedEvent, KeyedEvent } from './types';
 import React, { useEffect, useRef, useState } from 'react';
 
+import { Option } from '@polkadot/types';
 import { stringify, stringToU8a } from '@polkadot/util';
 import { xxhashAsHex } from '@polkadot/util-crypto';
 
 import { useApi } from '../useApi';
 import { useCall } from '../useCall';
-import {BlockEVMEvents} from "./types";
-import {Option} from "@polkadot/types";
+import { BlockEVMEvents } from './types';
 
 interface Props {
   children: React.ReactNode;
@@ -31,8 +31,7 @@ const DEFAULT_EVENTS: BlockEVMEvents = { evmEventCount: 0, evmEvents: [] };
 export const BlockEVMEventsCtx = React.createContext<BlockEVMEvents>(DEFAULT_EVENTS);
 
 async function manageEvents (api: ApiPromise, prev: PrevHashes, eventsRecords: Vec<EthTransactionStatus>, setState: React.Dispatch<React.SetStateAction<BlockEVMEvents>>): Promise<void> {
-
-  console.log('newEvents:::',eventsRecords);
+  console.log('newEvents:::', eventsRecords);
   const newEventHash = xxhashAsHex(stringToU8a(stringify(eventsRecords)));
 
   if (newEventHash !== prev.event && eventsRecords.length) {
@@ -64,9 +63,11 @@ export function BlockEVMEventsCtxRoot ({ children }: Props): React.ReactElement<
   const { api, isApiReady } = useApi();
   const [state, setState] = useState<BlockEVMEvents>(DEFAULT_EVENTS);
   const records = useCall<Option<Vec<EthTransactionStatus>>>(isApiReady && api.query.ethereum.currentTransactionStatuses);
+
   console.log('Inside block EVM events ctx root.....', records?.unwrap().toJSON());
   const prevHashes = useRef({ txHash: null, block: null, event: null });
   const evnts = records?.unwrap().toJSON() as unknown as Vec<EthTransactionStatus>;
+
   useEffect((): void => {
     records && manageEvents(api, prevHashes.current, evnts, setState).catch(console.error);
   }, [api, prevHashes, records, setState]);

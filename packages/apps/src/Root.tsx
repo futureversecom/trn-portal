@@ -56,13 +56,13 @@ function Root ({ isElectron, store }: Props): React.ReactElement<Props> {
                 <BlockAuthorsCtxRoot>
                   <BlockEventsCtxRoot>
                     <BlockEVMEventsCtxRoot>
-                    <HashRouter>
-                      <WindowSizeCtxRoot>
-                        <EthereumWalletCtxRoot>
-                          <Apps />
-                        </EthereumWalletCtxRoot>
-                      </WindowSizeCtxRoot>
-                    </HashRouter>
+                      <HashRouter>
+                        <WindowSizeCtxRoot>
+                          <EthereumWalletCtxRoot>
+                            <Apps />
+                          </EthereumWalletCtxRoot>
+                        </WindowSizeCtxRoot>
+                      </HashRouter>
                     </BlockEVMEventsCtxRoot>
                   </BlockEventsCtxRoot>
                 </BlockAuthorsCtxRoot>

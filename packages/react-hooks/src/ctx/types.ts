@@ -3,7 +3,7 @@
 
 import type { HeaderExtended } from '@polkadot/api-derive/types';
 import type { ProviderStats } from '@polkadot/rpc-provider/types';
-import type {BlockNumber, EthTransactionStatus, EventRecord} from '@polkadot/types/interfaces';
+import type { BlockNumber, EthTransactionStatus, EventRecord } from '@polkadot/types/interfaces';
 
 export interface Accounts {
   allAccounts: string[];
@@ -39,7 +39,6 @@ export interface BlockEvents {
   eventCount: number;
   events: KeyedEvent[];
 }
-
 
 export interface BlockEVMEvents {
   evmEventCount: number;

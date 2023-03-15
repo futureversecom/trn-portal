@@ -6,8 +6,8 @@
 import { useContext } from 'react';
 
 import { BlockEVMEventsCtx } from './ctx/BlockEVMEvents';
+import { BlockEVMEvents } from './ctx/types';
 import { createNamedHook } from './createNamedHook';
-import {BlockEVMEvents} from "./ctx/types";
 
 function useBlockEVMEventsImpl (): BlockEVMEvents {
   return useContext(BlockEVMEventsCtx);
