@@ -3,9 +3,9 @@
 
 import React from 'react';
 
+import EVMEvents from '@polkadot/app-explorer/EVMEvents';
 import { styled } from '@polkadot/react-components';
-import EVMEvents from "@polkadot/app-explorer/EVMEvents";
-import {useBlockEVMEvents} from "@polkadot/react-hooks/useBlockEVMEvents";
+import { useBlockEVMEvents } from '@polkadot/react-hooks/useBlockEVMEvents';
 
 interface Props {
   className?: string;
@@ -19,7 +19,10 @@ function EVM ({ className }: Props): React.ReactElement<Props> {
 
   return (
     <StyledDiv className={className}>
-      <EVMEvents className={className} events={evmEvents} />
+      <EVMEvents
+        className={className}
+        events={evmEvents}
+      />
     </StyledDiv>
   );
 }

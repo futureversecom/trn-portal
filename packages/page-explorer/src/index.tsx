@@ -15,11 +15,11 @@ import { isFunction } from '@polkadot/util';
 
 import Api from './Api';
 import BlockInfo from './BlockInfo';
+import EVM from './EVM';
 import Forks from './Forks';
 import Latency from './Latency';
 import Main from './Main';
 import NodeInfo from './NodeInfo';
-import EVM from './EVM';
 import { useTranslation } from './translate';
 
 interface Props {
@@ -31,10 +31,10 @@ interface Props {
 function createPathRef (basePath: string): Record<string, string | string[]> {
   return {
     api: `${basePath}/api`,
+    evm: `${basePath}/evm`,
     forks: `${basePath}/forks`,
     latency: `${basePath}/latency`,
     node: `${basePath}/node`,
-    evm: `${basePath}/evm`,
     query: [
       `${basePath}/query/:value`,
       `${basePath}/query/`

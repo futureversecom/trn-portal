@@ -37,7 +37,7 @@ function EVMEventDisplay ({ children, className = '', contractAddress, from, log
         // overrides={overrides}
         params={[]}
         // registry={value.registry}
-        values={[{ isValid: true, value: transactionIndex.toString() },
+        values={[{ isValid: true, value: transactionIndex.toString() }
           // { isValid: true, value: transactionHash.toString() }, { isValid: true, value: contractAddress.toString() },
           // { isValid: true, value: transactionIndex.toString() }, { isValid: true, value: transactionIndex.toString() }
         ] as RawParam[]}
@@ -64,18 +64,14 @@ function EVMEventDisplay ({ children, className = '', contractAddress, from, log
             label={t<string>('From')}
             value={from?.toString()}
           />
-          {/*<Input*/}
-          {/*  isDisabled*/}
-          {/*  label={t<string>('Logs')}*/}
-          {/*  value={'Logs'}*/}
-          {/*>*/}
-          {(logs.map(log =>
+          {(logs.map((log) =>
             <Params
               isDisabled
+              key={log.data.toString()}
               // overrides={overrides}
               params={[]}
               // registry={value.registry}
-              values={[{ isValid: true, value: `log-${log.data.toString() }`}] as RawParam[]}
+              values={[{ isValid: true, value: `log-${log.data.toString()}` }] as RawParam[]}
               withExpander={withExpander}
             >
               <>
@@ -85,33 +81,34 @@ function EVMEventDisplay ({ children, className = '', contractAddress, from, log
                   value={log.address?.toString()}
                 />
                 {(log.topics.map((topic, idx) =>
-                <Input
-                  isDisabled
-                  label={t<string>(`topics - ${idx}`)}
-                  value={topic?.toString()}
-                />
-                  ))}
+                  <Input
+                    isDisabled
+                    key={idx}
+                    label={t<string>(`topics - ${idx}`)}
+                    value={topic?.toString()}
+                  />
+                ))}
                 <Input
                   isDisabled
                   label={t<string>('data')}
                   value={log.data?.toString()}
                 />
-                </>
-             </Params>
-                ))
-                }
-          {/*</Input>*/}
+              </>
+            </Params>
+          ))
+          }
+          {/* </Input>*/}
           <Input
             isDisabled
             label={t<string>('LogsBloom')}
             value={logsBloom?.toString()}
           />
-           {/*<Params*/}
-           {/* isDisabled*/}
-           {/* params={transactionHash.toString()}*/}
-           {/* // registry={value.registry}*/}
-           {/* // values={abiEvent.values}*/}
-           {/*/>*/}
+          {/* <Params*/}
+          {/* isDisabled*/}
+          {/* params={transactionHash.toString()}*/}
+          {/* // registry={value.registry}*/}
+          {/* // values={abiEvent.values}*/}
+          {/* />*/}
         </>
 
       </Params>
