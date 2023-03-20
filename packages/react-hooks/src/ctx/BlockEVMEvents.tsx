@@ -28,11 +28,11 @@ export const BlockEVMEventsCtx = React.createContext<BlockEVMEvents>(DEFAULT_EVE
 
 function manageEvents (api: ApiPromise, prev: PrevHashes, eventsRecords: Vec<EthTransactionStatus>, setState: React.Dispatch<React.SetStateAction<BlockEVMEvents>>): void {
   if (eventsRecords.length) {
-      setState(() => ({
-        evmEventCount: eventsRecords.length,
-        evmEvents: eventsRecords
-      }));
-    }
+    setState(() => ({
+      evmEventCount: eventsRecords.length,
+      evmEvents: eventsRecords
+    }));
+  }
 }
 
 export function BlockEVMEventsCtxRoot ({ children }: Props): React.ReactElement<Props> {
@@ -42,14 +42,13 @@ export function BlockEVMEventsCtxRoot ({ children }: Props): React.ReactElement<
 
   const prevHashes = useRef({ block: null, event: null, txHash: null });
   const events = records?.unwrap().toJSON() as unknown as Vec<EthTransactionStatus>;
-  const transactionHashes = events ? new Set(events.map(evt => evt.transactionHash)) : new Set();
-  const mergedEvents = (events ? [...events, ...state.evmEvents?.filter(e => !transactionHashes.has(e.transactionHash))] :
-    state.evmEvents) as unknown as Vec<EthTransactionStatus>;
-
+  const transactionHashes = events ? new Set(events.map((evt) => evt.transactionHash)) : new Set();
 
   useEffect((): void => {
+    const mergedEvents = (events ? [...events, ...state.evmEvents?.filter(e => !transactionHashes.has(e.transactionHash))] :
+      state.evmEvents) as unknown as Vec<EthTransactionStatus>;
     records && manageEvents(api, prevHashes.current, mergedEvents, setState);
-  }, [api, prevHashes, records, setState, mergedEvents]);
+  }, [api, prevHashes, records, setState]);
 
   return (
     <BlockEVMEventsCtx.Provider value={state}>
