@@ -18,8 +18,7 @@ interface Props {
   label?: React.ReactNode;
 }
 
-function renederEvent (className: string | undefined, ethTransactionStatus: EthTransactionStatus): React.ReactNode {
-  console.log('Inside reneder event....');
+function renderEvent (className: string | undefined, ethTransactionStatus: EthTransactionStatus): React.ReactNode {
   const { transactionIndex } = ethTransactionStatus;
 
   return (
@@ -29,12 +28,6 @@ function renederEvent (className: string | undefined, ethTransactionStatus: EthT
     >
       <td className='overflow relative'>
         <EVMEvent value={ethTransactionStatus} />
-        {/* {blockNumber && (*/}
-        {/*  <div className='absolute --digits'>*/}
-        {/*    {indexes.length !== 1 && <span>{formatNumber(indexes.length)}x&nbsp;</span>}*/}
-        {/*    <Link to={`/explorer/query/${blockHash || ''}`}>{formatNumber(blockNumber)}-{indexes[0].toString().padStart(2, '0')}</Link>*/}
-        {/*  </div>*/}
-        {/* )}*/}
       </td>
     </tr>
   );
@@ -43,7 +36,6 @@ function renederEvent (className: string | undefined, ethTransactionStatus: EthT
 function EVMEvents ({ className = '', emptyLabel, error, eventClassName, events, label }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
 
-  console.log('events::::::::::::::', events);
   const header = useMemo<[React.ReactNode?, string?, number?][]>(
     () => [
       [label || t<string>('recent evm events'), 'start']
@@ -66,7 +58,7 @@ function EVMEvents ({ className = '', emptyLabel, error, eventClassName, events,
             <td><MarkError content={t<string>('Unable to decode the block events. {{error}}', { replace: { error: error.message } })} /></td>
           </tr>
         )
-        : events && events.map((e) => renederEvent(eventClassName, e))
+        : events && events.map((e) => renderEvent(eventClassName, e))
       }
     </Table>
   );

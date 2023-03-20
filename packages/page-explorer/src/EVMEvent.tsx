@@ -12,8 +12,6 @@ interface Props {
 }
 
 function EVMEvent ({ className = '', value: { contractAddress, from, logs, logsBloom, to, transactionHash, transactionIndex } }: Props): React.ReactElement<Props> {
-  // const con = `${event.section}.${event.method}`;
-
   return (
     <Expander
       className={className}
