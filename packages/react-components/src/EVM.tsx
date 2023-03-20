@@ -34,12 +34,8 @@ function EVMEventDisplay ({ children, className = '', contractAddress, from, log
       {children}
       <Params
         isDisabled
-        // overrides={overrides}
         params={[]}
-        // registry={value.registry}
         values={[{ isValid: true, value: transactionIndex.toString() }
-          // { isValid: true, value: transactionHash.toString() }, { isValid: true, value: contractAddress.toString() },
-          // { isValid: true, value: transactionIndex.toString() }, { isValid: true, value: transactionIndex.toString() }
         ] as RawParam[]}
         withExpander={withExpander}
       >
@@ -68,9 +64,7 @@ function EVMEventDisplay ({ children, className = '', contractAddress, from, log
             <Params
               isDisabled
               key={log.data.toString()}
-              // overrides={overrides}
               params={[]}
-              // registry={value.registry}
               values={[{ isValid: true, value: `log-${log.data.toString()}` }] as RawParam[]}
               withExpander={withExpander}
             >
@@ -97,18 +91,12 @@ function EVMEventDisplay ({ children, className = '', contractAddress, from, log
             </Params>
           ))
           }
-          {/* </Input>*/}
           <Input
             isDisabled
             label={t<string>('LogsBloom')}
             value={logsBloom?.toString()}
           />
-          {/* <Params*/}
-          {/* isDisabled*/}
-          {/* params={transactionHash.toString()}*/}
-          {/* // registry={value.registry}*/}
-          {/* // values={abiEvent.values}*/}
-          {/* />*/}
+
         </>
 
       </Params>
