@@ -12,7 +12,7 @@ interface Props {
 }
 
 function EVM ({ className }: Props): React.ReactElement<Props> {
-  const { evmEvents } = useBlockEVMEvents();
+  const evmEvents = useBlockEVMEvents();
 
   return (
     <StyledDiv className={className}>

@@ -19,12 +19,13 @@ interface Props {
 }
 
 function renderEvent (className: string | undefined, ethTransactionStatus: EthTransactionStatus): React.ReactNode {
-  const { transactionIndex } = ethTransactionStatus;
+  const { transactionHash } = ethTransactionStatus;
+  console.log('ethTransactionStatus::',ethTransactionStatus);
 
   return (
     <tr
       className={className}
-      key={transactionIndex.toString()}
+      key={transactionHash.toString()}
     >
       <td className='overflow relative'>
         <EVMEvent value={ethTransactionStatus} />

@@ -41,7 +41,7 @@ export interface BlockEvents {
 }
 
 export interface BlockEVMEvents {
-  evmEventCount: number;
+ // evmEventCount: number;
   evmEvents: EthTransactionStatus[];
 }
 
