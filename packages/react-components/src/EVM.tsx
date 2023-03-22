@@ -8,7 +8,7 @@ import { RawParam } from '@polkadot/react-params/types';
 import { EthAddress, EthBloom, EthLog } from '@polkadot/types/interfaces/eth/types';
 import { H256 } from '@polkadot/types/interfaces/runtime';
 import { Option, u32, Vec } from '@polkadot/types-codec';
-import { TypeDefInfo } from "@polkadot/types-create/types/types";
+import { TypeDefInfo } from '@polkadot/types-create/types/types';
 
 export interface Props {
   children?: React.ReactNode;
@@ -31,17 +31,17 @@ function EVMEventDisplay ({ children, className = '', contractAddress, from, log
     { isValid: true, value: transactionHash },
     { isValid: true, value: logs },
     { isValid: true, value: logsBloom },
-    { isValid: true, value: transactionIndex },
+    { isValid: true, value: transactionIndex }
   ];
   const params = [
-    { name: `contractAddress`,  type: { type: 'EthAddress', info: TypeDefInfo.Plain}},
-    { name: `from`, type: {type: 'EthAddress', info: TypeDefInfo.Plain}},
-    { name: `to`, type: {type: 'EthAddress', info: TypeDefInfo.Plain}},
-    { name: `transactionHash`, type: {type: 'H256', info: TypeDefInfo.Plain}},
-    { name: `logs`,  type: { type: 'EthLog1', info: TypeDefInfo.Plain}},
-    { name: `logsBloom`, type: { type: 'EthBloom', info: TypeDefInfo.Plain}},
-    { name: `transactionIndex`, type: {type: 'u32', info: TypeDefInfo.Plain}}
-   ];
+    { name: 'contractAddress', type: { info: TypeDefInfo.Plain, type: 'EthAddress' } },
+    { name: 'from', type: { info: TypeDefInfo.Plain, type: 'EthAddress' } },
+    { name: 'to', type: { info: TypeDefInfo.Plain, type: 'EthAddress' } },
+    { name: 'transactionHash', type: { info: TypeDefInfo.Plain, type: 'H256' } },
+    { name: 'logs', type: { info: TypeDefInfo.Plain, type: 'EthLog1' } },
+    { name: 'logsBloom', type: { info: TypeDefInfo.Plain, type: 'EthBloom' } },
+    { name: 'transactionIndex', type: { info: TypeDefInfo.Plain, type: 'u32' } }
+  ];
 
   return (
     <div className={`${className} ui--Event`}>
@@ -55,6 +55,5 @@ function EVMEventDisplay ({ children, className = '', contractAddress, from, log
     </div>
   );
 }
-
 
 export default React.memo(EVMEventDisplay);

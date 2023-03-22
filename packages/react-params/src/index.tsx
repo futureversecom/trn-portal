@@ -88,11 +88,7 @@ class Params extends React.PureComponent<Props, State> {
     if (!values || !values.length) {
       return null;
     }
-    // console.log('key:::',`${name || ''}:${type.type.toString()}:${index}:${isDisabled ? stringify(values[index]) : ''}`);
-    params.map(({ name, type }: ParamDef, index: number) => {
-      console.log(`${name}:${values[index]}`);
-      console.log('key::',`${name || ''}:${type.type.toString()}:${index}:${isDisabled ? stringify(values[index]) : ''}`);
-    });
+
     return (
       <Holder
         className={className}

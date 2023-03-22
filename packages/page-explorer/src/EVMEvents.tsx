@@ -20,7 +20,6 @@ interface Props {
 
 function renderEvent (className: string | undefined, ethTransactionStatus: EthTransactionStatus): React.ReactNode {
   const { transactionHash } = ethTransactionStatus;
-  console.log('ethTransactionStatus::',ethTransactionStatus);
 
   return (
     <tr

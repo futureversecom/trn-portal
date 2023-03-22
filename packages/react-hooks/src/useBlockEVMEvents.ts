@@ -5,10 +5,11 @@
 
 import { useContext } from 'react';
 
+import { EthTransactionStatus } from '@polkadot/types/interfaces';
+
 import { BlockEVMEventsCtx } from './ctx/BlockEVMEvents';
 // import { BlockEVMEvents } from './ctx/types';
 import { createNamedHook } from './createNamedHook';
-import {EthTransactionStatus} from "@polkadot/types/interfaces";
 
 function useBlockEVMEventsImpl (): EthTransactionStatus[] {
   return useContext(BlockEVMEventsCtx);
