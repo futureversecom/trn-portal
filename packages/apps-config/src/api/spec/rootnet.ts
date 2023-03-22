@@ -30,6 +30,11 @@ const definitions: OverrideBundleDefinition = {
         },
         ExtrinsicSignature: 'EthereumSignature',
         EthyId: '[u8; 32]',
+        EthLog1: {
+          address: 'EthAddress',
+          topics: 'Vec<H256>',
+          data: 'Bytes'
+        },
         EthWalletCall: {
           nonce: 'u32'
         },
