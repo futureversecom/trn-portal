@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import React, { useMemo } from 'react';
+import { Link } from 'react-router-dom';
 
 import { MarkError, Table } from '@polkadot/react-components';
 import { BlockEVMEvents } from '@polkadot/react-hooks/ctx/types';
@@ -19,10 +20,7 @@ interface Props {
 }
 
 function renderEvent (className: string | undefined, ethTransactionStatus: BlockEVMEvents): React.ReactNode {
-  console.log('ethTransactionStatus::', ethTransactionStatus);
-  const { transactionHash } = ethTransactionStatus;
-
-  console.log('transactionHash::', transactionHash);
+  const { blockHash, blockNumber, transactionHash, transactionIndex } = ethTransactionStatus;
 
   return (
     <tr
@@ -31,6 +29,11 @@ function renderEvent (className: string | undefined, ethTransactionStatus: Block
     >
       <td className='overflow relative'>
         <EVMEvent value={ethTransactionStatus} />
+        {blockNumber && (
+          <div className='absolute --digits'>
+            <Link to={`/explorer/query/${blockHash?.toString() || ''}`}>{blockNumber.toString()}-{transactionIndex?.toString()?.padStart(2, '0')}</Link>
+          </div>
+        )}
       </td>
     </tr>
   );

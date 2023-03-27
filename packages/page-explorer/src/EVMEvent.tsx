@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import React from 'react';
-import { Link } from 'react-router-dom';
 
 import { EVMEventDisplay, Expander } from '@polkadot/react-components';
 import { BlockEVMEvents } from '@polkadot/react-hooks/ctx/types';
@@ -12,10 +11,7 @@ interface Props {
   value: BlockEVMEvents;
 }
 
-function EVMEvent ({ className = '', value: { blockHash, blockNumber, contractAddress, from, logs, logsBloom, to, transactionHash, transactionIndex } }: Props): React.ReactElement<Props> {
-  console.log('blockNumber:::::', blockNumber?.toString());
-  console.log('blockHash:::', blockHash?.toString());
-
+function EVMEvent ({ className = '', value: { contractAddress, from, logs, logsBloom, to, transactionHash, transactionIndex } }: Props): React.ReactElement<Props> {
   return (
     <Expander
       className={className}
@@ -36,11 +32,6 @@ function EVMEvent ({ className = '', value: { blockHash, blockNumber, contractAd
         />
       )
       }
-      {blockNumber && (
-        <div className='absolute --digits'>
-          <Link to={`/explorer/query/${blockHash?.toString() || ''}`}>{blockNumber.toString()}-{transactionIndex?.toString()?.padStart(2, '0')}</Link>
-        </div>
-      )}
     </Expander>
   );
 }

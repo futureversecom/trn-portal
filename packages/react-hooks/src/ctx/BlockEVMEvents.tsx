@@ -27,7 +27,7 @@ async function evmDetails (evmRecords: Vec<EthTransactionStatus>, api: ApiPromis
     evmRecords.map(async (e) => {
       const txHash = e.transactionHash;
       const blockDetails: EthTransaction = await api.rpc.eth.getTransactionByHash(txHash) as unknown as EthTransaction;
-      const blockNumber = blockDetails as unknown as Option<u32>;
+      const blockNumber = blockDetails.blockNumber as unknown as Option<u32>;
       const blockHash = await api.rpc.chain.getBlockHash(blockNumber.toString()) as unknown as BlockHash;
 
       return { blockHash, blockNumber, ...e };
