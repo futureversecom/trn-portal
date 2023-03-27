@@ -110,7 +110,6 @@ function ExplorerApp ({ basePath, className }: Props): React.ReactElement<Props>
           <Main
             eventCount={eventCount}
             events={events}
-            // evmEvents={evmEvents}
             headers={lastHeaders}
           />
         </Route>

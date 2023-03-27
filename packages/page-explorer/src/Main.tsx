@@ -30,7 +30,6 @@ function Main ({ eventCount, events, headers }: Props): React.ReactElement<Props
         </Columar.Column>
         <Columar.Column>
           <Events events={events} />
-          {/* <EVMEvents events={evmEvents} />*/}
         </Columar.Column>
       </Columar>
     </>
