@@ -22,8 +22,6 @@ interface Props {
 }
 
 function renederEvent (className: string | undefined, { blockHash, blockNumber, indexes, key, record }: KeyedEvent): React.ReactNode {
-  console.log('Inside reneder event....');
-
   return (
     <tr
       className={className}

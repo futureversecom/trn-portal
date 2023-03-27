@@ -4,7 +4,7 @@
 import React, { useMemo } from 'react';
 
 import { MarkError, Table } from '@polkadot/react-components';
-import { EthTransactionStatus } from '@polkadot/types/interfaces';
+import { BlockEVMEvents } from '@polkadot/react-hooks/ctx/types';
 
 import EVMEvent from './EVMEvent';
 import { useTranslation } from './translate';
@@ -13,18 +13,21 @@ interface Props {
   className?: string;
   error?: Error | null;
   emptyLabel?: React.ReactNode;
-  events?: EthTransactionStatus[] | null;
+  events?: BlockEVMEvents[] | null;
   eventClassName?: string;
   label?: React.ReactNode;
 }
 
-function renderEvent (className: string | undefined, ethTransactionStatus: EthTransactionStatus): React.ReactNode {
+function renderEvent (className: string | undefined, ethTransactionStatus: BlockEVMEvents): React.ReactNode {
+  console.log('ethTransactionStatus::', ethTransactionStatus);
   const { transactionHash } = ethTransactionStatus;
+
+  console.log('transactionHash::', transactionHash);
 
   return (
     <tr
       className={className}
-      key={transactionHash.toString()}
+      key={transactionHash?.toString()}
     >
       <td className='overflow relative'>
         <EVMEvent value={ethTransactionStatus} />

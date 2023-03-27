@@ -6,20 +6,39 @@ import type { EthTransactionStatus, H256 } from '@polkadot/types/interfaces';
 
 import React, { useEffect, useState } from 'react';
 
+import { ApiPromise } from '@polkadot/api';
+import { BlockEVMEvents } from '@polkadot/react-hooks/ctx/types';
 import { Option } from '@polkadot/types';
+import { BlockHash } from '@polkadot/types/interfaces/chain';
+import { EthTransaction } from '@polkadot/types/interfaces/eth';
 
 import { useApi } from '../useApi';
 import { useCall } from '../useCall';
+import { u32 } from "@polkadot/types-codec";
 
 interface Props {
   children: React.ReactNode;
 }
 
-export const BlockEVMEventsCtx = React.createContext<EthTransactionStatus[]>([]);
+export const BlockEVMEventsCtx = React.createContext<BlockEVMEvents[]>([]);
+
+async function evmDetails (evmRecords: Vec<EthTransactionStatus>, api: ApiPromise): Promise<BlockEVMEvents[]> {
+  const evmRecordsUpdated = await Promise.all(
+    evmRecords.map(async (e) => {
+      const txHash = e.transactionHash;
+      const blockDetails: EthTransaction = await api.rpc.eth.getTransactionByHash(txHash) as unknown as EthTransaction;
+      const blockNumber = blockDetails as unknown as Option<u32>;
+      const blockHash = await api.rpc.chain.getBlockHash(blockNumber.toString()) as unknown as BlockHash;
+
+      return { blockHash, blockNumber, ...e };
+    }));
+
+  return evmRecordsUpdated;
+}
 
 export function BlockEVMEventsCtxRoot ({ children }: Props): React.ReactElement<Props> {
   const { api, isApiReady } = useApi();
-  const [evmEvents, setEVMEvents] = useState<EthTransactionStatus[]>([]);
+  const [evmEvents, setEVMEvents] = useState<BlockEVMEvents[]>([]);
   const [rawEvents, setRawEvents] = useState<EthTransactionStatus[]>([]);
   const [transactionHashes, setTransactionHashes] = useState<Set<H256>>(new Set());
   const records = useCall<Option<Vec<EthTransactionStatus>>>(isApiReady && api.query.ethereum.currentTransactionStatuses, []);
@@ -37,13 +56,13 @@ export function BlockEVMEventsCtxRoot ({ children }: Props): React.ReactElement<
 
   useEffect((): void => {
     const evmRecords = (rawEvents && evmEvents
-      ? [...rawEvents, ...evmEvents.filter((e) => !transactionHashes.has(e.transactionHash))]
+      ? [...rawEvents, ...evmEvents.filter((e) => !transactionHashes.has(e?.transactionHash))]
       : evmEvents) as unknown as Vec<EthTransactionStatus>;
 
     if (evmRecords && evmRecords.length) {
-      setEVMEvents(evmRecords);
+      evmDetails(evmRecords, api).then((evmRecordsUpdated) => setEVMEvents(evmRecordsUpdated)).catch(console.error);
     }
-  }, [evmEvents, rawEvents, transactionHashes]);
+  }, [api, evmEvents, rawEvents, transactionHashes]);
 
   return (
     <BlockEVMEventsCtx.Provider value={evmEvents}>
