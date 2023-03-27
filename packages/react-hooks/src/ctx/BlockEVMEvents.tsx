@@ -11,10 +11,10 @@ import { BlockEVMEvents } from '@polkadot/react-hooks/ctx/types';
 import { Option } from '@polkadot/types';
 import { BlockHash } from '@polkadot/types/interfaces/chain';
 import { EthTransaction } from '@polkadot/types/interfaces/eth';
+import { u32 } from '@polkadot/types-codec';
 
 import { useApi } from '../useApi';
 import { useCall } from '../useCall';
-import { u32 } from "@polkadot/types-codec";
 
 interface Props {
   children: React.ReactNode;
