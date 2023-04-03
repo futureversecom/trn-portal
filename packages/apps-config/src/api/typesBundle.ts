@@ -95194,7 +95194,7 @@ export const typesBundle = {
                 "type": "u128"
               }
             ],
-            "type": "Result<u128, DispatchError>"
+            "type": "Json"
           },
           "getAmountsOut": {
             "description": "Given an array of AssetIds, return amounts out for an amount in",
@@ -95208,7 +95208,7 @@ export const typesBundle = {
                 "type": "Vec<AssetId>"
               }
             ],
-            "type": "Result<Vec<Balance>, DispatchError>"
+            "type": "Json"
           },
           "getAmountsIn": {
             "description": "Given an array of AssetIds, return amounts in for an amount out",
@@ -95222,7 +95222,7 @@ export const typesBundle = {
                 "type": "Vec<AssetId>"
               }
             ],
-            "type": "Result<Vec<Balance>, DispatchError>"
+            "type": "Json"
           }
         },
         "ethy": {
