@@ -90,7 +90,11 @@ function TxSigned ({ className, currentItem, requestAddress }: Props): React.Rea
           const signedExtrinsic = await signWithEthereumWallet(api, senderInfo.signAddress, currentItem.extrinsic, { tip });
 
           queueSetTxStatus(currentItem.id, 'sending');
-          const unsubscribe: () => void = await signedExtrinsic.send(handleTxResults('signAndSend', queueSetTxStatus, currentItem, () => unsubscribe()));
+          if (signedExtrinsic.send) {
+            const unsubscribe: () => void = await signedExtrinsic.send(handleTxResults('signAndSend', queueSetTxStatus, currentItem, () => unsubscribe()));
+          } else {
+            await api.rpc.author.submitAndWatchExtrinsic(currentItem.extrinsic);
+          }
         } catch (error) {
           const { code, message } = error as {code: number, message: string};
 
