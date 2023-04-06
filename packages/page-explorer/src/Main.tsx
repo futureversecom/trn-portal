@@ -5,8 +5,9 @@ import type { HeaderExtended } from '@polkadot/api-derive/types';
 import type { KeyedEvent } from '@polkadot/react-hooks/ctx/types';
 
 import EVMEvents from '@trnsp/custom/components/EVMEvents';
+import { useLocalStorage } from '@trnsp/custom/hooks/useLocalStorage';
 import { BlockEVMEvent } from '@trnsp/custom/types';
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 
 import { Columar, styled, ToggleGroup } from '@polkadot/react-components';
 
@@ -25,7 +26,7 @@ interface Props {
 
 function Main ({ eventCount, events, evmEvents, headers }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
-  const [intentIndex, setIntentIndex] = useState(0);
+  const [intentIndex, setIntentIndex] = useLocalStorage<number>('explorer:event', 0);
 
   const intentOptions = useRef([
     { text: t<string>('Substrate Events'), value: 'substrate' },
@@ -41,20 +42,28 @@ function Main ({ eventCount, events, evmEvents, headers }: Props): React.ReactEl
           <BlockHeaders headers={headers} />
         </Columar.Column>
         <Columar.Column>
-          { intentIndex === 0 && <EventsPanel
+          { intentIndex === 0 &&
+          <EventsPanel
             events={events}
-            label={ <EventsLabel
-              onChange={setIntentIndex}
-              options={intentOptions.current}
-              value={intentIndex} /> } />
-          }
-          { intentIndex === 1 && <EVMEventsPanel
+            label={
+              <EventsLabel
+                onChange={setIntentIndex}
+                options={intentOptions.current}
+                value={intentIndex}
+              />
+            }
+          /> }
+          { intentIndex === 1 &&
+          <EVMEventsPanel
             events={evmEvents}
-            label={ <EventsLabel
-              onChange={setIntentIndex}
-              options={intentOptions.current}
-              value={intentIndex} /> } />
-          }
+            label={
+              <EventsLabel
+                onChange={setIntentIndex}
+                options={intentOptions.current}
+                value={intentIndex}
+              />
+            }
+          /> }
         </Columar.Column>
       </Columar>
     </>
@@ -76,7 +85,6 @@ const EVMEventsPanel = styled(EVMEvents)`
     padding-bottom: 0.45rem !important;
   }
 `;
-
 
 const EventsLabel = styled(ToggleGroup)`
   float: right !important;
