@@ -7,14 +7,13 @@ import type { EthTransactionStatus, H256 } from '@polkadot/types/interfaces';
 import React, { useEffect, useState } from 'react';
 
 import { ApiPromise } from '@polkadot/api';
-import { BlockEVMEvents } from '@polkadot/react-hooks/ctx/types';
+import { useApi, useCall } from '@polkadot/react-hooks';
 import { Option } from '@polkadot/types';
 import { BlockHash } from '@polkadot/types/interfaces/chain';
 import { EthTransaction } from '@polkadot/types/interfaces/eth';
 import { u32 } from '@polkadot/types-codec';
 
-import { useApi } from '../useApi';
-import { useCall } from '../useCall';
+import { BlockEVMEvents } from '../types';
 
 interface Props {
   children: React.ReactNode;

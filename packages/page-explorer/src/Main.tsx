@@ -4,6 +4,8 @@
 import type { HeaderExtended } from '@polkadot/api-derive/types';
 import type { KeyedEvent } from '@polkadot/react-hooks/ctx/types';
 
+import EVMEvents from '@trnsp/custom/components/EVMEvents';
+import { BlockEVMEvents } from '@trnsp/custom/types';
 import React, { useRef, useState } from 'react';
 
 import { Columar, styled, ToggleGroup } from '@polkadot/react-components';
@@ -17,10 +19,11 @@ import { useTranslation } from './translate';
 interface Props {
   eventCount: number;
   events: KeyedEvent[];
+  evmEvents: BlockEVMEvents[];
   headers: HeaderExtended[];
 }
 
-function Main ({ eventCount, events, headers }: Props): React.ReactElement<Props> {
+function Main ({ eventCount, events, evmEvents, headers }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
   const [intentIndex, setIntentIndex] = useState(0);
 
@@ -43,14 +46,14 @@ function Main ({ eventCount, events, headers }: Props): React.ReactElement<Props
             label={ <EventsLabel
               onChange={setIntentIndex}
               options={intentOptions.current}
-              value={intentIndex} />
-            }
-          />
+              value={intentIndex} /> } />
           }
-          { intentIndex === 1 && <EventsLabel
-            onChange={setIntentIndex}
-            options={intentOptions.current}
-            value={intentIndex} />
+          { intentIndex === 1 && <EVMEventsPanel
+            events={evmEvents}
+            label={ <EventsLabel
+              onChange={setIntentIndex}
+              options={intentOptions.current}
+              value={intentIndex} /> } />
           }
         </Columar.Column>
       </Columar>
@@ -66,6 +69,14 @@ const EventsPanel = styled(Events)`
     padding-bottom: 0.45rem !important;
   }
 `;
+
+const EVMEventsPanel = styled(EVMEvents)`
+  th {
+    padding-top: 0.45rem !important;
+    padding-bottom: 0.45rem !important;
+  }
+`;
+
 
 const EventsLabel = styled(ToggleGroup)`
   float: right !important;

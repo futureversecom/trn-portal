@@ -3,8 +3,10 @@
 
 import React from 'react';
 
-import { EVMEventDisplay, Expander } from '@polkadot/react-components';
-import { BlockEVMEvents } from '@polkadot/react-hooks/ctx/types';
+import { Expander } from '@polkadot/react-components';
+
+import { BlockEVMEvents } from '../types';
+import EVMEventDisplay from './EVMEventDisplay';
 
 interface Props {
   className?: string;
