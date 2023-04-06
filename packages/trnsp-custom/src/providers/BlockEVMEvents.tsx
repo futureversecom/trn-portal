@@ -13,15 +13,15 @@ import { BlockHash } from '@polkadot/types/interfaces/chain';
 import { EthTransaction } from '@polkadot/types/interfaces/eth';
 import { u32 } from '@polkadot/types-codec';
 
-import { BlockEVMEvents } from '../types';
+import { BlockEVMEvent } from '../types';
 
 interface Props {
   children: React.ReactNode;
 }
 
-export const BlockEVMEventsCtx = React.createContext<BlockEVMEvents[]>([]);
+export const BlockEVMEventsCtx = React.createContext<BlockEVMEvent[]>([]);
 
-async function evmDetails (evmRecords: Vec<EthTransactionStatus>, api: ApiPromise): Promise<BlockEVMEvents[]> {
+async function evmDetails (evmRecords: Vec<EthTransactionStatus>, api: ApiPromise): Promise<BlockEVMEvent[]> {
   const evmRecordsUpdated = await Promise.all(
     evmRecords.map(async (e) => {
       const txHash = e.transactionHash;
@@ -37,7 +37,7 @@ async function evmDetails (evmRecords: Vec<EthTransactionStatus>, api: ApiPromis
 
 export function BlockEVMEventsCtxRoot ({ children }: Props): React.ReactElement<Props> {
   const { api, isApiReady } = useApi();
-  const [evmEvents, setEVMEvents] = useState<BlockEVMEvents[]>([]);
+  const [evmEvents, setEVMEvents] = useState<BlockEVMEvent[]>([]);
   const [rawEvents, setRawEvents] = useState<EthTransactionStatus[]>([]);
   const [transactionHashes, setTransactionHashes] = useState<Set<H256>>(new Set());
   const records = useCall<Option<Vec<EthTransactionStatus>>>(isApiReady && api.query.ethereum.currentTransactionStatuses, []);

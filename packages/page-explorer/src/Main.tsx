@@ -5,7 +5,7 @@ import type { HeaderExtended } from '@polkadot/api-derive/types';
 import type { KeyedEvent } from '@polkadot/react-hooks/ctx/types';
 
 import EVMEvents from '@trnsp/custom/components/EVMEvents';
-import { BlockEVMEvents } from '@trnsp/custom/types';
+import { BlockEVMEvent } from '@trnsp/custom/types';
 import React, { useRef, useState } from 'react';
 
 import { Columar, styled, ToggleGroup } from '@polkadot/react-components';
@@ -19,7 +19,7 @@ import { useTranslation } from './translate';
 interface Props {
   eventCount: number;
   events: KeyedEvent[];
-  evmEvents: BlockEVMEvents[];
+  evmEvents: BlockEVMEvent[];
   headers: HeaderExtended[];
 }
 

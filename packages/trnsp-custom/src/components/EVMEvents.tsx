@@ -7,20 +7,20 @@ import { Link } from 'react-router-dom';
 
 import { MarkError, Table } from '@polkadot/react-components';
 
-import { BlockEVMEvents } from '../types';
+import { BlockEVMEvent } from '../types';
 import EVMEvent from './EVMEvent';
 
 interface Props {
   className?: string;
   error?: Error | null;
   emptyLabel?: React.ReactNode;
-  events?: BlockEVMEvents[] | null;
+  events?: BlockEVMEvent[] | null;
   eventClassName?: string;
   label?: React.ReactNode;
 }
 
-function renderEvent (className: string | undefined, ethTransactionStatus: BlockEVMEvents): React.ReactNode {
-  const { blockHash, blockNumber, transactionHash, transactionIndex } = ethTransactionStatus;
+function renderEvent (className: string | undefined, event: BlockEVMEvent): React.ReactNode {
+  const { blockHash, blockNumber, transactionHash, transactionIndex } = event;
 
   return (
     <tr
@@ -28,7 +28,7 @@ function renderEvent (className: string | undefined, ethTransactionStatus: Block
       key={transactionHash?.toString()}
     >
       <td className='overflow relative'>
-        <EVMEvent value={ethTransactionStatus} />
+        <EVMEvent value={event} />
         {blockNumber && (
           <div className='absolute --digits'>
             <Link to={`/explorer/query/${blockHash?.toString() || ''}`}>{blockNumber.toString()}-{transactionIndex?.toString()?.padStart(2, '0')}</Link>

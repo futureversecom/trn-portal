@@ -4,7 +4,7 @@ import { EthAddress, EthBloom, EthLog } from '@polkadot/types/interfaces/eth/typ
 import { H256 } from '@polkadot/types/interfaces/runtime';
 import { Option, u32, Vec } from '@polkadot/types-codec';
 
-export interface BlockEVMEvents {
+export interface BlockEVMEvent {
   transactionHash: H256;
   readonly transactionIndex: u32;
   readonly from: EthAddress;
