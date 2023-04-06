@@ -4,14 +4,15 @@
 import type { HeaderExtended } from '@polkadot/api-derive/types';
 import type { KeyedEvent } from '@polkadot/react-hooks/ctx/types';
 
-import React from 'react';
+import React, { useRef, useState } from 'react';
 
-import { Columar } from '@polkadot/react-components';
+import { Columar, styled, ToggleGroup } from '@polkadot/react-components';
 
 import BlockHeaders from './BlockHeaders';
 import Events from './Events';
 import Query from './Query';
 import Summary from './Summary';
+import { useTranslation } from './translate';
 
 interface Props {
   eventCount: number;
@@ -20,6 +21,14 @@ interface Props {
 }
 
 function Main ({ eventCount, events, headers }: Props): React.ReactElement<Props> {
+  const { t } = useTranslation();
+  const [intentIndex, setIntentIndex] = useState(0);
+
+  const intentOptions = useRef([
+    { text: t<string>('Substrate Events'), value: 'substrate' },
+    { text: t<string>('EVM Events'), value: 'evm' }
+  ]);
+
   return (
     <>
       <Query />
@@ -29,7 +38,20 @@ function Main ({ eventCount, events, headers }: Props): React.ReactElement<Props
           <BlockHeaders headers={headers} />
         </Columar.Column>
         <Columar.Column>
-          <Events events={events} />
+          { intentIndex === 0 && <EventsPanel
+            events={events}
+            label={ <EventsLabel
+              onChange={setIntentIndex}
+              options={intentOptions.current}
+              value={intentIndex} />
+            }
+          />
+          }
+          { intentIndex === 1 && <EventsLabel
+            onChange={setIntentIndex}
+            options={intentOptions.current}
+            value={intentIndex} />
+          }
         </Columar.Column>
       </Columar>
     </>
@@ -37,3 +59,21 @@ function Main ({ eventCount, events, headers }: Props): React.ReactElement<Props
 }
 
 export default React.memo(Main);
+
+const EventsPanel = styled(Events)`
+  th {
+    padding-top: 0.45rem !important;
+    padding-bottom: 0.45rem !important;
+  }
+`;
+
+const EventsLabel = styled(ToggleGroup)`
+  float: right !important;
+  font-size: var(--font-size-small);
+
+  button.hasLabel {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    border: 1px solid var(--ui-highlight);
+  }
+`;
