@@ -34,13 +34,13 @@ function EVMEventDisplay ({ children, className = '', contractAddress, from, log
     { isValid: true, value: transactionIndex }
   ];
   const params = [
-    { name: 'transactionIndex', type: { info: TypeDefInfo.Plain, type: 'u32' } },
-    { name: 'transactionHash', type: { info: TypeDefInfo.Plain, type: 'H256' } },
+    { name: 'contractAddress', type: { info: TypeDefInfo.Plain, type: 'EthAddress' } },
     { name: 'from', type: { info: TypeDefInfo.Plain, type: 'EthAddress' } },
     { name: 'to', type: { info: TypeDefInfo.Plain, type: 'EthAddress' } },
-    { name: 'contractAddress', type: { info: TypeDefInfo.Plain, type: 'EthAddress' } },
+    { name: 'transactionHash', type: { info: TypeDefInfo.Plain, type: 'H256' } },
     { name: 'logs', type: { info: TypeDefInfo.Plain, type: 'EthLog1' } },
-    { name: 'logsBloom', type: { info: TypeDefInfo.Plain, type: 'EthBloom' } }
+    { name: 'logsBloom', type: { info: TypeDefInfo.Plain, type: 'EthBloom' } },
+    { name: 'transactionIndex', type: { info: TypeDefInfo.Plain, type: 'u32' } },
   ];
 
   return (
