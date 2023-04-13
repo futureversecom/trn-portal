@@ -5,11 +5,6 @@ import type { HeaderExtended } from '@polkadot/api-derive/types';
 import type { ProviderStats } from '@polkadot/rpc-provider/types';
 import type { BlockNumber, EventRecord } from '@polkadot/types/interfaces';
 
-import { BlockHash } from '@polkadot/types/interfaces/chain';
-import { EthAddress, EthBloom, EthLog } from '@polkadot/types/interfaces/eth/types';
-import { H256 } from '@polkadot/types/interfaces/runtime';
-import { Option, u32, Vec } from '@polkadot/types-codec';
-
 export interface Accounts {
   allAccounts: string[];
   allAccountsHex: string[];
@@ -43,18 +38,6 @@ export interface BlockAuthors {
 export interface BlockEvents {
   eventCount: number;
   events: KeyedEvent[];
-}
-
-export interface BlockEVMEvents {
-  transactionHash: H256;
-  readonly transactionIndex: u32;
-  readonly from: EthAddress;
-  readonly to: Option<EthAddress>;
-  readonly contractAddress: Option<EthAddress>;
-  readonly logs: Vec<EthLog>;
-  readonly logsBloom: EthBloom;
-  blockHash?: BlockHash;
-  blockNumber?: Option<u32>;
 }
 
 export interface IndexedEvent {

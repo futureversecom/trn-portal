@@ -4,7 +4,6 @@
 export { ApiStatsCtxRoot } from './ApiStats';
 export { BlockAuthorsCtxRoot } from './BlockAuthors';
 export { BlockEventsCtxRoot } from './BlockEvents';
-export { BlockEVMEventsCtxRoot } from './BlockEVMEvents';
 export { KeyringCtxRoot } from './Keyring';
 export { QueueCtxRoot } from './Queue';
 export { WindowSizeCtxRoot } from './WindowSize';

@@ -3,20 +3,23 @@
 
 import React from 'react';
 
-import { EVMEventDisplay, Expander } from '@polkadot/react-components';
-import { BlockEVMEvents } from '@polkadot/react-hooks/ctx/types';
+import { Expander, styled } from '@polkadot/react-components';
+
+import { BlockEVMEvent } from '../types';
+import EVMEventDisplay from './EVMEventDisplay';
 
 interface Props {
   className?: string;
-  value: BlockEVMEvents;
+  value: BlockEVMEvent;
 }
 
 function EVMEvent ({ className = '', value: { contractAddress, from, logs, logsBloom, to, transactionHash, transactionIndex } }: Props): React.ReactElement<Props> {
   return (
-    <Expander
+    <CustomExpander
       className={className}
       isLeft
       summary={transactionHash}
+      summarySub={ from }
     >
       {(
         <EVMEventDisplay
@@ -32,8 +35,14 @@ function EVMEvent ({ className = '', value: { contractAddress, from, logs, logsB
         />
       )
       }
-    </Expander>
+    </CustomExpander>
   );
 }
 
 export default React.memo(EVMEvent);
+
+const CustomExpander = styled(Expander)`
+  .ui--Expander-summary-header {
+    max-width: calc(100% - 10rem) !important;
+  }
+`;
