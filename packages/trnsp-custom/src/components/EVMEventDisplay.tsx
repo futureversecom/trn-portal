@@ -40,7 +40,7 @@ function EVMEventDisplay ({ children, className = '', contractAddress, from, log
     { name: 'transactionHash', type: { info: TypeDefInfo.Plain, type: 'H256' } },
     { name: 'logs', type: { info: TypeDefInfo.Plain, type: 'EthLog1' } },
     { name: 'logsBloom', type: { info: TypeDefInfo.Plain, type: 'EthBloom' } },
-    { name: 'transactionIndex', type: { info: TypeDefInfo.Plain, type: 'u32' } },
+    { name: 'transactionIndex', type: { info: TypeDefInfo.Plain, type: 'u32' } }
   ];
 
   return (
