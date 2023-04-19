@@ -363,6 +363,7 @@ export default createGlobalStyle<Props & ThemeProps>(({ theme, uiHighlight }: Pr
     font: var(--font-sans);
     font-weight: var(--font-weight-normal);
     height: 100%;
+    --ui-highlight: ${getHighlight(uiHighlight)};
   }
 
   a {

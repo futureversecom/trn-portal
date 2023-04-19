@@ -5,6 +5,7 @@ import type { TFunction } from 'i18next';
 import type { TabItem } from '@polkadot/react-components/types';
 import type { KeyedEvent } from '@polkadot/react-hooks/ctx/types';
 
+import { useBlockEVMEvents } from '@trnsp/custom/hooks/useBlockEVMEvents';
 import React, { useMemo, useRef } from 'react';
 import { Route, Routes } from 'react-router';
 
@@ -63,6 +64,8 @@ function ExplorerApp ({ basePath, className }: Props): React.ReactElement<Props>
   const { api } = useApi();
   const { lastHeaders } = useBlockAuthors();
   const { eventCount, events } = useBlockEvents();
+  const evmEvents = useBlockEVMEvents();
+
   const itemsRef = useRef(createItemsRef(t));
 
   const hidden = useMemo<string[]>(
@@ -104,8 +107,8 @@ function ExplorerApp ({ basePath, className }: Props): React.ReactElement<Props>
               <Main
                 eventCount={eventCount}
                 events={events}
-                headers={lastHeaders}
-              />
+                evmEvents={evmEvents}
+            headers={lastHeaders}/>
             }
             index
           />
