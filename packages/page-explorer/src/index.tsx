@@ -4,6 +4,7 @@
 import type { TabItem } from '@polkadot/react-components/types';
 import type { KeyedEvent } from '@polkadot/react-hooks/ctx/types';
 
+import { useBlockEVMEvents } from '@trnsp/custom/hooks/useBlockEVMEvents';
 import React, { useMemo, useRef } from 'react';
 import { Route, Routes } from 'react-router';
 
@@ -23,6 +24,20 @@ interface Props {
   basePath: string;
   className?: string;
   newEvents?: KeyedEvent[];
+}
+
+function createPathRef (basePath: string): Record<string, string | string[]> {
+  return {
+    api: `${basePath}/api`,
+    evm: `${basePath}/evm`,
+    forks: `${basePath}/forks`,
+    latency: `${basePath}/latency`,
+    node: `${basePath}/node`,
+    query: [
+      `${basePath}/query/:value`,
+      `${basePath}/query/`
+    ]
+  };
 }
 
 function createItemsRef (t: (key: string, options?: { replace: Record<string, unknown> }) => string): TabItem[] {
@@ -62,6 +77,8 @@ function ExplorerApp ({ basePath, className }: Props): React.ReactElement<Props>
   const { api } = useApi();
   const { lastHeaders } = useBlockAuthors();
   const { eventCount, events } = useBlockEvents();
+  const evmEvents = useBlockEVMEvents();
+
   const itemsRef = useRef(createItemsRef(t));
 
   const hidden = useMemo<string[]>(
@@ -103,8 +120,8 @@ function ExplorerApp ({ basePath, className }: Props): React.ReactElement<Props>
               <Main
                 eventCount={eventCount}
                 events={events}
-                headers={lastHeaders}
-              />
+                evmEvents={evmEvents}
+            headers={lastHeaders}/>
             }
             index
           />

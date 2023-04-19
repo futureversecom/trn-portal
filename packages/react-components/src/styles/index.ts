@@ -361,6 +361,7 @@ export default createGlobalStyle<Props>(({ uiHighlight }: Props) => `
     font: var(--font-sans);
     font-weight: var(--font-weight-normal);
     height: 100%;
+    --ui-highlight: ${getHighlight(uiHighlight)};
   }
 
   a {
