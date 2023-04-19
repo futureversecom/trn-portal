@@ -6,7 +6,9 @@ import type { BN } from '@polkadot/util';
 
 import React, { useCallback, useEffect, useState } from 'react';
 
+import { SubmittableResult } from '@polkadot/api';
 import { Button, ErrorBoundary, Modal, Output, styled } from '@polkadot/react-components';
+import { QueueTxStatus } from '@polkadot/react-components/Status/types';
 import { useApi, useQueue, useToggle } from '@polkadot/react-hooks';
 import Address from '@polkadot/react-signer/Address';
 import Tip from '@polkadot/react-signer/Tip';
@@ -90,7 +92,21 @@ function TxSigned ({ className, currentItem, requestAddress }: Props): React.Rea
           const signedExtrinsic = await signWithEthereumWallet(api, senderInfo.signAddress, currentItem.extrinsic, { tip });
 
           queueSetTxStatus(currentItem.id, 'sending');
-          const unsubscribe: () => void = await signedExtrinsic.send(handleTxResults('signAndSend', queueSetTxStatus, currentItem, () => unsubscribe()));
+
+          if (signedExtrinsic.send) {
+            const unsubscribe: () => void = await signedExtrinsic.send(handleTxResults('signAndSend', queueSetTxStatus, currentItem, () => unsubscribe()));
+          } else {
+            const unsubscribe = await api.rpc.author.submitAndWatchExtrinsic(currentItem.extrinsic, (res): void => {
+              const status = res.type.toLowerCase() as QueueTxStatus;
+
+              queueSetTxStatus(currentItem.id, status, res);
+
+              if (currentItem?.txUpdateCb) {
+                currentItem?.txUpdateCb(res as unknown as SubmittableResult);
+                unsubscribe();
+              }
+            });
+          }
         } catch (error) {
           const { code, message } = error as {code: number, message: string};
 
