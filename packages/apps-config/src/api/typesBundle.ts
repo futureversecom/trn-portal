@@ -95852,7 +95852,7 @@ export const typesBundle = {
               { "name": "cursor", "type": "SerialNumber" },
               { "name": "limit", "type": "u16" }
             ],
-            "type": "(SerialNumber, Vec<SerialNumber>)"
+            "type": "Json"
           },
           "tokenUri": {
             "description": "Get the URI of a token",
@@ -95862,7 +95862,7 @@ export const typesBundle = {
                 "type": "TokenId"
               }
             ],
-            "type": "Vec<u8>"
+            "type": "Json"
           }
         }
       }
