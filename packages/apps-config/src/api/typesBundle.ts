@@ -72226,6 +72226,48 @@ export const typesBundle = {
               }
             ],
             "type": "Json"
+          },
+          "getLPTokenID": {
+            "description": "Given two AssetIds, return liquidity token created for the pair",
+            "params": [
+              {
+                "name": "assetA",
+                "type": "AssetId"
+              },
+              {
+                "name": "assetB",
+                "type": "AssetId"
+              }
+            ],
+            "type": "Json"
+          },
+          "getLiquidity": {
+            "description": "Given two AssetIds, return liquidity",
+            "params": [
+              {
+                "name": "assetA",
+                "type": "AssetId"
+              },
+              {
+                "name": "assetB",
+                "type": "AssetId"
+              }
+            ],
+            "type": "Json"
+          },
+          "getTradingPairStatus": {
+            "description": "Given two AssetIds, return whether trading pair is enabled or disabled",
+            "params": [
+              {
+                "name": "assetA",
+                "type": "AssetId"
+              },
+              {
+                "name": "assetB",
+                "type": "AssetId"
+              }
+            ],
+            "type": "Json"
           }
         },
         "ethy": {
