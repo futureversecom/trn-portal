@@ -129,46 +129,46 @@ const definitions: OverrideBundleDefinition = {
         type: 'Json'
       },
       getLPTokenID: {
-        description: "Given two AssetIds, return liquidity token created for the pair",
+        description: 'Given two AssetIds, return liquidity token created for the pair',
         params: [
           {
-            name: "assetA",
-            type: "AssetId"
+            name: 'assetA',
+            type: 'AssetId'
           },
           {
-            name: "assetB",
-            type: "AssetId"
+            name: 'assetB',
+            type: 'AssetId'
           }
         ],
-        type: "Json"
+        type: 'Json'
       },
       getLiquidity: {
-        description: "Given two AssetIds, return liquidity",
+        description: 'Given two AssetIds, return liquidity',
         params: [
           {
-            name: "assetA",
-            type: "AssetId"
+            name: 'assetA',
+            type: 'AssetId'
           },
           {
-            name: "assetB",
-            type: "AssetId"
+            name: 'assetB',
+            type: 'AssetId'
           }
         ],
-        type: "Json"
+        type: 'Json'
       },
       getTradingPairStatus: {
-        description: "Given two AssetIds, return whether trading pair is enabled or disabled",
+        description: 'Given two AssetIds, return whether trading pair is enabled or disabled',
         params: [
           {
-            name: "assetA",
-            type: "AssetId"
+            name: 'assetA',
+            type: 'AssetId'
           },
           {
-            name: "assetB",
-            type: "AssetId"
+            name: 'assetB',
+            type: 'AssetId'
           }
         ],
-        type: "Json"
+        type: 'hex'
       }
     },
     ethy: {
