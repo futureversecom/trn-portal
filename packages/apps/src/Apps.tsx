@@ -3,6 +3,7 @@
 
 import type { BareProps as Props } from '@polkadot/react-components/types';
 
+import { useExposeApi } from '@trnsp/custom/hooks/useExposeApi';
 import React, { useMemo } from 'react';
 
 import { AccountSidebar, styled } from '@polkadot/react-components';
@@ -19,6 +20,7 @@ import WarmUp from './WarmUp.js';
 export const PORTAL_ID = 'portals';
 
 function Apps ({ className = '' }: Props): React.ReactElement<Props> {
+  useExposeApi();
   const { themeClassName } = useTheme();
   const { apiEndpoint, isDevelopment } = useApi();
 
