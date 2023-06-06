@@ -94,6 +94,7 @@ function TxSigned ({ className, currentItem, requestAddress }: Props): React.Rea
           queueSetTxStatus(currentItem.id, 'sending');
 
           if (signedExtrinsic.send) {
+            currentItem.txStartCb && currentItem.txStartCb();
             const unsubscribe: () => void = await signedExtrinsic.send(handleTxResults('signAndSend', queueSetTxStatus, currentItem, () => unsubscribe()));
           } else {
             const unsubscribe = await api.rpc.author.submitAndWatchExtrinsic(currentItem.extrinsic, (res): void => {
