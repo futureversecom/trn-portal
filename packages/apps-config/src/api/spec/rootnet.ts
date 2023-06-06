@@ -168,7 +168,7 @@ const definitions: OverrideBundleDefinition = {
             type: 'AssetId'
           }
         ],
-        type: 'hex'
+        type: 'Text'
       }
     },
     ethy: {
