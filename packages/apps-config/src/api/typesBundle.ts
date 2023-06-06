@@ -95264,7 +95264,7 @@ export const typesBundle = {
                 "type": "AssetId"
               }
             ],
-            "type": "Json"
+            "type": "Text"
           }
         },
         "ethy": {
