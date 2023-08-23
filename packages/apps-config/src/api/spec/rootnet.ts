@@ -105,7 +105,7 @@ const definitions: OverrideBundleDefinition = {
         params: [
           {
             name: 'amountIn',
-            type: 'Balance'
+            type: 'u128'
           },
           {
             name: 'path',
@@ -119,7 +119,7 @@ const definitions: OverrideBundleDefinition = {
         params: [
           {
             name: 'amountOut',
-            type: 'balance'
+            type: 'u128'
           },
           {
             name: 'path',
