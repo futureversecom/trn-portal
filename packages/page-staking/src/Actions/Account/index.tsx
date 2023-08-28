@@ -60,6 +60,8 @@ function useStashCalls (api: ApiPromise, stashId: string) {
   return { balancesAll, spanCount, stakingAccount };
 }
 
+export const STORAGE_KEY = 'FPASS_ACCOUNTS';
+
 function Account ({ allSlashes, className = '', info: { controllerId, destination, hexSessionIdNext, hexSessionIdQueue, isLoading, isOwnController, isOwnStash, isStashNominating, isStashValidating, nominating, sessionIds, stakingLedger, stashId }, isDisabled, minCommission, targets }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
   const { api } = useApi();
@@ -75,6 +77,20 @@ function Account ({ allSlashes, className = '', info: { controllerId, destinatio
   const [isUnbondOpen, toggleUnbond] = useToggle();
   const [isValidateOpen, toggleValidate] = useToggle();
   const { balancesAll, spanCount, stakingAccount } = useStashCalls(api, stashId);
+  const fPassAccounts: string | null = localStorage.getItem(STORAGE_KEY);
+  let fpassAcc = '';
+
+  if (fPassAccounts) {
+    const fpassAddresses = JSON.parse(fPassAccounts) as string[];
+
+    fpassAddresses.forEach((account: string) => {
+      const [fpass, address] = account.split('-');
+
+      if (address === controllerId) {
+        fpassAcc = fpass;
+      }
+    });
+  }
 
   const slashes = useMemo(
     () => extractSlashes(stashId, allSlashes),
@@ -199,6 +215,9 @@ function Account ({ allSlashes, className = '', info: { controllerId, destinatio
         <StakingBonded stakingInfo={stakingAccount} />
         <StakingUnbonding stakingInfo={stakingAccount} />
         <StakingRedeemable stakingInfo={stakingAccount} />
+      </td>
+      <td className='address'>
+        <AddressMini value={fpassAcc} />
       </td>
       {isStashValidating
         ? (

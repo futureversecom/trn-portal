@@ -7,12 +7,16 @@ import type { BN } from '@polkadot/util';
 import type { AccountBalance, Delegation, SortedAccount } from '../types';
 import type { SortCategory } from '../util';
 
+import { useLocalStorage } from '@trnsp/custom/hooks/useLocalStorage';
 import { useEthereumWallet } from '@trnsp/custom/providers/EthereumWallet';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
+import FPassAccount from '@polkadot/app-accounts/Accounts/FPassAccount';
 import { Button, FilterInput, SortDropdown, styled, SummaryBox, Table } from '@polkadot/react-components';
 import { getAccountCryptoType } from '@polkadot/react-components/util';
-import { useAccounts, useApi, useDelegations, useFavorites, useIpfs, useLedger, useNextTick, useProxies, useToggle } from '@polkadot/react-hooks';
+import { useAccounts, useApi, useCall, useDelegations, useFavorites, useIpfs, useLedger, useNextTick, useProxies, useToggle } from '@polkadot/react-hooks';
+import { Option, Vec } from '@polkadot/types';
+import { Codec } from '@polkadot/types/types';
 import { keyring } from '@polkadot/ui-keyring';
 import { settings } from '@polkadot/ui-settings';
 import { BN_ZERO, isFunction } from '@polkadot/util';
@@ -44,17 +48,19 @@ interface SortControls {
   sortFromMax: boolean;
 }
 
-type GroupName = 'accounts' | 'hardware' | 'injected' | 'multisig' | 'proxied' | 'qr' | 'testing';
+type GroupName = 'accounts' | 'hardware' | 'injected' | 'multisig' | 'proxied' | 'qr' | 'testing' | 'fPassAddress';
 
 const DEFAULT_SORT_CONTROLS: SortControls = { sortBy: 'date', sortFromMax: true };
 
 const STORE_FAVS = 'accounts:favorites';
 
-const GROUP_ORDER: GroupName[] = ['accounts', 'injected', 'qr', 'hardware', 'proxied', 'multisig', 'testing'];
+const GROUP_ORDER: GroupName[] = ['accounts', 'injected', 'qr', 'hardware', 'proxied', 'multisig', 'testing', 'fPassAddress'];
 
-function groupAccounts (accounts: SortedAccount[]): Record<GroupName, string[]> {
+// fpassAccount: Record<GroupName, string[]>
+function groupAccounts (accounts: SortedAccount[], fpassAddresses: string[]): Record<GroupName, string[]> {
   const ret: Record<GroupName, string[]> = {
     accounts: [],
+    fPassAddress: [],
     hardware: [],
     injected: [],
     multisig: [],
@@ -84,8 +90,14 @@ function groupAccounts (accounts: SortedAccount[]): Record<GroupName, string[]> 
     }
   }
 
+  if (fpassAddresses.length) {
+    ret.fPassAddress = fpassAddresses;
+  }
+
   return ret;
 }
+
+export const STORAGE_KEY = 'FPASS_ACCOUNTS';
 
 function Overview ({ className = '', onStatusChange }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
@@ -107,6 +119,9 @@ function Overview ({ className = '', onStatusChange }: Props): React.ReactElemen
   const delegations = useDelegations();
   const proxies = useProxies();
   const isNextTick = useNextTick();
+  const [, setFpassAccount] = useLocalStorage<string[]>(
+    STORAGE_KEY, []
+  );
 
   const onSortChange = useCallback(
     (sortBy: SortCategory) => setSortBy(({ sortFromMax }) => ({ sortBy, sortFromMax })),
@@ -203,6 +218,7 @@ function Overview ({ className = '', onStatusChange }: Props): React.ReactElemen
     (): Record<GroupName, [React.ReactNode?, string?, number?, (() => void)?][]> => {
       const ret: Record<GroupName, [React.ReactNode?, string?, number?, (() => void)?][]> = {
         accounts: [[<>{t<string>('accounts')}<div className='sub'>{t<string>('all locally stored accounts')}</div></>]],
+        fPassAddress: [[<>{t<string>('fPassAddress')}<div className='sub'>{t<string>('FPass address for extension accounts')}</div></>]],
         hardware: [[<>{t<string>('hardware')}<div className='sub'>{t<string>('accounts managed via hardware devices')}</div></>]],
         injected: [[<>{t<string>('extension')}<div className='sub'>{t<string>('accounts available via browser extensions')}</div></>]],
         multisig: [[<>{t<string>('multisig')}<div className='sub'>{t<string>('on-chain multisig accounts')}</div></>]],
@@ -221,9 +237,50 @@ function Overview ({ className = '', onStatusChange }: Props): React.ReactElemen
     [t]
   );
 
+  const keys: string[] = useMemo(
+    () => {
+      const k: string[] = [];
+
+      sortedAccounts.map((accounts) => {
+        const { address } = accounts;
+        const cryptoType = getAccountCryptoType(address);
+
+        if (cryptoType === 'injected') {
+          k.push(address);
+        }
+
+        return address;
+      });
+
+      return k;
+    }, [sortedAccounts]);
+
+  const QUERY_OPTS = { withParams: false };
+  const holder = useCall<Vec<Option<Codec>>>(api.query.futurepass.holders.multi, [keys], QUERY_OPTS);
+  const fpassAddresses: string[] = useMemo(
+    () => {
+      const fp: string[] = [];
+
+      if (holder) {
+        holder.map((h: Option<Codec>, i: number) => {
+          if (h.isSome) {
+            fp.push(`${h.toString()}-${keys[i]}`);
+          }
+
+          return h;
+        });
+      }
+
+      return fp;
+    }, [holder, keys]);
+
+  useEffect((): void => {
+    setFpassAccount(fpassAddresses);
+  }, [fpassAddresses, setFpassAccount]);
+
   const grouped = useMemo(
-    () => groupAccounts(sortedAccounts),
-    [sortedAccounts]
+    () => groupAccounts(sortedAccounts, fpassAddresses),
+    [sortedAccounts, fpassAddresses]
   );
 
   const accounts = useMemo(
@@ -251,7 +308,25 @@ function Overview ({ className = '', onStatusChange }: Props): React.ReactElemen
       const items = grouped[group];
 
       if (items.length) {
-        groups[group] = items.map((account) => accounts[account]);
+        if (group === 'fPassAddress') {
+          const groupItem = items.map((address) => {
+            const fpass = address.split('-')[0];
+
+            return (
+              <FPassAccount
+                defaultName={address}
+                filter={''}
+                isFavorite={false}
+                key={fpass}
+                value={fpass}
+              />
+            );
+          });
+
+          groups[group] = groupItem;
+        } else {
+          groups[group] = items.map((account) => accounts[account]);
+        }
       }
 
       return groups;
