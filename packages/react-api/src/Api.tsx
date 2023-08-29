@@ -74,7 +74,6 @@ function isKeyringLoaded () {
   }
 }
 
-
 async function getInjectedAccounts (injectedPromise: Promise<InjectedExtension[]>): Promise<InjectedAccountExt[]> {
   try {
     await injectedPromise;
