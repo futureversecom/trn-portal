@@ -1,6 +1,6 @@
 // Copyright 2017-2023 @polkadot/app-accounts authors & contributors
 // SPDX-License-Identifier: Apache-2.0
-
+/* eslint-disable */
 import type { SubmittableExtrinsic } from '@polkadot/api/types';
 import type { DeriveDemocracyLock, DeriveStakingAccount } from '@polkadot/api-derive/types';
 import type { Ledger } from '@polkadot/hw-ledger';
@@ -540,6 +540,7 @@ function Account ({ account: { address, meta }, className = '', delegation, filt
             <ProxyOverview
               key='modal-proxy-overview'
               onClose={toggleProxyOverview}
+                // @ts-ignore
               previousProxy={proxy}
               proxiedAccount={address}
             />

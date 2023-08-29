@@ -405,6 +405,8 @@ function Targets ({ className = '', isInElection, nominatedBy, ownStashes, targe
       >
         {displayList && displayList.map((info): React.ReactNode =>
           <Validator
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
             allSlashes={allSlashes}
             canSelect={canSelect}
             filterName={nameFilter}

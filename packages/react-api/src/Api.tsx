@@ -1,6 +1,8 @@
 // Copyright 2017-2023 @polkadot/react-api authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
+import '@therootnetwork/api-types';
+
 import type { LinkOption } from '@polkadot/apps-config/endpoints/types';
 import type { InjectedExtension } from '@polkadot/extension-inject/types';
 import type { ChainProperties, ChainType } from '@polkadot/types/interfaces';
@@ -8,12 +10,12 @@ import type { KeyringStore } from '@polkadot/ui-keyring/types';
 import type { ApiProps, ApiState } from './types';
 
 import * as Sc from '@substrate/connect';
+import { getApiOptions } from '@therootnetwork/api';
 import React, { useEffect, useMemo, useState } from 'react';
-import store from 'store';
 
 import { ApiPromise, ScProvider, WsProvider } from '@polkadot/api';
 import { deriveMapCache, setDeriveCache } from '@polkadot/api-derive/util';
-import { ethereumChains, typesBundle } from '@polkadot/apps-config';
+import { ethereumChains } from '@polkadot/apps-config';
 import { web3Accounts, web3Enable } from '@polkadot/extension-dapp';
 import { TokenUnit } from '@polkadot/react-components/InputNumber';
 import { useApiUrl, useEndpoint, useQueue } from '@polkadot/react-hooks';
@@ -25,12 +27,6 @@ import { defaults as addressDefaults } from '@polkadot/util-crypto/address/defau
 
 import { lightSpecs, relaySpecs } from './light';
 import registry from './typeRegistry';
-import { decodeUrlTypes } from './urlTypes';
-
-import {
-  getApiOptions,
-} from "@therootnetwork/api";
-import "@therootnetwork/api-types";
 
 interface Props {
   children: React.ReactNode;
@@ -78,14 +74,6 @@ function isKeyringLoaded () {
   }
 }
 
-function getDevTypes (): Record<string, Record<string, string>> {
-  const types = decodeUrlTypes() || store.get('types', {}) as Record<string, Record<string, string>>;
-  const names = Object.keys(types);
-
-  names.length && console.log('Injected types:', names.join(', '));
-
-  return types;
-}
 
 async function getInjectedAccounts (injectedPromise: Promise<InjectedExtension[]>): Promise<InjectedAccountExt[]> {
   try {
@@ -232,38 +220,28 @@ async function getLightProvider (chain: string): Promise<ScProvider> {
  * @internal
  */
 async function createApi (apiUrl: string, signer: ApiSigner, onError: (error: unknown) => void): Promise<Record<string, Record<string, string>>> {
-  // const types = getDevTypes();
   const isLight = apiUrl.startsWith('light://');
-  const types_rpc = getApiOptions();
+  const typesRpc = getApiOptions();
 
   try {
     const provider = isLight
       ? await getLightProvider(apiUrl.replace('light://', ''))
       : new WsProvider(apiUrl);
-    console.log('provider::',provider);
-    // api = new ApiPromise({
-    //   provider,
-    //   registry,
-    //   signer,
-    //   types,
-    //   typesBundle
-    // });
 
-      console.log('types:',types_rpc);
-      api = new ApiPromise({
-          noInitWarn: true,
-          registry,
-          signer,
-          provider,
-          typesBundle:{
-            chain: {
-              'root': {
-                rpc: types_rpc.rpc
-              }
-            }
-          },
-          ...types_rpc
-      });
+    api = new ApiPromise({
+      noInitWarn: true,
+      provider,
+      registry,
+      signer,
+      typesBundle: {
+        spec: {
+          root: {
+            rpc: typesRpc.rpc
+          }
+        }
+      },
+      ...typesRpc
+    });
 
     // See https://github.com/polkadot-js/api/pull/4672#issuecomment-1078843960
     if (isLight) {
@@ -273,7 +251,7 @@ async function createApi (apiUrl: string, signer: ApiSigner, onError: (error: un
     onError(error);
   }
 
-  return types_rpc.types as Record<string, Record<string, string>>;
+  return typesRpc.types as Record<string, Record<string, string>>;
 }
 
 export function ApiCtxRoot ({ apiUrl, children, isElectron, store }: Props): React.ReactElement<Props> | null {

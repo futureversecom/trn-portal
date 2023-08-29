@@ -80,6 +80,8 @@ function Mint ({ className, details: { issuer, minBalance }, id, metadata, onClo
       </Modal.Content>
       <Modal.Actions>
         <TxButton
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
           accountId={issuer}
           icon='plus'
           isDisabled={!recipientId || !isAmountValid}

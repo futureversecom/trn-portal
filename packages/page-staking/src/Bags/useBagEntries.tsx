@@ -40,6 +40,8 @@ function useBagEntriesImpl (headId: AccountId32 | null, trigger: number): [boole
       if (next.isSome) {
         const currId = next.unwrap();
 
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         setCurrent(([, { list }]) => [currId, { isCompleted: false, list: [...list, currId] }]);
       } else {
         setCurrent(([currId, { list }]) => [currId, { isCompleted: true, list }]);

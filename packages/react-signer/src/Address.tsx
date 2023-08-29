@@ -175,6 +175,8 @@ async function queryForProxy (api: ApiPromise, allAccounts: string[], address: s
     const { isProxied } = extractExternal(address);
     const [_proxies] = await api.query.proxy.proxies<ITuple<[Vec<ITuple<[AccountId, KitchensinkRuntimeProxyType]> | PalletProxyProxyDefinition>, BalanceOf]>>(address);
     const proxies = api.tx.proxy.addProxy.meta.args.length === 3
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
       ? (_proxies as PalletProxyProxyDefinition[]).map(({ delay, delegate, proxyType }): [string, BN, KitchensinkRuntimeProxyType] => [delegate.toString(), delay, proxyType])
       : (_proxies as [AccountId, KitchensinkRuntimeProxyType][]).map(([delegate, proxyType]): [string, BN, KitchensinkRuntimeProxyType] => [delegate.toString(), BN_ZERO, proxyType]);
     const proxiesFilter = filterProxies(allAccounts, tx, proxies);

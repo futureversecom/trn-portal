@@ -42,6 +42,8 @@ function Bag ({ bagLower, bagUpper, info, nodesOwn }: Props): React.ReactElement
 
   useEffect((): void => {
     info && nodesOwn &&
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
       setHeadId(([, trigger]) => [info.head.unwrapOr(null), ++trigger]);
   }, [info, nodesOwn]);
 

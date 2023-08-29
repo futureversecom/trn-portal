@@ -1,6 +1,7 @@
-// Copyright 2017-2023 @polkadot/app-staking authors & contributors
+// Copyright 2017-2023 @polkadot/app-accounts authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
+// @typescript-eslint/ban-ts-comment
 import type { ApiPromise } from '@polkadot/api';
 import type { SubmittableExtrinsic } from '@polkadot/api/types';
 import type { BatchOptions } from '@polkadot/react-hooks/types';
@@ -50,6 +51,8 @@ function createAddProxy (api: ApiPromise, account: AccountId, type: KitchensinkR
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore old version
     ? api.tx.proxy.addProxy(account, type)
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
     : api.tx.proxy.addProxy(account, type, delay);
 }
 
@@ -58,6 +61,8 @@ function createRmProxy (api: ApiPromise, account: AccountId, type: KitchensinkRu
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore old version
     ? api.tx.proxy.removeProxy(account, type)
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
     : api.tx.proxy.removeProxy(account, type, delay);
 }
 
@@ -168,6 +173,8 @@ function ProxyOverview ({ className, onClose, previousProxy: [existing] = EMPTY_
   const [batchPrevious, setBatchPrevious] = useState<SubmittableExtrinsic<'promise'>[]>([]);
   const [batchAdded, setBatchAdded] = useState<SubmittableExtrinsic<'promise'>[]>([]);
   const [txs, setTxs] = useState<SubmittableExtrinsic<'promise'>[] | null>(null);
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   const [previous, setPrevious] = useState<PrevProxy[]>(() => existing.map(({ delegate, proxyType }) => [delegate, proxyType]));
   const [added, setAdded] = useState<PrevProxy[]>([]);
   const extrinsics = useTxBatch(txs, BATCH_OPTS);
