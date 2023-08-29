@@ -2231,6 +2231,8 @@ __metadata:
     "@crustio/crust-pin": ^1.0.0
     "@pinata/sdk": ^1.2.1
     "@polkadot/dev": ^0.69.6
+    "@therootnetwork/api": ^1.0.2
+    "@therootnetwork/api-types": ^1.0.0
     "@types/chart.js": ^2.9.37
     "@types/file-saver": ^2.0.5
     "@types/jest": ^29.4.0
@@ -4654,6 +4656,24 @@ __metadata:
     react: ^18.0.0
     react-dom: ^18.0.0
   checksum: 51ec548c1fdb1271089a5c63e0908f0166f2c7fcd9cacd3108ebbe0ce64cb4351812d885892020dc37608418cfb15698514856502b3cab0e5cc58d6cc1bd4a3e
+  languageName: node
+  linkType: hard
+
+"@therootnetwork/api-types@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "@therootnetwork/api-types@npm:1.0.0"
+  dependencies:
+    "@polkadot/types": ^10.9.1
+  checksum: 2082c84ed169b0809722ea59f5c5450471588af5c55a13adc18b7750776546d62ca27879b15a35b0a1586676a0851cd7c956e45bab86ea844ed889d9ebf4e3b1
+  languageName: node
+  linkType: hard
+
+"@therootnetwork/api@npm:^1.0.2":
+  version: 1.0.4
+  resolution: "@therootnetwork/api@npm:1.0.4"
+  peerDependencies:
+    "@polkadot/api": ^10.8.1
+  checksum: ddda4aeca588f9441a76cf5b6c704c6b5c674e0d4324092030cf371d2eafc65e663f881167392a8e73ca393d927d4979bf80a196bf3d649f540f96ef62d2e8e4
   languageName: node
   linkType: hard
 

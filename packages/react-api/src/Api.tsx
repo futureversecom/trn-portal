@@ -27,6 +27,11 @@ import { lightSpecs, relaySpecs } from './light';
 import registry from './typeRegistry';
 import { decodeUrlTypes } from './urlTypes';
 
+import {
+  getApiOptions,
+} from "@therootnetwork/api";
+import "@therootnetwork/api-types";
+
 interface Props {
   children: React.ReactNode;
   apiUrl: string;
@@ -227,21 +232,38 @@ async function getLightProvider (chain: string): Promise<ScProvider> {
  * @internal
  */
 async function createApi (apiUrl: string, signer: ApiSigner, onError: (error: unknown) => void): Promise<Record<string, Record<string, string>>> {
-  const types = getDevTypes();
+  // const types = getDevTypes();
   const isLight = apiUrl.startsWith('light://');
+  const types_rpc = getApiOptions();
 
   try {
     const provider = isLight
       ? await getLightProvider(apiUrl.replace('light://', ''))
       : new WsProvider(apiUrl);
+    console.log('provider::',provider);
+    // api = new ApiPromise({
+    //   provider,
+    //   registry,
+    //   signer,
+    //   types,
+    //   typesBundle
+    // });
 
-    api = new ApiPromise({
-      provider,
-      registry,
-      signer,
-      types,
-      typesBundle
-    });
+      console.log('types:',types_rpc);
+      api = new ApiPromise({
+          noInitWarn: true,
+          registry,
+          signer,
+          provider,
+          typesBundle:{
+            chain: {
+              'root': {
+                rpc: types_rpc.rpc
+              }
+            }
+          },
+          ...types_rpc
+      });
 
     // See https://github.com/polkadot-js/api/pull/4672#issuecomment-1078843960
     if (isLight) {
@@ -251,7 +273,7 @@ async function createApi (apiUrl: string, signer: ApiSigner, onError: (error: un
     onError(error);
   }
 
-  return types;
+  return types_rpc.types as Record<string, Record<string, string>>;
 }
 
 export function ApiCtxRoot ({ apiUrl, children, isElectron, store }: Props): React.ReactElement<Props> | null {
