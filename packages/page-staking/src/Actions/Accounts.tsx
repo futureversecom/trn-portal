@@ -31,7 +31,6 @@ function Accounts ({ allSlashes, className, footer, isInElection, list, minCommi
     [t<string>('controller'), 'address'],
     [t<string>('rewards'), 'start media--1200'],
     [t<string>('bonded'), 'number'],
-    [t<string>('fpassAddress'), 'address'],
     [],
     []
   ]);

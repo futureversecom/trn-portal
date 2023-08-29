@@ -4,6 +4,8 @@ import { ExternalProvider } from '@ethersproject/providers';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 
 import { useApi } from '@polkadot/react-hooks/useApi';
+import { Option } from '@polkadot/types';
+import { Codec } from '@polkadot/types/types';
 import { Keyring, keyring } from '@polkadot/ui-keyring';
 
 import { useLocalStorage } from '../hooks/useLocalStorage';
@@ -42,9 +44,10 @@ export function EthereumWalletCtxRoot ({ children }: Props): React.ReactElement<
   const [connectedAccounts, setConnectedAccounts] = useLocalStorage<string[]>(
     STORAGE_KEY, []
   );
+  const { api, isApiReady } = useApi();
   const [activeAccount, setActiveAccount] = useState<string>();
+
   const [hasEthereumWallet, setHasEthereumWallet] = useState<boolean>(!!window?.ethereum);
-  const { isApiReady } = useApi();
 
   useEffect(() => {
     setHasEthereumWallet(!!window?.ethereum);
@@ -55,12 +58,17 @@ export function EthereumWalletCtxRoot ({ children }: Props): React.ReactElement<
       return;
     }
 
-    const handleAccountsChanged = (accounts: string[]) => {
+    const handleAccountsChanged = async (accounts: string[]) => {
       if (!accounts?.length) {
         return;
       }
 
       const address = accounts[0];
+      const holder = (await api.query.futurepass.holders(address)) as Option<Codec>;
+
+      if (holder.isSome) {
+        addAddress(holder.toString());
+      }
 
       setActiveAccount(address);
 
@@ -72,11 +80,21 @@ export function EthereumWalletCtxRoot ({ children }: Props): React.ReactElement<
     };
 
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    window?.ethereum?.request?.({ method: 'eth_accounts' }).then(handleAccountsChanged);
-    window?.ethereum?.on?.('accountsChanged', handleAccountsChanged);
+    window?.ethereum?.request?.({ method: 'eth_accounts' }).then(async (acc: string[]) => {
+      await handleAccountsChanged(acc);
+    });
+    window?.ethereum?.on?.('accountsChanged', (acc: string[]) => {
+      (async (acc: string[]) => {
+        await handleAccountsChanged(acc);
+      })(acc).catch(console.log);
+    });
 
-    return () => window?.ethereum?.removeListener?.('accountsChanged', handleAccountsChanged);
-  }, [connectedAccounts, hasEthereumWallet, isApiReady, setConnectedAccounts]);
+    return () => window?.ethereum?.removeListener?.('accountsChanged', (acc: string[]) => {
+      (async (acc: string[]) => {
+        await handleAccountsChanged(acc);
+      })(acc).catch(console.log);
+    });
+  }, [connectedAccounts, hasEthereumWallet, isApiReady, setConnectedAccounts, api]);
 
   const requestAccounts = useCallback(async () => {
     try {
