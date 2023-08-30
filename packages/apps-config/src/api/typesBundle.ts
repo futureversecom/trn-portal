@@ -72204,7 +72204,7 @@ export const typesBundle = {
             "params": [
               {
                 "name": "amountIn",
-                "type": "u128"
+                "type": "Balance"
               },
               {
                 "name": "path",
@@ -72218,7 +72218,7 @@ export const typesBundle = {
             "params": [
               {
                 "name": "amountOut",
-                "type": "u128"
+                "type": "Balance"
               },
               {
                 "name": "path",
