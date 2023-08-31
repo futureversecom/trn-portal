@@ -1,8 +1,6 @@
 // Copyright 2017-2023 @polkadot/react-components authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import '@therootnetwork/api-types';
-
 import type { Text } from '@polkadot/types';
 import type { RuntimeVersion } from '@polkadot/types/interfaces';
 import type { DefinitionRpc, DefinitionRpcExt, Registry } from '@polkadot/types/types';

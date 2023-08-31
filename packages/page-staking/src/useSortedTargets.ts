@@ -290,8 +290,6 @@ function useSortedTargetsImpl (favorites: string[], withLedger: boolean): Sorted
 
   const baseInfo = useMemo(
     () => electedInfo && lastEraInfo && totalIssuance && waitingInfo
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
       ? extractBaseInfo(api, allAccounts, electedInfo, waitingInfo, favorites, totalIssuance, lastEraInfo, api.consts.staking.historyDepth || historyDepth)
       : EMPTY_PARTIAL,
     [api, allAccounts, electedInfo, favorites, historyDepth, lastEraInfo, totalIssuance, waitingInfo]
