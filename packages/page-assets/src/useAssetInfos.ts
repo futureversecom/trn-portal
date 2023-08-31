@@ -32,17 +32,9 @@ function extractInfo (allAccounts: string[], id: BN, optDetails: Option<PalletAs
   return {
     ...(details
       ? {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
         isAdminMe: isAccount(allAccounts, details.admin),
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
         isFreezerMe: isAccount(allAccounts, details.freezer),
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
         isIssuerMe: isAccount(allAccounts, details.issuer),
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
         isOwnerMe: isAccount(allAccounts, details.owner)
       }
       : EMPTY_FLAGS

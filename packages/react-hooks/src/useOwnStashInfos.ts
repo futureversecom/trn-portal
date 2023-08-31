@@ -41,11 +41,7 @@ function getStakerState (stashId: string, allAccounts: string[], [isOwnStash, { 
 
   return {
     controllerId,
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
     destination: rewardDestination,
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
     exposure,
     hexSessionIdNext: u8aToHex(nextConcat, 48),
     hexSessionIdQueue: u8aToHex(currConcat.length ? currConcat : nextConcat, 48),
@@ -61,8 +57,6 @@ function getStakerState (stashId: string, allAccounts: string[], [isOwnStash, { 
         ? nextSessionIds
         : sessionIds
     ).map(toIdString) as string[],
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
     stakingLedger,
     stashId,
     validatorPrefs

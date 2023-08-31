@@ -1,9 +1,6 @@
 // Copyright 2017-2023 @polkadot/react-components authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-// import {
-//   getApiOptions,
-// } from "@therootnetwork/api";
 import '@therootnetwork/api-types';
 
 import type { Text } from '@polkadot/types';
@@ -14,7 +11,6 @@ import jsonrpc from '@polkadot/types/interfaces/jsonrpc';
 import { getSpecRpc } from '@polkadot/types-known';
 
 function toExt (section: string, input: Record<string, DefinitionRpc>): Record<string, DefinitionRpcExt> {
-  // const types_rpc = getApiOptions();
   return Object.entries(input).reduce((output: Record<string, DefinitionRpcExt>, [method, def]): Record<string, DefinitionRpcExt> => {
     output[method] = {
       isSubscription: false,

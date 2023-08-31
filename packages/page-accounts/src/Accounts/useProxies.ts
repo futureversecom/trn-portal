@@ -51,8 +51,6 @@ function useProxiesImpl (address?: string | null): State | null {
         .then(([_proxies]): void => {
           const proxies = api.tx.proxy.addProxy.meta.args.length === 3
             ? (_proxies as PalletProxyProxyDefinition[]).map(({ delay, delegate, proxyType }) =>
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
               createProxy(allAccounts, delegate, proxyType, delay)
             )
             : (_proxies as [AccountId, KitchensinkRuntimeProxyType][]).map(([delegate, proxyType]) =>

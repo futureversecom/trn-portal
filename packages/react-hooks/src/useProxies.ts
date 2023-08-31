@@ -17,8 +17,6 @@ const OPTS = {
       ? result as [PalletProxyProxyDefinition[], BN][]
       : (result as [[AccountId, KitchensinkRuntimeProxyType][], BN][]).map(([arr, bn]): [PalletProxyProxyDefinition[], BN] =>
         [arr.map(([delegate, proxyType]): PalletProxyProxyDefinition =>
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
           api.createType('ProxyDefinition', {
             delegate,
             proxyType

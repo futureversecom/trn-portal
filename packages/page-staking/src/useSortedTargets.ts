@@ -1,7 +1,6 @@
 // Copyright 2017-2023 @polkadot/app-staking authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-/* eslint-disable */
 import type { ApiPromise } from '@polkadot/api';
 import type { DeriveSessionInfo, DeriveStakingElected, DeriveStakingWaiting } from '@polkadot/api-derive/types';
 import type { Inflation } from '@polkadot/react-hooks/types';
@@ -139,8 +138,6 @@ function extractSingle (api: ApiPromise, allAccounts: string[], derive: DeriveSt
     }
 
     // some overrides (e.g. Darwinia Crab) does not have the value field in IndividualExposure
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
     const minNominated = (exposure.others || []).reduce((min: BN, { value = api.createType('Compact<Balance>') }): BN => {
       const actual = value.unwrap();
 
@@ -161,15 +158,11 @@ function extractSingle (api: ApiPromise, allAccounts: string[], derive: DeriveSt
       bondShare: 0,
       bondTotal,
       commissionPer: validatorPrefs.commission.unwrap().toNumber() / 10_000_000,
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
       exposure,
       isActive: !skipRewards,
       isBlocking: !!(validatorPrefs.blocked && validatorPrefs.blocked.isTrue),
       isElected: !isWaitingDerive(derive) && derive.nextElected.some((e) => e.eq(accountId)),
       isFavorite: favorites.includes(key),
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
       isNominating: (exposure.others || []).reduce((isNominating, indv): boolean => {
         const nominator = indv.who.toString();
 
@@ -310,8 +303,6 @@ function useSortedTargetsImpl (favorites: string[], withLedger: boolean): Sorted
     (): SortedTargets => ({
       counterForNominators,
       counterForValidators,
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
       historyDepth: api.consts.staking.historyDepth || historyDepth,
       inflation,
       maxNominatorsCount,

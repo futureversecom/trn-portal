@@ -235,8 +235,6 @@ function Overview ({ className = '', onStatusChange }: Props): React.ReactElemen
           filter={filterOn}
           isFavorite={isFavorite}
           key={address}
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
           proxy={proxies?.[index]}
           setBalance={setBalance}
           toggleFavorite={toggleFavorite}

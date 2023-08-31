@@ -175,8 +175,6 @@ function StakingApp ({ basePath, className = '' }: Props): React.ReactElement<Pr
         <Route path={pathRef.current.slashes}>
           <Slashes
             ownStashes={ownStashes}
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
             slashes={slashes}
           />
         </Route>

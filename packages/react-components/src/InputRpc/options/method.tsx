@@ -9,7 +9,6 @@ import React from 'react';
 import { ApiPromise } from '@polkadot/api';
 
 export default function createOptions (api: ApiPromise, rpcs: Record<string, Record<string, DefinitionRpcExt>>, sectionName: string): DropdownOptions {
-  console.log('rpcs::', rpcs);
   const section = rpcs[sectionName];
 
   if (!section || Object.keys((api.rpc as unknown as Record<string, Record<string, unknown>>)[sectionName]).length === 0) {
