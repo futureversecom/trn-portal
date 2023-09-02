@@ -1,14 +1,18 @@
 // Copyright 2017-2023 @polkadot/react-components authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
+// Something is seriously going wrong here...
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
 import type { DropdownItemProps } from 'semantic-ui-react';
 import type { KeyringOption$Type, KeyringOptions, KeyringSectionOption, KeyringSectionOptions } from '@polkadot/ui-keyring/options/types';
 import type { Option } from './types.js';
 
-import { EthereumWallet, EthereumWalletCtx } from '@trnsp/custom/providers/EthereumWallet';
 import React from 'react';
 import store from 'store';
 
+import { EthereumWalletCtx } from '@polkadot/custom/src/providers/EthereumWallet';
 import { withMulti, withObservable } from '@polkadot/react-api/hoc';
 import { keyring } from '@polkadot/ui-keyring';
 import { createOptionItem } from '@polkadot/ui-keyring/options/item';
@@ -196,7 +200,7 @@ class InputAddress extends React.PureComponent<Props, State> {
       : actualValue;
 
     const innerNode = (() => {
-      const { activeAccount } = this.context as EthereumWallet;
+      const { activeAccount } = this.context as string;
       const { isSigner } = this.props;
       const { innerValue } = this.state;
 

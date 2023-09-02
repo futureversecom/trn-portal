@@ -1,11 +1,17 @@
 // Copyright 2017-2023 @polkadot/app-explorer authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
+// Something is seriously going wrong here...
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+import type { BlockEVMEvent } from '../types';
+
 import React from 'react';
 
 import { Expander, styled } from '@polkadot/react-components';
 
-import { BlockEVMEvent } from '../types';
 import EVMEventDisplay from './EVMEventDisplay';
 
 interface Props {

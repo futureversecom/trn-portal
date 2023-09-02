@@ -4,7 +4,7 @@
 import type { TFunction } from '../types.js';
 import type { LinkOption } from './types.js';
 
-import { chainsRootnetPNG } from '../ui/logos/chains';
+import { chainsRootnetPNG } from '@polkadot/apps-config/ui/logos/chains';
 
 export const CUSTOM_ENDPOINT_KEY = 'polkadot-app-custom-endpoints';
 
@@ -75,7 +75,7 @@ export function createDev (t: TFunction): LinkOption[] {
       textBy: '127.0.0.1:9944',
       ui: {
         color: '#E56399',
-        logo: chainsRootnetPNG
+        logo: chainsRootnetPNG as string
       },
       value: 'ws://127.0.0.1:9944'
     }

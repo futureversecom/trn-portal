@@ -1,20 +1,25 @@
 /* eslint-disable header/header */
 
-import type { QueueTx } from '@polkadot/react-components/Status/types';
-import type { AddressProxy } from '@polkadot/react-signer/types';
+// Something is seriously going wrong here...
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+
+import type { SubmittableResult } from '@polkadot/api';
+import type { QueueTx, QueueTxStatus } from '@polkadot/react-components/src/Status/types.js';
+import type { AddressProxy } from '@polkadot/react-signer/src/types';
 import type { BN } from '@polkadot/util';
 
 import React, { useCallback, useEffect, useState } from 'react';
 
-import { SubmittableResult } from '@polkadot/api';
 import { Button, ErrorBoundary, Modal, Output, styled } from '@polkadot/react-components';
-import { QueueTxStatus } from '@polkadot/react-components/Status/types';
 import { useApi, useQueue, useToggle } from '@polkadot/react-hooks';
-import Address from '@polkadot/react-signer/Address';
-import Tip from '@polkadot/react-signer/Tip';
-import Transaction from '@polkadot/react-signer/Transaction';
-import { useTranslation } from '@polkadot/react-signer/translate';
-import { handleTxResults } from '@polkadot/react-signer/util';
+import Address from '@polkadot/react-signer/src/Address';
+import Tip from '@polkadot/react-signer/src/Tip';
+import Transaction from '@polkadot/react-signer/src/Transaction';
+import { useTranslation } from '@polkadot/react-signer/src/translate.js';
+import { handleTxResults } from '@polkadot/react-signer/src/util';
 import { nextTick } from '@polkadot/util';
 
 import { signWithEthereumWallet } from '../utils/signWithEthereumWallet';
@@ -47,8 +52,8 @@ function TxSigned ({ className, currentItem, requestAddress }: Props): React.Rea
   // when we are sending the hash only, get the wrapped call for display (proxies if required)
   useEffect((): void => {
     const method = currentItem.extrinsic && (
-      senderInfo.proxyRoot
-        ? api.tx.proxy.proxy(senderInfo.proxyRoot, null, currentItem.extrinsic)
+      (senderInfo).proxyRoot
+        ? api.tx.proxy.proxy((senderInfo).proxyRoot, null, currentItem.extrinsic)
         : currentItem.extrinsic
     ).method;
 
@@ -56,7 +61,7 @@ function TxSigned ({ className, currentItem, requestAddress }: Props): React.Rea
       method
         ? {
           innerHash: method.hash.toHex(),
-          innerTx: senderInfo.multiRoot
+          innerTx: (senderInfo).multiRoot
             ? method.toHex()
             : null
         }
@@ -89,7 +94,7 @@ function TxSigned ({ className, currentItem, requestAddress }: Props): React.Rea
         }
 
         try {
-          const signedExtrinsic = await signWithEthereumWallet(api, senderInfo.signAddress, currentItem.extrinsic, { tip });
+          const signedExtrinsic = await signWithEthereumWallet(api, (senderInfo).signAddress, currentItem.extrinsic, { tip });
 
           queueSetTxStatus(currentItem.id, 'sending');
 
@@ -149,7 +154,7 @@ function TxSigned ({ className, currentItem, requestAddress }: Props): React.Rea
               <Output
                 isDisabled
                 isTrimmed
-                label={t<string>('call hash')}
+                label={t('call hash')}
                 value={innerHash}
                 withCopy
               />
@@ -162,7 +167,7 @@ function TxSigned ({ className, currentItem, requestAddress }: Props): React.Rea
           icon='sign-in-alt'
           isBusy={isBusy}
           isDisabled={!senderInfo.signAddress || isRenderError}
-          label={t<string>('Sign and Submit')}
+          label={t('Sign and Submit')}
           onClick={_doStart}
           tabIndex={2}
         />

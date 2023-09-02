@@ -120,7 +120,10 @@
       "@polkadot/test-support/types": ["test-support/src/types.ts"],
       "@polkadot/test-support/transaction": ["test-support/src/transaction/index.ts"],
       "@polkadot/test-support/utils": ["test-support/src/utils/index.ts"],
-      "@trnsp/custom/*": ["trnsp-custom/src/*.ts"]
+      "@polkadot/custom/components/*": ["trnsp-custom/src/components/*.ts"],
+      "@polkadot/custom/hooks/*": ["trnsp-custom/src/hooks/*.ts"],
+      "@polkadot/custom/providers/*": ["trnsp-custom/src/providers/*.ts"],
+      "@polkadot/custom/utils/*": ["trnsp-custom/src/utils/*.ts"]
     }
 	}
  }

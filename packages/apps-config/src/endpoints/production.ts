@@ -3,7 +3,7 @@
 
 import type { EndpointOption } from './types.js';
 
-import { chainsRootnetPNG } from '../ui/logos/chains';
+import { chainsRootnetPNG } from '@polkadot/apps-config/ui/logos/chains';
 
 // The available endpoints that will show in the dropdown. For the most part (with the exception of
 // Polkadot) we try to keep this to live chains only, with RPCs hosted by the community/chain vendor
@@ -12,7 +12,7 @@ import { chainsRootnetPNG } from '../ui/logos/chains';
 //   providers: The actual hosted secure websocket endpoint
 //
 // IMPORTANT: Alphabetical based on text
-export const prodChains: EndpointOption[] = [
+export const prodChains: Omit<EndpointOption, 'teleport'>[] = [
   {
     info: 'rootnet',
     providers: {
@@ -21,7 +21,7 @@ export const prodChains: EndpointOption[] = [
     text: 'Root (Archive Node)',
     ui: {
       color: '#000000',
-      logo: chainsRootnetPNG
+      logo: chainsRootnetPNG as string
     }
   },
   {
@@ -32,7 +32,7 @@ export const prodChains: EndpointOption[] = [
     text: 'Root (Full Node)',
     ui: {
       color: '#000000',
-      logo: chainsRootnetPNG
+      logo: chainsRootnetPNG as string
     }
   }
 ];

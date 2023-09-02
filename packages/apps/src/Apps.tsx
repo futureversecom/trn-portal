@@ -3,9 +3,10 @@
 
 import type { BareProps as Props } from '@polkadot/react-components/types';
 
-import { useExposeApi } from '@trnsp/custom/hooks/useExposeApi';
 import React, { useMemo } from 'react';
 
+import { useExposeApi } from '@polkadot/custom/src/hooks/useExposeApi.js';
+// import { useExposeApi } from '@polkadot/custom/hooks/useExposeApi';
 import { AccountSidebar, styled } from '@polkadot/react-components';
 import GlobalStyle from '@polkadot/react-components/styles';
 import { useApi, useTheme } from '@polkadot/react-hooks';

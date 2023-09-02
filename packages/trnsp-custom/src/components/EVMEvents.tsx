@@ -1,13 +1,20 @@
 // Copyright 2017-2023 @polkadot/app-explorer authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
+// Something is seriously going wrong here...
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+import type { H256 } from '@polkadot/types/interfaces';
+import type { BlockHash } from '@polkadot/types/interfaces/chain';
+import type { BlockEVMEvent } from '../types';
+
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
 import { MarkError, Table } from '@polkadot/react-components';
 
-import { BlockEVMEvent } from '../types';
 import EVMEvent from './EVMEvent';
 
 interface Props {
@@ -25,13 +32,13 @@ function renderEvent (className: string | undefined, event: BlockEVMEvent): Reac
   return (
     <tr
       className={className}
-      key={transactionHash?.toString()}
+      key={(transactionHash as H256)?.toString()}
     >
       <td className='overflow relative'>
         <EVMEvent value={event} />
         {blockNumber && (
           <div className='absolute --digits'>
-            <Link to={`/explorer/query/${blockHash?.toString() || ''}`}>{blockNumber.toString()}-{transactionIndex?.toString()?.padStart(2, '0')}</Link>
+            <Link to={`/explorer/query/${(blockHash as BlockHash)?.toString() || ''}`}>{blockNumber.toString()}-{transactionIndex?.toString()?.padStart(2, '0')}</Link>
           </div>
         )}
       </td>
@@ -64,7 +71,7 @@ function EVMEvents ({ className = '', emptyLabel, error, eventClassName, events,
             <td><MarkError content={t<string>('Unable to decode the block events. {{error}}', { replace: { error: error.message } })} /></td>
           </tr>
         )
-        : events && events.map((e) => renderEvent(eventClassName, e))
+        : events?.map((e) => renderEvent(eventClassName, e))
       }
     </Table>
   );

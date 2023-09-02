@@ -4,12 +4,14 @@
 import type { ThemeDef } from '@polkadot/react-components/types';
 import type { KeyringStore } from '@polkadot/ui-keyring/types';
 
-import { BlockEVMEventsCtxRoot } from '@trnsp/custom/providers/BlockEVMEvents';
-import { EthereumWalletCtxRoot } from '@trnsp/custom/providers/EthereumWallet';
 import React, { Suspense, useEffect, useState } from 'react';
 import { HashRouter } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 
+import { BlockEVMEventsCtxRoot } from '@polkadot/custom/src/providers/BlockEVMEvents';
+import { EthereumWalletCtxRoot } from '@polkadot/custom/src/providers/EthereumWallet';
+// import { BlockEVMEventsCtxRoot } from '@polkadot/custom/providers/BlockEVMEvents';
+// import { EthereumWalletCtxRoot } from '@polkadot/custom/providers/EthereumWallet';
 import { ApiCtxRoot } from '@polkadot/react-api';
 import { ApiStatsCtxRoot, BlockAuthorsCtxRoot, BlockEventsCtxRoot, KeyringCtxRoot, QueueCtxRoot, WindowSizeCtxRoot } from '@polkadot/react-hooks';
 import { settings } from '@polkadot/ui-settings';

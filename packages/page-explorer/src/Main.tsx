@@ -1,21 +1,25 @@
 // Copyright 2017-2023 @polkadot/app-explorer authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
+// Something is seriously going wrong here...
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+import type { Dispatch, SetStateAction } from 'react';
 import type { HeaderExtended } from '@polkadot/api-derive/types';
+import type { BlockEVMEvent } from '@polkadot/custom/src/types';
 import type { KeyedEvent } from '@polkadot/react-hooks/ctx/types';
 
-import EVMEvents from '@trnsp/custom/components/EVMEvents';
-import { useLocalStorage } from '@trnsp/custom/hooks/useLocalStorage';
-import { BlockEVMEvent } from '@trnsp/custom/types';
 import React, { useRef } from 'react';
 
+import EVMEvents from '@polkadot/custom/src/components/EVMEvents';
+import { useLocalStorage } from '@polkadot/custom/src/hooks/useLocalStorage';
 import { Columar, styled, ToggleGroup } from '@polkadot/react-components';
 
 import BlockHeaders from './BlockHeaders.js';
 import Events from './Events.js';
 import Query from './Query.js';
 import Summary from './Summary.js';
-import { useTranslation } from './translate';
+import { useTranslation } from './translate.js';
 
 interface Props {
   eventCount: number;
@@ -26,7 +30,7 @@ interface Props {
 
 function Main ({ eventCount, events, evmEvents, headers }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
-  const [intentIndex, setIntentIndex] = useLocalStorage<number>('explorer:event', 0);
+  const [intentIndex, setIntentIndex]: [number, Dispatch<SetStateAction<number>>] = useLocalStorage<number>('explorer:event', 0);
 
   const intentOptions = useRef([
     { text: t('Substrate Events'), value: 'substrate' },

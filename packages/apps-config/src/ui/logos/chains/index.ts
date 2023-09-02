@@ -3,4 +3,9 @@
 
 // Do not edit. Auto-generated via node scripts/imgConvert.mjs
 
-export { chainsRootnetPNG } from './generated/rootnetPNG';
+export { chains3dpassSVG } from './generated/3dpassSVG.js';
+export { chainsFragnovaPNG } from './generated/fragnovaPNG.js';
+export { chainsInvarchJPEG } from './generated/invarchJPEG.js';
+export { chainsPeaqPNG } from './generated/peaqPNG.js';
+export { chainsQpnPNG } from './generated/qpnPNG.js';
+export { chainsRootnetPNG } from './generated/rootnetPNG.js';

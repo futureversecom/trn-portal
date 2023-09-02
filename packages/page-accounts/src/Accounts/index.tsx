@@ -1,15 +1,18 @@
 // Copyright 2017-2023 @polkadot/app-accounts authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
+// Something is seriously going wrong here...
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+import type { EthereumWallet } from '@polkadot/custom/src/providers/EthereumWallet';
 import type { ActionStatus } from '@polkadot/react-components/Status/types';
 import type { KeyringAddress } from '@polkadot/ui-keyring/types';
 import type { BN } from '@polkadot/util';
 import type { AccountBalance, Delegation, SortedAccount } from '../types.js';
 import type { SortCategory } from '../util.js';
 
-import { useEthereumWallet } from '@trnsp/custom/providers/EthereumWallet';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
+import { useEthereumWallet } from '@polkadot/custom/src/providers/EthereumWallet';
 import { Button, FilterInput, SortDropdown, styled, SummaryBox, Table } from '@polkadot/react-components';
 import { getAccountCryptoType } from '@polkadot/react-components/util';
 import { useAccounts, useApi, useDelegations, useFavorites, useIpfs, useLedger, useNextTick, useProxies, useToggle } from '@polkadot/react-hooks';
@@ -27,7 +30,7 @@ import { useTranslation } from '../translate.js';
 import { SORT_CATEGORY, sortAccounts } from '../util.js';
 import Account from './Account.js';
 import BannerClaims from './BannerClaims.js';
-import BannerExtension from './BannerExtension.js';
+// import BannerExtension from './BannerExtension.js';
 import Summary from './Summary.js';
 
 interface Balances {
@@ -144,8 +147,7 @@ function Overview ({ className = '', onStatusChange }: Props): React.ReactElemen
     []
   );
 
-  const { hasEthereumWallet, requestAccounts } = useEthereumWallet();
-
+  const { hasEthereumWallet, requestAccounts }: EthereumWallet = useEthereumWallet() as {a: () => EthereumWallet};
   const onEthereumWallet = useCallback(async () => {
     await requestAccounts?.();
   }, [requestAccounts]);

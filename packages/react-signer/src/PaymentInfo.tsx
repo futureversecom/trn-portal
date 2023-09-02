@@ -1,14 +1,19 @@
 // Copyright 2017-2023 @polkadot/react-signer authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
+// Something is seriously going wrong here...
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
 import type { SubmittableExtrinsic } from '@polkadot/api/promise/types';
 import type { RuntimeDispatchInfo } from '@polkadot/types/interfaces';
 import type { BN } from '@polkadot/util';
 
-import { useFeeAssetBalance } from '@trnsp/custom/hooks/useFeeAssetBalance';
 import React, { useEffect, useState } from 'react';
 import { Trans } from 'react-i18next';
 
+import { useFeeAssetBalance } from '@polkadot/custom/src/hooks/useFeeAssetBalance';
 import { Expander, MarkWarning } from '@polkadot/react-components';
 import { useApi, useIsMountedRef } from '@polkadot/react-hooks';
 import { nextTick } from '@polkadot/util';

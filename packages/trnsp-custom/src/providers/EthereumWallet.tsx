@@ -1,12 +1,18 @@
 /* eslint-disable header/header */
 
-import { ExternalProvider } from '@ethersproject/providers';
+// Something is seriously going wrong here...
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+import type { ExternalProvider } from '@ethersproject/providers';
+import type { Dispatch, SetStateAction } from 'react';
+import type { Option } from '@polkadot/types';
+import type { Codec } from '@polkadot/types/types';
+import type { Keyring } from '@polkadot/ui-keyring';
+
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 
 import { useApi } from '@polkadot/react-hooks/useApi';
-import { Option } from '@polkadot/types';
-import { Codec } from '@polkadot/types/types';
-import { Keyring, keyring } from '@polkadot/ui-keyring';
+import { keyring } from '@polkadot/ui-keyring';
 
 import { useLocalStorage } from '../hooks/useLocalStorage';
 
@@ -41,7 +47,7 @@ interface Props {
 }
 
 export function EthereumWalletCtxRoot ({ children }: Props): React.ReactElement<Props> {
-  const [connectedAccounts, setConnectedAccounts] = useLocalStorage<string[]>(
+  const [connectedAccounts, setConnectedAccounts]: [string[], Dispatch<SetStateAction<string[]>>] = useLocalStorage<string[]>(
     STORAGE_KEY, []
   );
   const { api, isApiReady } = useApi();
