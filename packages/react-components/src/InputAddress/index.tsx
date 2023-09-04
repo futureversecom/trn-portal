@@ -20,7 +20,7 @@ import { isNull, isUndefined } from '@polkadot/util';
 import { isAddress } from '@polkadot/util-crypto';
 
 import Dropdown from '../Dropdown.js';
-import MarkError from '../MarkError';
+import MarkError from '../MarkError.js';
 import Static from '../Static.js';
 import { styled } from '../styled.js';
 import { getAddressName, toAddress } from '../util/index.js';
@@ -200,7 +200,7 @@ class InputAddress extends React.PureComponent<Props, State> {
       : actualValue;
 
     const innerNode = (() => {
-      const { activeAccount } = this.context as string;
+      const { activeAccount } = this.context;
       const { isSigner } = this.props;
       const { innerValue } = this.state;
 

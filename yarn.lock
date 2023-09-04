@@ -3598,7 +3598,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@polkadot/custom@*, @polkadot/custom@workspace:packages/trnsp-custom":
+"@polkadot/custom@*, @polkadot/custom@1.0.0, @polkadot/custom@workspace:packages/trnsp-custom":
   version: 0.0.0-use.local
   resolution: "@polkadot/custom@workspace:packages/trnsp-custom"
   dependencies:
@@ -3847,6 +3847,7 @@ __metadata:
     "@fortawesome/fontawesome-svg-core": ^6.4.2
     "@fortawesome/free-solid-svg-icons": ^6.4.2
     "@fortawesome/react-fontawesome": ^0.2.0
+    "@polkadot/custom": 1.0.0
     "@polkadot/keyring": ^12.4.2
     "@polkadot/react-api": ^0.132.2-80-x
     "@polkadot/react-identicon": ^3.6.2
