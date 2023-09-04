@@ -21,6 +21,7 @@
     { "path": "../apps-config/tsconfig.build.json" },
     { "path": "../react-api/tsconfig.xref.json" },
     { "path": "../react-components/tsconfig.xref.json" },
-    { "path": "../react-query/tsconfig.build.json" }
+    { "path": "../react-query/tsconfig.build.json" },
+    { "path": "../trnsp-custom/tsconfig.build.json" }
   ]
 }
