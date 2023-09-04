@@ -1,13 +1,14 @@
 // Copyright 2017-2023 @polkadot/react-components authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
+import type { RawParam } from '@polkadot/react-params/types';
+import type { EthAddress, EthBloom, EthLog } from '@polkadot/types/interfaces/eth/types';
+import type { H256 } from '@polkadot/types/interfaces/runtime';
+import type { Option, u32, Vec } from '@polkadot/types-codec';
+
 import React from 'react';
 
 import Params from '@polkadot/react-params';
-import { RawParam } from '@polkadot/react-params/types';
-import { EthAddress, EthBloom, EthLog } from '@polkadot/types/interfaces/eth/types';
-import { H256 } from '@polkadot/types/interfaces/runtime';
-import { Option, u32, Vec } from '@polkadot/types-codec';
 import { TypeDefInfo } from '@polkadot/types-create/types/types';
 
 export interface Props {

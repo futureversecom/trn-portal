@@ -20,6 +20,7 @@ import WarmUp from './WarmUp.js';
 export const PORTAL_ID = 'portals';
 
 function Apps ({ className = '' }: Props): React.ReactElement<Props> {
+  /* eslint-disable @typescript-eslint/no-unsafe-call */
   useExposeApi();
   const { themeClassName } = useTheme();
   const { apiEndpoint, isDevelopment } = useApi();

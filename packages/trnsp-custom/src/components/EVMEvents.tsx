@@ -1,13 +1,18 @@
 // Copyright 2017-2023 @polkadot/app-explorer authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
+import type { BlockEVMEvent } from '../types';
+
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
 import { MarkError, Table } from '@polkadot/react-components';
 
-import { BlockEVMEvent } from '../types';
 import EVMEvent from './EVMEvent';
 
 interface Props {

@@ -1,11 +1,15 @@
 // Copyright 2017-2023 @polkadot/react-components authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+import type { EthereumWallet } from '@trnsp/custom/providers/EthereumWallet';
 import type { DropdownItemProps } from 'semantic-ui-react';
 import type { KeyringOption$Type, KeyringOptions, KeyringSectionOption, KeyringSectionOptions } from '@polkadot/ui-keyring/options/types';
 import type { Option } from './types.js';
 
-import { EthereumWallet, EthereumWalletCtx } from '@trnsp/custom/providers/EthereumWallet';
+import { EthereumWalletCtx } from '@trnsp/custom/providers/EthereumWallet';
 import React from 'react';
 import store from 'store';
 

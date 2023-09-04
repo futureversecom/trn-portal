@@ -3389,6 +3389,7 @@ __metadata:
   resolution: "@trnsp/custom@workspace:packages/trnsp-custom"
   dependencies:
     "@ethersproject/providers": ^5.7.2
+    "@polkadot/react-signer": ^0.132.1
     ethers: ^6.0.8
   languageName: unknown
   linkType: soft

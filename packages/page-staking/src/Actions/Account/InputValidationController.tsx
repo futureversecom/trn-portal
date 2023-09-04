@@ -1,6 +1,10 @@
 // Copyright 2017-2023 @polkadot/app-staking authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+
 import type { DeriveBalancesAll } from '@polkadot/api-derive/types';
 import type { Option } from '@polkadot/types';
 import type { AccountId, StakingLedger } from '@polkadot/types/interfaces';

@@ -1,14 +1,18 @@
 /* eslint-disable header/header */
 
-import type { QueueTx } from '@polkadot/react-components/Status/types';
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+
+import type { SubmittableResult } from '@polkadot/api';
+import type { QueueTx, QueueTxStatus } from '@polkadot/react-components/Status/types';
 import type { AddressProxy } from '@polkadot/react-signer/types';
 import type { BN } from '@polkadot/util';
 
 import React, { useCallback, useEffect, useState } from 'react';
 
-import { SubmittableResult } from '@polkadot/api';
 import { Button, ErrorBoundary, Modal, Output, styled } from '@polkadot/react-components';
-import { QueueTxStatus } from '@polkadot/react-components/Status/types';
 import { useApi, useQueue, useToggle } from '@polkadot/react-hooks';
 import Address from '@polkadot/react-signer/Address';
 import Tip from '@polkadot/react-signer/Tip';

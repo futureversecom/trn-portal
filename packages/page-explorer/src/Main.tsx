@@ -1,12 +1,15 @@
 // Copyright 2017-2023 @polkadot/app-explorer authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+
+import type { BlockEVMEvent } from '@trnsp/custom/types';
 import type { HeaderExtended } from '@polkadot/api-derive/types';
 import type { KeyedEvent } from '@polkadot/react-hooks/ctx/types';
 
 import EVMEvents from '@trnsp/custom/components/EVMEvents';
 import { useLocalStorage } from '@trnsp/custom/hooks/useLocalStorage';
-import { BlockEVMEvent } from '@trnsp/custom/types';
 import React, { useRef } from 'react';
 
 import { Columar, styled, ToggleGroup } from '@polkadot/react-components';

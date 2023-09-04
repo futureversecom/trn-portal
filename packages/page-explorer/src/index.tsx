@@ -21,6 +21,9 @@ import Forks from './Forks.js';
 import Main from './Main.js';
 import { useTranslation } from './translate.js';
 
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+
 interface Props {
   basePath: string;
   className?: string;
@@ -108,7 +111,8 @@ function ExplorerApp ({ basePath, className }: Props): React.ReactElement<Props>
                 eventCount={eventCount}
                 events={events}
                 evmEvents={evmEvents}
-            headers={lastHeaders}/>
+                headers={lastHeaders}
+              />
             }
             index
           />

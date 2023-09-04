@@ -27,7 +27,6 @@ import { useTranslation } from '../translate.js';
 import { SORT_CATEGORY, sortAccounts } from '../util.js';
 import Account from './Account.js';
 import BannerClaims from './BannerClaims.js';
-import BannerExtension from './BannerExtension.js';
 import Summary from './Summary.js';
 
 interface Balances {
@@ -143,7 +142,8 @@ function Overview ({ className = '', onStatusChange }: Props): React.ReactElemen
       }),
     []
   );
-
+  /* eslint-disable @typescript-eslint/no-unsafe-assignment */
+  /* eslint-disable @typescript-eslint/no-unsafe-call */
   const { hasEthereumWallet, requestAccounts } = useEthereumWallet();
 
   const onEthereumWallet = useCallback(async () => {

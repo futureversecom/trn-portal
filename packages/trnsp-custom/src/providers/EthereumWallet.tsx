@@ -1,12 +1,18 @@
 /* eslint-disable header/header */
 
-import { ExternalProvider } from '@ethersproject/providers';
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+
+import type { ExternalProvider } from '@ethersproject/providers';
+import type { Option } from '@polkadot/types';
+import type { Codec } from '@polkadot/types/types';
+import type { Keyring } from '@polkadot/ui-keyring';
+
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 
 import { useApi } from '@polkadot/react-hooks/useApi';
-import { Option } from '@polkadot/types';
-import { Codec } from '@polkadot/types/types';
-import { Keyring, keyring } from '@polkadot/ui-keyring';
+import { keyring } from '@polkadot/ui-keyring';
 
 import { useLocalStorage } from '../hooks/useLocalStorage';
 

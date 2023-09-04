@@ -1,6 +1,10 @@
 // Copyright 2017-2023 @polkadot/react-signer authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+
 import type { SubmittableExtrinsic } from '@polkadot/api/promise/types';
 import type { RuntimeDispatchInfo } from '@polkadot/types/interfaces';
 import type { BN } from '@polkadot/util';

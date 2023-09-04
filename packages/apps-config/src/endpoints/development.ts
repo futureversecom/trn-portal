@@ -75,7 +75,7 @@ export function createDev (t: TFunction): LinkOption[] {
       textBy: '127.0.0.1:9944',
       ui: {
         color: '#E56399',
-        logo: chainsRootnetPNG
+        logo: chainsRootnetPNG as string
       },
       value: 'ws://127.0.0.1:9944'
     }
