@@ -1,7 +1,7 @@
 // Copyright 2017-2023 @polkadot/react-api authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import '@therootnetwork/api-types';
+// import '@therootnetwork/api-types';
 
 import type { LinkOption } from '@polkadot/apps-config/endpoints/types';
 import type { InjectedExtension } from '@polkadot/extension-inject/types';
