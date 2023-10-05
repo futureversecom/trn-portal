@@ -8,10 +8,13 @@ import type { InjectedExtension } from '@polkadot/extension-inject/types';
 import type { ChainProperties, ChainType } from '@polkadot/types/interfaces';
 import type { KeyringStore } from '@polkadot/ui-keyring/types';
 import type { ApiProps, ApiState } from './types';
-
+import {
+  RegistryTypes
+} from "@polkadot/types/types";
 import * as Sc from '@substrate/connect';
 import { getApiOptions } from '@therootnetwork/api';
 import React, { useEffect, useMemo, useState } from 'react';
+import store from 'store';
 
 import { ApiPromise, ScProvider, WsProvider } from '@polkadot/api';
 import { deriveMapCache, setDeriveCache } from '@polkadot/api-derive/util';
@@ -27,6 +30,7 @@ import { defaults as addressDefaults } from '@polkadot/util-crypto/address/defau
 
 import { lightSpecs, relaySpecs } from './light';
 import registry from './typeRegistry';
+import { decodeUrlTypes } from './urlTypes';
 
 interface Props {
   children: React.ReactNode;
@@ -215,12 +219,23 @@ async function getLightProvider (chain: string): Promise<ScProvider> {
   return new ScProvider(Sc, JSON.stringify(specMod.default), relay);
 }
 
+function getDevTypes (): Record<string, Record<string, string>> {
+  const types = decodeUrlTypes() || store.get('types', {}) as Record<string, Record<string, string>>;
+  const names = Object.keys(types);
+
+  names.length && console.log('Injected types:', names.join(', '));
+
+  return types;
+}
+
+
 /**
  * @internal
  */
 async function createApi (apiUrl: string, signer: ApiSigner, onError: (error: unknown) => void): Promise<Record<string, Record<string, string>>> {
   const isLight = apiUrl.startsWith('light://');
   const typesRpc = getApiOptions();
+  const types = getDevTypes();
 
   try {
     const provider = isLight
@@ -235,11 +250,20 @@ async function createApi (apiUrl: string, signer: ApiSigner, onError: (error: un
       typesBundle: {
         spec: {
           root: {
-            rpc: typesRpc.rpc
+            rpc: typesRpc.rpc,
+            "types": [
+              {
+                "minmax": [
+                  0,
+                  null
+                ],
+                "types": typesRpc.types as RegistryTypes
+              }
+            ]
           }
         }
       },
-      ...typesRpc
+      types
     });
 
     // See https://github.com/polkadot-js/api/pull/4672#issuecomment-1078843960
@@ -250,7 +274,8 @@ async function createApi (apiUrl: string, signer: ApiSigner, onError: (error: un
     onError(error);
   }
 
-  return typesRpc.types as Record<string, Record<string, string>>;
+  // return typesRpc.types as Record<string, Record<string, string>>;
+  return types;
 }
 
 export function ApiCtxRoot ({ apiUrl, children, isElectron, store }: Props): React.ReactElement<Props> | null {
