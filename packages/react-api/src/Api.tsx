@@ -8,9 +8,7 @@ import type { InjectedExtension } from '@polkadot/extension-inject/types';
 import type { ChainProperties, ChainType } from '@polkadot/types/interfaces';
 import type { KeyringStore } from '@polkadot/ui-keyring/types';
 import type { ApiProps, ApiState } from './types';
-import {
-  RegistryTypes
-} from "@polkadot/types/types";
+
 import * as Sc from '@substrate/connect';
 import { getApiOptions } from '@therootnetwork/api';
 import React, { useEffect, useMemo, useState } from 'react';
@@ -23,6 +21,7 @@ import { web3Accounts, web3Enable } from '@polkadot/extension-dapp';
 import { TokenUnit } from '@polkadot/react-components/InputNumber';
 import { useApiUrl, useEndpoint, useQueue } from '@polkadot/react-hooks';
 import ApiSigner from '@polkadot/react-signer/signers/ApiSigner';
+import { RegistryTypes } from '@polkadot/types/types';
 import { keyring } from '@polkadot/ui-keyring';
 import { settings } from '@polkadot/ui-settings';
 import { formatBalance, isNumber, isTestChain, objectSpread, stringify } from '@polkadot/util';
@@ -228,7 +227,6 @@ function getDevTypes (): Record<string, Record<string, string>> {
   return types;
 }
 
-
 /**
  * @internal
  */
@@ -247,23 +245,23 @@ async function createApi (apiUrl: string, signer: ApiSigner, onError: (error: un
       provider,
       registry,
       signer,
+      types,
       typesBundle: {
         spec: {
           root: {
             rpc: typesRpc.rpc,
-            "types": [
+            types: [
               {
-                "minmax": [
+                minmax: [
                   0,
                   null
                 ],
-                "types": typesRpc.types as RegistryTypes
+                types: typesRpc.types as RegistryTypes
               }
             ]
           }
         }
-      },
-      types
+      }
     });
 
     // See https://github.com/polkadot-js/api/pull/4672#issuecomment-1078843960
