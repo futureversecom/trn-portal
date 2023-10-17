@@ -123,7 +123,7 @@ async function retrieve (api: ApiPromise, injectedPromise: Promise<InjectedExten
     properties: registry.createType('ChainProperties', {
       ss58Format: api.registry.chainSS58,
       tokenDecimals: api.registry.chainDecimals,
-      tokenSymbol: api.registry.chainTokens
+      tokenSymbol: 'XRP'
     }),
     systemChain: (systemChain || '<unknown>').toString(),
     systemChainType,

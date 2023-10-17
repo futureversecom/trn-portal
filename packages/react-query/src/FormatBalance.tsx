@@ -35,8 +35,7 @@ type LabelPost = string | React.ReactNode
 
 function getFormat (registry: Registry, formatIndex = 0): [number, string] {
   const decimals = registry.chainDecimals;
-  const tokens = registry.chainTokens;
-
+  const tokens = ['XRP'];
   return [
     formatIndex < decimals.length
       ? decimals[formatIndex]
