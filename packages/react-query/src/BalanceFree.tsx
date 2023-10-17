@@ -2,11 +2,12 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import type { AccountId, AccountIndex, Address } from '@polkadot/types/interfaces';
-import { PalletAssetsAssetAccount } from "@polkadot/types/lookup";
-import { Option } from "@polkadot/types";
+
 import React from 'react';
 
 import { useApi, useCall } from '@polkadot/react-hooks';
+import { Option } from '@polkadot/types';
+import { PalletAssetsAssetAccount } from '@polkadot/types/lookup';
 
 import FormatBalance from './FormatBalance';
 
@@ -20,6 +21,7 @@ interface Props {
 function BalanceFree ({ children, className = '', label, params }: Props): React.ReactElement<Props> {
   const { api } = useApi();
   const xrpBalance = useCall<Option<PalletAssetsAssetAccount>>(api.query.assets?.account, [2, params]);
+
   return (
     <FormatBalance
       className={className}
