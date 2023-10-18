@@ -45,7 +45,7 @@ function StakingRedeemable ({ className = '', isPool, stakingInfo }: Props): Rea
 
   return (
     <div className={className}>
-      <FormatBalance value={stakingInfo.redeemable}>
+      <FormatBalance value={stakingInfo.redeemable} format={[6, "ROOT" ]}>
         {allAccounts.includes((stakingInfo.controllerId || '').toString())
           ? (
             <TxButton

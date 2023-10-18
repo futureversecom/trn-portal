@@ -70,16 +70,16 @@ function Row ({ index, isSelected, onSelect, slash: { era, isMine, slash: { othe
         ))}
       </td>
       <td className='number together'>
-        <FormatBalance value={own} />
+        <FormatBalance value={own} format={[6, "ROOT" ]} />
       </td>
       <td className='number together'>
-        <FormatBalance value={totalOther} />
+        <FormatBalance value={totalOther} format={[6, "ROOT" ]}/>
       </td>
       <td className='number together'>
-        <FormatBalance value={total} />
+        <FormatBalance value={total} format={[6, "ROOT" ]}/>
       </td>
       <td className='number together'>
-        <FormatBalance value={payout} />
+        <FormatBalance value={payout} format={[6, "ROOT" ]}/>
       </td>
       {!api.query.staking.earliestUnappliedSlash && !!api.consts.staking.slashDeferDuration && (
         <td className='number together'>

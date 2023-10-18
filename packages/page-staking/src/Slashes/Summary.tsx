@@ -56,7 +56,7 @@ function Summary ({ slash: { era, nominators, reporters, total, validators } }: 
         />
       )}
       <CardSummary label={t<string>('total')}>
-        <FormatBalance value={total} />
+        <FormatBalance value={total} format={[6, "ROOT" ]} />
       </CardSummary>
     </SummaryBox>
   );

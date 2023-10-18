@@ -77,6 +77,7 @@ function Summary ({ avgStaked, className, lastEra, lowStaked, minNominated, minN
             className={progressStake.isBlurred ? '--tmp' : ''}
             value={progressStake.value}
             withSi
+            format={[6, "ROOT" ]}
           />
         </CardSummary>
       </section>
@@ -100,12 +101,14 @@ function Summary ({ avgStaked, className, lastEra, lowStaked, minNominated, minN
               value={progressAvg.value}
               withCurrency={false}
               withSi
+              format={[6, "ROOT" ]}
             />
             &nbsp;/&nbsp;
             <FormatBalance
               className={progressAvg.isBlurred ? '--tmp' : ''}
               value={progressAvg.total}
               withSi
+              format={[6, "ROOT" ]}
             />
           </span>
         </CardSummary>
@@ -123,6 +126,7 @@ function Summary ({ avgStaked, className, lastEra, lowStaked, minNominated, minN
               value={minNominated}
               withCurrency={!minNominatorBond}
               withSi
+              format={[6, "ROOT" ]}
             />
             {minNominatorBond && (
               <>
@@ -130,6 +134,7 @@ function Summary ({ avgStaked, className, lastEra, lowStaked, minNominated, minN
                 <FormatBalance
                   value={minNominatorBond}
                   withSi
+                  format={[6, "ROOT" ]}
                 />
               </>
             )}
@@ -142,6 +147,7 @@ function Summary ({ avgStaked, className, lastEra, lowStaked, minNominated, minN
             className={lastReward ? '' : '--tmp'}
             value={lastReward || 1}
             withSi
+            format={[6, "ROOT" ]}
           />
         </CardSummary>
       </section>

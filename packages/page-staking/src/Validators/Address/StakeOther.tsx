@@ -77,6 +77,7 @@ function StakeOther ({ nominators, stakeOther }: Props): React.ReactElement<Prop
             <FormatBalance
               labelPost={` (${rewarded ? rewarded[0] : '0'})`}
               value={rewardedTotal}
+              format={[6, "ROOT" ]}
             />
           }
         />

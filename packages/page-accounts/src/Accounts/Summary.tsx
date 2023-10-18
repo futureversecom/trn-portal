@@ -23,6 +23,7 @@ function Summary ({ balance, className }: Props) {
         <FormatBalance
           className={balance ? '' : '--tmp'}
           value={balance?.total || 1}
+          format={[6, "ROOT" ]}
         />
       </CardSummary>
       <CardSummary
@@ -32,12 +33,14 @@ function Summary ({ balance, className }: Props) {
         <FormatBalance
           className={balance ? '' : '--tmp'}
           value={balance?.transferrable || 1}
+          format={[6, "ROOT" ]}
         />
       </CardSummary>
       <CardSummary label={t<string>('total locked')}>
         <FormatBalance
           className={balance ? '' : '--tmp'}
           value={balance?.locked || 1}
+          format={[6, "ROOT" ]}
         />
       </CardSummary>
       {balance?.bonded.gtn(0) &&
@@ -45,21 +48,21 @@ function Summary ({ balance, className }: Props) {
           className='media--1100'
           label={t<string>('bonded')}
         >
-          <FormatBalance value={balance.bonded} />
+          <FormatBalance value={balance.bonded}  format={[6, "ROOT" ]}/>
         </CardSummary>}
       {balance?.redeemable.gtn(0) &&
         <CardSummary
           className='media--1500'
           label={t<string>('redeemable')}
         >
-          <FormatBalance value={balance.redeemable} />
+          <FormatBalance value={balance.redeemable} format={[6, "ROOT" ]} />
         </CardSummary>}
       {balance?.unbonding.gtn(0) &&
         <CardSummary
           className='media--1300'
           label={t<string>('unbonding')}
         >
-          <FormatBalance value={balance.unbonding} />
+          <FormatBalance value={balance.unbonding} format={[6, "ROOT" ]}/>
         </CardSummary>}
     </SummaryBox>
   );

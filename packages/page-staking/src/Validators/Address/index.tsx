@@ -197,6 +197,7 @@ function Address ({ address, className = '', filterName, hasQueries, isElected, 
                     <h5>{t<string>('own stake')}</h5>
                     <FormatBalance
                       value={stakeOwn}
+                      format={[6, "ROOT" ]}
                     />
                   </>
                 )}

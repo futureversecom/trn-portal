@@ -222,6 +222,7 @@ function renderValidatorPrefs ({ stakingInfo, withValidatorPrefs = false }: Prop
               <FormatBalance
                 className='result'
                 value={(stakingInfo.validatorPrefs as any as ValidatorPrefsTo145).validatorPayment}
+                format={[6, "ROOT" ]}
               />
             </>
           )
@@ -248,6 +249,7 @@ function createBalanceItems (formatIndex: number, lookup: Record<string, string>
         formatIndex={formatIndex}
         labelPost={<IconVoid />}
         value={balancesAll ? balancesAll.freeBalance.add(balancesAll.reservedBalance) : 1}
+        format={[6, "ROOT" ]}
       />
     </React.Fragment>
   );
@@ -258,6 +260,7 @@ function createBalanceItems (formatIndex: number, lookup: Record<string, string>
         className='result'
         formatIndex={formatIndex}
         labelPost={<IconVoid />}
+        format={[6, "ROOT" ]}
         value={deriveBalances.availableBalance}
       />
     </React.Fragment>
@@ -279,6 +282,7 @@ function createBalanceItems (formatIndex: number, lookup: Record<string, string>
             />
           }
           value={deriveBalances.vestedBalance}
+          format={[6, "ROOT" ]}
         >
           <Tooltip trigger={`${address}-vested-trigger`}>
             <div>
@@ -341,6 +345,7 @@ function createBalanceItems (formatIndex: number, lookup: Record<string, string>
           </>
         }
         value={isAllLocked ? 'all' : deriveBalances.lockedBalance}
+        format={[6, "ROOT" ]}
       />
     </React.Fragment>
   );
