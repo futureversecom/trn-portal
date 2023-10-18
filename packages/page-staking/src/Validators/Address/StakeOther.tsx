@@ -75,9 +75,9 @@ function StakeOther ({ nominators, stakeOther }: Props): React.ReactElement<Prop
           renderChildren={rewarded && rewarded[1]}
           summary={
             <FormatBalance
+              format={[6, 'ROOT']}
               labelPost={` (${rewarded ? rewarded[0] : '0'})`}
               value={rewardedTotal}
-              format={[6, "ROOT" ]}
             />
           }
         />

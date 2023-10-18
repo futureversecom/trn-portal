@@ -221,8 +221,8 @@ function renderValidatorPrefs ({ stakingInfo, withValidatorPrefs = false }: Prop
               <Label label={t<string>('commission')} />
               <FormatBalance
                 className='result'
+                format={[6, 'ROOT']}
                 value={(stakingInfo.validatorPrefs as any as ValidatorPrefsTo145).validatorPayment}
-                format={[6, "ROOT" ]}
               />
             </>
           )
@@ -246,10 +246,10 @@ function createBalanceItems (formatIndex: number, lookup: Record<string, string>
       <Label label={withLabel ? t<string>('total') : ''} />
       <FormatBalance
         className={`result ${balancesAll ? '' : '--tmp'}`}
+        format={[6, 'ROOT']}
         formatIndex={formatIndex}
         labelPost={<IconVoid />}
         value={balancesAll ? balancesAll.freeBalance.add(balancesAll.reservedBalance) : 1}
-        format={[6, "ROOT" ]}
       />
     </React.Fragment>
   );
@@ -258,9 +258,9 @@ function createBalanceItems (formatIndex: number, lookup: Record<string, string>
       <Label label={t<string>('transferrable')} />
       <FormatBalance
         className='result'
+        format={[6, 'ROOT']}
         formatIndex={formatIndex}
         labelPost={<IconVoid />}
-        format={[6, "ROOT" ]}
         value={deriveBalances.availableBalance}
       />
     </React.Fragment>
@@ -274,6 +274,7 @@ function createBalanceItems (formatIndex: number, lookup: Record<string, string>
         <Label label={t<string>('vested')} />
         <FormatBalance
           className='result'
+          format={[6, 'ROOT']}
           formatIndex={formatIndex}
           labelPost={
             <Icon
@@ -282,7 +283,6 @@ function createBalanceItems (formatIndex: number, lookup: Record<string, string>
             />
           }
           value={deriveBalances.vestedBalance}
-          format={[6, "ROOT" ]}
         >
           <Tooltip trigger={`${address}-vested-trigger`}>
             <div>
@@ -322,6 +322,7 @@ function createBalanceItems (formatIndex: number, lookup: Record<string, string>
       <Label label={t<string>('locked')} />
       <FormatBalance
         className='result'
+        format={[6, 'ROOT']}
         formatIndex={formatIndex}
         labelPost={
           <>
@@ -345,7 +346,6 @@ function createBalanceItems (formatIndex: number, lookup: Record<string, string>
           </>
         }
         value={isAllLocked ? 'all' : deriveBalances.lockedBalance}
-        format={[6, "ROOT" ]}
       />
     </React.Fragment>
   );

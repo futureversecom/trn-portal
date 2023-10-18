@@ -129,9 +129,18 @@ function Validator ({ allSlashes, canSelect, filterName, info: { accountId, bond
       <td className='number media--1200 no-pad-right'>{numNominators || ''}</td>
       <td className='number media--1200 no-pad-left'>{nominatedBy.length || ''}</td>
       <td className='number media--1100'>{commissionPer.toFixed(2)}%</td>
-      <td className='number together'>{!bondTotal.isZero() && <FormatBalance value={bondTotal} format={[6, "ROOT" ]}/>}</td>
-      <td className='number together media--900'>{!bondOwn.isZero() && <FormatBalance value={bondOwn} format={[6, "ROOT" ]}/>}</td>
-      <td className='number together media--1600'>{!bondOther.isZero() && <FormatBalance value={bondOther} format={[6, "ROOT" ]} />}</td>
+      <td className='number together'>{!bondTotal.isZero() && <FormatBalance
+        format={[6, 'ROOT']}
+        value={bondTotal}
+      />}</td>
+      <td className='number together media--900'>{!bondOwn.isZero() && <FormatBalance
+        format={[6, 'ROOT']}
+        value={bondOwn}
+      />}</td>
+      <td className='number together media--1600'>{!bondOther.isZero() && <FormatBalance
+        format={[6, 'ROOT']}
+        value={bondOther}
+      />}</td>
       <td className='number together'>{(stakedReturnCmp > 0) && <>{stakedReturnCmp.toFixed(2)}%</>}</td>
       <td>
         {!isBlocking && (canSelect || isSelected) && (

@@ -75,9 +75,9 @@ function Summary ({ avgStaked, className, lastEra, lowStaked, minNominated, minN
         >
           <FormatBalance
             className={progressStake.isBlurred ? '--tmp' : ''}
+            format={[6, 'ROOT']}
             value={progressStake.value}
             withSi
-            format={[6, "ROOT" ]}
           />
         </CardSummary>
       </section>
@@ -98,17 +98,17 @@ function Summary ({ avgStaked, className, lastEra, lowStaked, minNominated, minN
         >
           <span className={progressAvg.isBlurred ? '--tmp' : ''}>
             <FormatBalance
+              format={[6, 'ROOT']}
               value={progressAvg.value}
               withCurrency={false}
               withSi
-              format={[6, "ROOT" ]}
             />
             &nbsp;/&nbsp;
             <FormatBalance
               className={progressAvg.isBlurred ? '--tmp' : ''}
+              format={[6, 'ROOT']}
               value={progressAvg.total}
               withSi
-              format={[6, "ROOT" ]}
             />
           </span>
         </CardSummary>
@@ -123,18 +123,18 @@ function Summary ({ avgStaked, className, lastEra, lowStaked, minNominated, minN
                 : t<string>('min nominated')}
           >
             <FormatBalance
+              format={[6, 'ROOT']}
               value={minNominated}
               withCurrency={!minNominatorBond}
               withSi
-              format={[6, "ROOT" ]}
             />
             {minNominatorBond && (
               <>
                 &nbsp;/&nbsp;
                 <FormatBalance
+                  format={[6, 'ROOT']}
                   value={minNominatorBond}
                   withSi
-                  format={[6, "ROOT" ]}
                 />
               </>
             )}
@@ -145,9 +145,9 @@ function Summary ({ avgStaked, className, lastEra, lowStaked, minNominated, minN
         <CardSummary label={t<string>('last reward')}>
           <FormatBalance
             className={lastReward ? '' : '--tmp'}
+            format={[6, 'ROOT']}
             value={lastReward || 1}
             withSi
-            format={[6, "ROOT" ]}
           />
         </CardSummary>
       </section>

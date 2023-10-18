@@ -22,8 +22,8 @@ function StakingBonded ({ className = '', stakingInfo }: Props): React.ReactElem
   return (
     <FormatBalance
       className={className}
+      format={[6, 'ROOT']}
       value={balance}
-      format={[6, "ROOT" ]}
     />
   );
 }
