@@ -1,5 +1,8 @@
 {
+  "No events available": "No events available",
   "Sign and Submit": "Sign and Submit",
   "The call hash as calculated for this transaction": "The call hash as calculated for this transaction",
-  "call hash": "call hash"
+  "Unable to decode the block events. {{error}}": "Unable to decode the block events. {{error}}",
+  "call hash": "call hash",
+  "recent evm events": "recent evm events"
 }
