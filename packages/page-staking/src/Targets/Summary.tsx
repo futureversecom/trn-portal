@@ -80,6 +80,7 @@ function Summary ({ avgStaked, className, lastEra, lowStaked, minNominated, minN
           />
         </CardSummary>
       </section>
+      {/*
       <section className='media--800'>
         <CardSummary label={t<string>('returns')}>
           {totalIssuance && (stakedReturn > 0)
@@ -89,7 +90,7 @@ function Summary ({ avgStaked, className, lastEra, lowStaked, minNominated, minN
             : <span className='--tmp'>0.0{percent}</span>
           }
         </CardSummary>
-      </section>
+      </section>*/}
       <section className='media--1000'>
         <CardSummary
           label={`${t<string>('lowest / avg staked')}`}
@@ -136,6 +137,7 @@ function Summary ({ avgStaked, className, lastEra, lowStaked, minNominated, minN
           </CardSummary>
         )}
       </section>
+      {/*
       <section>
         <CardSummary label={t<string>('last reward')}>
           <FormatBalance
@@ -144,7 +146,7 @@ function Summary ({ avgStaked, className, lastEra, lowStaked, minNominated, minN
             withSi
           />
         </CardSummary>
-      </section>
+      </section>*/}
     </StyledSummaryBox>
   );
 }
