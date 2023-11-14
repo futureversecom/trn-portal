@@ -66,9 +66,13 @@ function extractGroups (routing: Routes, groupNames: Record<string, string>, api
     )
     .map(({ name, routes }): Group => ({
       name,
-      routes: routes.filter(({ display }) =>
-        checkVisible(apiProps, allowTeleport, hasAccounts, hasSudo, display)
-      )
+      routes: routes.filter(({ display, group }) => {
+        if (group === 'governance') {
+          return false;
+        }
+
+        return checkVisible(apiProps, allowTeleport, hasAccounts, hasSudo, display)
+      })
     }))
     .filter(({ routes }) => routes.length);
 }
