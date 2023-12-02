@@ -22,7 +22,7 @@ interface Props {
 function Summary ({ className = '', stakingOverview, targets: { counterForNominators, inflation: { idealStake, inflation, stakedFraction }, nominators, waitingIds } }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
 
-  const percent = <span className='percent'>%</span>;
+  // const percent = <span className='percent'>%</span>;
 
   return (
     <StyledSummaryBox className={className}>

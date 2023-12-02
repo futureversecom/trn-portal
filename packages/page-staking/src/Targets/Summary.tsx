@@ -1,14 +1,14 @@
 // Copyright 2017-2023 @polkadot/app-staking authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { Option } from '@polkadot/types';
-import type { Balance } from '@polkadot/types/interfaces';
+// import type { Option } from '@polkadot/types';
+// import type { Balance } from '@polkadot/types/interfaces';
 import type { BN } from '@polkadot/util';
 
 import React, { useMemo } from 'react';
 
 import { CardSummary, styled, SummaryBox } from '@polkadot/react-components';
-import { useApi, useCall } from '@polkadot/react-hooks';
+// import { useApi, useCall } from '@polkadot/react-hooks';
 import { FormatBalance } from '@polkadot/react-query';
 import { BN_THREE, BN_TWO, BN_ZERO } from '@polkadot/util';
 
@@ -35,10 +35,10 @@ interface ProgressInfo {
   value: BN;
 }
 
-const OPT_REWARD = {
-  transform: (optBalance: Option<Balance>) =>
-    optBalance.unwrapOrDefault()
-};
+// const OPT_REWARD = {
+//   transform: (optBalance: Option<Balance>) =>
+//     optBalance.unwrapOrDefault()
+// };
 
 function getProgressInfo (value?: BN, total?: BN): ProgressInfo {
   return {
@@ -51,8 +51,8 @@ function getProgressInfo (value?: BN, total?: BN): ProgressInfo {
 
 function Summary ({ avgStaked, className, lastEra, lowStaked, minNominated, minNominatorBond, stakedReturn, totalIssuance, totalStaked }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
-  const { api } = useApi();
-  const lastReward = useCall<BN>(lastEra && api.query.staking.erasValidatorReward, [lastEra], OPT_REWARD);
+  // const { api } = useApi();
+  // const lastReward = useCall<BN>(lastEra && api.query.staking.erasValidatorReward, [lastEra], OPT_REWARD);
 
   const progressStake = useMemo(
     () => getProgressInfo(totalStaked, totalIssuance),
@@ -64,7 +64,7 @@ function Summary ({ avgStaked, className, lastEra, lowStaked, minNominated, minN
     [avgStaked, lowStaked]
   );
 
-  const percent = <span className='percent'>%</span>;
+  // const percent = <span className='percent'>%</span>;
 
   return (
     <StyledSummaryBox className={className}>

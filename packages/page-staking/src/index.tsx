@@ -84,10 +84,10 @@ function StakingApp ({ basePath, className = '' }: Props): React.ReactElement<Pr
     [api, hasAccounts]
   );
 
-  const hasStashes = useMemo(
-    () => hasAccounts && !!ownStashes && (ownStashes.length !== 0),
-    [hasAccounts, ownStashes]
-  );
+  // const hasStashes = useMemo(
+  //   () => hasAccounts && !!ownStashes && (ownStashes.length !== 0),
+  //   [hasAccounts, ownStashes]
+  // );
 
   const ownValidators = useMemo(
     () => (ownStashes || []).filter(({ isStashValidating }) => isStashValidating),
@@ -141,7 +141,7 @@ function StakingApp ({ basePath, className = '' }: Props): React.ReactElement<Pr
       name: 'query',
       text: t<string>('Validator stats')
     }
-  ].filter((q): q is { name: string; text: string } => !!q), [api, hasStashes, slashes, t]);
+  ].filter((q): q is { name: string; text: string } => !!q), [api, slashes, t]);
 
   return (
     <StyledMain className={`${className} staking--App`}>

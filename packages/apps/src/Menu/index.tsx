@@ -71,7 +71,7 @@ function extractGroups (routing: Routes, groupNames: Record<string, string>, api
           return false;
         }
 
-        return checkVisible(apiProps, allowTeleport, hasAccounts, hasSudo, display)
+        return checkVisible(apiProps, allowTeleport, hasAccounts, hasSudo, display);
       })
     }))
     .filter(({ routes }) => routes.length);
