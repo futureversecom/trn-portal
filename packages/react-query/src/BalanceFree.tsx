@@ -2,11 +2,15 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import type { DeriveBalancesAll } from '@polkadot/api-derive/types';
+import type { Option } from '@polkadot/types';
 import type { AccountId, AccountIndex, Address } from '@polkadot/types/interfaces';
+import type { PalletAssetsAssetAccount } from '@polkadot/types/lookup';
 
 import React from 'react';
 
+import { styled } from '@polkadot/react-components/styled';
 import { useApi, useCall } from '@polkadot/react-hooks';
+import { formatBalance } from '@polkadot/util';
 
 import FormatBalance from './FormatBalance';
 
@@ -20,16 +24,36 @@ interface Props {
 function BalanceFree ({ children, className = '', label, params }: Props): React.ReactElement<Props> {
   const { api } = useApi();
   const allBalances = useCall<DeriveBalancesAll>(api.derive.balances?.all, [params]);
+  const xrpInfo = useCall<Option<PalletAssetsAssetAccount>>(api.query.assets.account, [2, params]);
+  const xrpBalance = formatBalance(xrpInfo?.unwrapOr({ balance: 0 }).balance, { forceUnit: '-', withUnit: '' }).split('.');
 
   return (
-    <FormatBalance
-      className={className}
-      label={label}
-      value={allBalances?.freeBalance}
-    >
-      {children}
-    </FormatBalance>
+    <>
+      <FormatBalance
+        className={className}
+        label={label}
+        value={allBalances?.freeBalance}
+      >
+        {children}
+      </FormatBalance>
+      &nbsp;/&nbsp;
+      <FormatXRP>
+        {xrpBalance[0]}.<span className='postfix'>{xrpBalance[1] ?? '0000'}</span>
+        <span className='unit'> XRP</span>
+      </FormatXRP>
+    </>
   );
 }
+
+const FormatXRP = styled.span`
+  .postfix {
+    font-weight: lighter;
+    vertical-align: baseline;
+  }
+  .unit {
+    font-size: var(--font-percent-tiny);
+    text-transform: uppercase;
+  }
+`;
 
 export default React.memo(BalanceFree);
