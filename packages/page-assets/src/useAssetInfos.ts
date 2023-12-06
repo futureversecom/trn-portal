@@ -1,7 +1,7 @@
 // Copyright 2017-2023 @polkadot/app-assets authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { Option } from '@polkadot/types';
+import type { Option, u128 } from '@polkadot/types';
 import type { AccountId } from '@polkadot/types/interfaces';
 import type { PalletAssetsAssetDetails, PalletAssetsAssetMetadata } from '@polkadot/types/lookup';
 import type { BN } from '@polkadot/util';
@@ -30,7 +30,7 @@ function extractInfo (allAccounts: string[], id: BN, optDetails: Option<PalletAs
   const details = optDetails.unwrapOr(null);
 
   return {
-    ...(details
+    ...(details && id.toString() !== '1' // disable the Mint button for asset id 1 (ROOT)
       ? {
         isAdminMe: isAccount(allAccounts, details.admin),
         isFreezerMe: isAccount(allAccounts, details.freezer),
@@ -53,16 +53,25 @@ function useAssetInfosImpl (ids?: BN[]): AssetInfo[] | undefined {
   const { allAccounts } = useAccounts();
   const metadata = useCall<[[BN[]], PalletAssetsAssetMetadata[]]>(api.query.assets.metadata.multi, [ids], QUERY_OPTS);
   const details = useCall<[[BN[]], Option<PalletAssetsAssetDetails>[]]>(api.query.assets.asset.multi, [ids], QUERY_OPTS);
+  const totalBalanceIssuance = useCall<u128>(api.query.balances.totalIssuance);
   const [state, setState] = useState<AssetInfo[] | undefined>();
 
   useEffect((): void => {
     details && metadata && (details[0][0].length === metadata[0][0].length) &&
       setState(
-        details[0][0].map((id, index) =>
-          extractInfo(allAccounts, id, details[1][index], metadata[1][index])
+        details[0][0].map((id, index) => {
+          if (id.toString() === '1') {
+            details[1][index] = api.registry.createType('Option<PalletAssetsAssetDetails>', {
+              ...details[1][index].toJSON() as unknown as object,
+              supply: totalBalanceIssuance?.toString()
+            });
+          }
+
+          return extractInfo(allAccounts, id, details[1][index], metadata[1][index]);
+        }
         )
       );
-  }, [allAccounts, details, ids, metadata]);
+  }, [allAccounts, details, ids, metadata, api, totalBalanceIssuance]);
 
   return state;
 }
