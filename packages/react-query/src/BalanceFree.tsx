@@ -6,7 +6,7 @@ import type { Option } from '@polkadot/types';
 import type { AccountId, AccountIndex, Address } from '@polkadot/types/interfaces';
 import type { PalletAssetsAssetAccount } from '@polkadot/types/lookup';
 
-import React from 'react';
+import React, { useMemo } from 'react';
 
 import { styled } from '@polkadot/react-components/styled';
 import { useApi, useCall } from '@polkadot/react-hooks';
@@ -21,11 +21,25 @@ interface Props {
   params?: AccountId | AccountIndex | Address | string | Uint8Array | null;
 }
 
+const M_LENGTH = 6 + 1;
+
 function BalanceFree ({ children, className = '', label, params }: Props): React.ReactElement<Props> {
   const { api } = useApi();
   const allBalances = useCall<DeriveBalancesAll>(api.derive.balances?.all, [params]);
   const xrpInfo = useCall<Option<PalletAssetsAssetAccount>>(api.query.assets.account, [2, params]);
-  const xrpBalance = formatBalance(xrpInfo?.unwrapOr({ balance: 0 }).balance, { forceUnit: '-', withUnit: '' }).split('.');
+  const [prefix, postfix, unit] = useMemo(() => {
+    const value = xrpInfo?.unwrapOr({ balance: 0 }).balance;
+    let unit = 'xrp';
+    let [prefix, postfix = '0000'] = formatBalance(value, { decimals: 6, forceUnit: '-', withSi: false }).split('.');
+
+    if (prefix.length > M_LENGTH) {
+      [prefix, postfix] = formatBalance(value, { decimals: 6, withUnit: false }).split('.');
+      [postfix, unit] = postfix.split(' ');
+      unit += 'xrp';
+    }
+
+    return [prefix, postfix, unit];
+  }, [xrpInfo]);
 
   return (
     <>
@@ -38,8 +52,8 @@ function BalanceFree ({ children, className = '', label, params }: Props): React
       </FormatBalance>
       &nbsp;/&nbsp;
       <FormatXRP>
-        {xrpBalance[0]}.<span className='postfix'>{xrpBalance[1] ?? '0000'}</span>
-        <span className='unit'> XRP</span>
+        {prefix}.<span className='postfix'>{postfix}</span>
+        <span className='unit'> {unit}</span>
       </FormatXRP>
     </>
   );
