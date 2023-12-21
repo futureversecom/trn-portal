@@ -61,7 +61,7 @@ const BALANCES_OPTS = {
         }),
         accountId: accountIds[index]
       };
-    }),
+    }).filter((a): a is AccountResult => !!a.account && !a.account.balance.isZero()),
     assetId: BN_ONE
   }),
   withParamsTransform: true
