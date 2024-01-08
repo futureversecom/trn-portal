@@ -122,7 +122,7 @@ function Signer ({ children, className = '' }: Props): React.ReactElement<Props>
   );
 
   const { connectedAccounts } = useEthereumWallet();
-  const canSignExternally = !!requestAddress && connectedAccounts.indexOf(requestAddress.toLowerCase()) >= 0;
+  const canSignExternally = !!requestAddress && connectedAccounts.indexOf(requestAddress) >= 0;
 
   return (
     <>
