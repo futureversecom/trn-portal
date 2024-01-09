@@ -435,17 +435,17 @@ function Account ({ account: { address, meta }, className = '', delegation, filt
           onClick={toggleDelegate}
         />
       ),
-      isFunction(api.api.query.proxy?.proxies) && (
-        <Menu.Item
-          icon='sitemap'
-          key='proxy-overview'
-          label={proxy?.[0].length
-            ? t<string>('Manage proxies')
-            : t<string>('Add proxy')
-          }
-          onClick={toggleProxyOverview}
-        />
-      )
+      // isFunction(api.api.query.proxy?.proxies) && (
+      //   <Menu.Item
+      //     icon='sitemap'
+      //     key='proxy-overview'
+      //     label={proxy?.[0].length
+      //       ? t<string>('Manage proxies')
+      //       : t<string>('Add proxy')
+      //     }
+      //     onClick={toggleProxyOverview}
+      //   />
+      // )
     ], t<string>('Delegate')),
     isEditable && !api.isDevelopment && createMenuGroup('genesisGroup', [
       <ChainLock
