@@ -146,18 +146,15 @@ async function addAddress (api: ApiPromise, address: string) {
     const checksum = ethers.getAddress(address);
 
     (keyring as unknown as Keyring).addExternal(checksum, {
-      ...meta,
-      genesisHash: api.genesisHash.toString(),
       // add `isEthereumWallet` to easily target the account
       isEthereumWallet: true,
-      // add `isInjected` so the account can show up in `extension` group
-      isInjected: true,
       name: `${hex.substring(0, 4)}..${hex.substring(hex.length - 4, hex.length)}`,
-      whenCreated: Date.now()
+      whenCreated: Date.now(),
+      ...meta
     });
   };
 
-  add(address);
+  add(address, { isInjected: true});
 
   const fpAddress = (await api.query.futurepass.holders(address)) as Option<Codec>;
 

@@ -132,7 +132,7 @@ export function KeyringCtxRoot ({ children }: Props): React.ReactElement<Props> 
         .pipe(
           map(([accounts, addrInfo]): State => ({
             accounts,
-            addresses: extractAddresses(isEthereum, addrInfo, [])
+            addresses: extractAddresses(isEthereum, addrInfo, accounts.allAccounts)
           }))
         )
         .subscribe((state) => setState(state));

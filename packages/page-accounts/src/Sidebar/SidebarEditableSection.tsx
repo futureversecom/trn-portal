@@ -4,6 +4,7 @@
 import React, { useCallback, useEffect, useMemo } from 'react';
 
 import { Tags } from '@polkadot/react-components';
+import { getAddressName } from '@polkadot/react-components/util';
 import { useAccountInfo, useOutsideClick } from '@polkadot/react-hooks';
 import { keyring } from '@polkadot/ui-keyring';
 
@@ -21,6 +22,8 @@ interface Props {
 
 function SidebarEditableSection ({ accountIndex, address, isBeingEdited, onUpdateName, sidebarRef }: Props): React.ReactElement<Props> {
   const { flags, isEditing, isEditingName, isEditingTags, name, onForgetAddress, onSaveName, onSaveTags, setIsEditingName, setIsEditingTags, setName, setTags, tags, toggleIsEditingName, toggleIsEditingTags } = useAccountInfo(address);
+
+  const [,, addressName] = getAddressName(address, null, name);
 
   const refs = useMemo(
     () => [sidebarRef],
@@ -53,7 +56,7 @@ function SidebarEditableSection ({ accountIndex, address, isBeingEdited, onUpdat
     <>
       <AddressSection
         accountIndex={accountIndex}
-        defaultValue={name}
+        defaultValue={addressName}
         editingName={isEditingName}
         flags={flags}
         onChange={setName}

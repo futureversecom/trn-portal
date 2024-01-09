@@ -125,7 +125,7 @@ function useAccountInfoImpl (value: string | null, isContract = false): UseAccou
         setFlags((flags): AddressFlags => ({
           ...flags,
           isDevelopment: accountOrAddress?.meta.isTesting || false,
-          isEditable: !!(!identity?.display && (isInContacts || accountOrAddress?.meta.isMultisig || (accountOrAddress && !(accountOrAddress.meta.isInjected)))) || false,
+          isEditable: !!(!identity?.display && (isInContacts || accountOrAddress?.meta.isMultisig || accountOrAddress?.meta.isExternal)) || false,
           isEthereum: isHex(value, 160),
           isExternal: !!accountOrAddress?.meta.isExternal || false,
           isHardware: !!accountOrAddress?.meta.isHardware || false,
