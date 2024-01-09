@@ -168,10 +168,10 @@ function Overview ({ className = '', onStatusChange }: Props): React.ReactElemen
   );
 
   // proxy support
-  const hasPalletProxy = useMemo(
-    () => isFunction(api.tx.proxy?.addProxy),
-    [api]
-  );
+  // const hasPalletProxy = useMemo(
+  //   () => isFunction(api.tx.proxy?.addProxy),
+  //   [api]
+  // );
 
   const accountsMap = useMemo(
     () => allAccounts

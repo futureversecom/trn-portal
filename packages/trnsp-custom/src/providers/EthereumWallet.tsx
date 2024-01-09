@@ -154,7 +154,7 @@ async function addAddress (api: ApiPromise, address: string) {
     });
   };
 
-  add(address, { isInjected: true});
+  add(address, { isInjected: true });
 
   const fpAddress = (await api.query.futurepass.holders(address)) as Option<Codec>;
 
