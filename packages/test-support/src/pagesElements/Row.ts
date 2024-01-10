@@ -1,4 +1,4 @@
-// Copyright 2017-2023 @polkadot/test-supports authors & contributors
+// Copyright 2017-2024 @polkadot/test-supports authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
 // utility wrapper over an account item in accounts table, serves basic assertions about an account row

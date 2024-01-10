@@ -1,4 +1,4 @@
-// Copyright 2017-2023 @polkadot/app-assets authors & contributors
+// Copyright 2017-2024 @polkadot/app-assets authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
 import type { ApiPromise } from '@polkadot/api';
@@ -61,7 +61,7 @@ const BALANCES_OPTS = {
         }),
         accountId: accountIds[index]
       };
-    }),
+    }).filter((a): a is AccountResult => !!a.account && !a.account.balance.isZero()),
     assetId: BN_ONE
   }),
   withParamsTransform: true

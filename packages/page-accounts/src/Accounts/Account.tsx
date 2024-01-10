@@ -1,4 +1,4 @@
-// Copyright 2017-2023 @polkadot/app-accounts authors & contributors
+// Copyright 2017-2024 @polkadot/app-accounts authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
 import type { SubmittableExtrinsic } from '@polkadot/api/types';
@@ -434,18 +434,18 @@ function Account ({ account: { address, meta }, className = '', delegation, filt
           label={t<string>('Delegate democracy votes')}
           onClick={toggleDelegate}
         />
-      ),
-      isFunction(api.api.query.proxy?.proxies) && (
-        <Menu.Item
-          icon='sitemap'
-          key='proxy-overview'
-          label={proxy?.[0].length
-            ? t<string>('Manage proxies')
-            : t<string>('Add proxy')
-          }
-          onClick={toggleProxyOverview}
-        />
       )
+      // isFunction(api.api.query.proxy?.proxies) && (
+      //   <Menu.Item
+      //     icon='sitemap'
+      //     key='proxy-overview'
+      //     label={proxy?.[0].length
+      //       ? t<string>('Manage proxies')
+      //       : t<string>('Add proxy')
+      //     }
+      //     onClick={toggleProxyOverview}
+      //   />
+      // )
     ], t<string>('Delegate')),
     isEditable && !api.isDevelopment && createMenuGroup('genesisGroup', [
       <ChainLock
@@ -456,7 +456,7 @@ function Account ({ account: { address, meta }, className = '', delegation, filt
       />
     ])
   ].filter((i) => i),
-  [_clearDemocracyLocks, _clearReferendaLocks, _showOnHardware, _vestingVest, api, delegation, democracyUnlockTx, genesisHash, identity, isDevelopment, isEditable, isEthereum, isExternal, isHardware, isInjected, isMultisig, multiInfos, onSetGenesisHash, proxy, referendaUnlockTx, recoveryInfo, t, toggleBackup, toggleDelegate, toggleDerive, toggleForget, toggleIdentityMain, toggleIdentitySub, toggleMultisig, togglePassword, toggleProxyOverview, toggleRecoverAccount, toggleRecoverSetup, toggleUndelegate, vestingVestTx]);
+  [_clearDemocracyLocks, _clearReferendaLocks, _showOnHardware, _vestingVest, api, delegation, democracyUnlockTx, genesisHash, identity, isDevelopment, isEditable, isEthereum, isExternal, isHardware, isInjected, isMultisig, multiInfos, onSetGenesisHash, referendaUnlockTx, recoveryInfo, t, toggleBackup, toggleDelegate, toggleDerive, toggleForget, toggleIdentityMain, toggleIdentitySub, toggleMultisig, togglePassword, toggleRecoverAccount, toggleRecoverSetup, toggleUndelegate, vestingVestTx]);
 
   if (!isVisible) {
     return null;
