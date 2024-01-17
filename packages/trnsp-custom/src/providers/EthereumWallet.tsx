@@ -147,6 +147,7 @@ async function addAddress (api: ApiPromise, address: string) {
 
     (keyring as unknown as Keyring).addExternal(checksum, {
       // add `isEthereumWallet` to easily target the account
+      genesisHash: keyring.genesisHash,
       isEthereumWallet: true,
       name: `${hex.substring(0, 4)}..${hex.substring(hex.length - 4, hex.length)}`,
       whenCreated: Date.now(),
