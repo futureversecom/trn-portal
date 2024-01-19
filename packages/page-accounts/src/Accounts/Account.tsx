@@ -508,6 +508,7 @@ function Account ({ account: { address, meta }, className = '', delegation, filt
               address={address}
               key='modal-forget-account'
               onClose={toggleForget}
+              // eslint-disable-next-line @typescript-eslint/no-misused-promises
               onForget={_onForget}
             />
           )}
