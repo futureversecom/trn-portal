@@ -200,7 +200,7 @@ class InputAddress extends React.PureComponent<Props, State> {
       const { isSigner } = this.props;
       const { innerValue } = this.state;
 
-      if (!isSigner || !innerValue || !activeAccount || activeAccount.toLowerCase() === innerValue.toLowerCase()) {
+      if (!isSigner || !innerValue || !activeAccount || activeAccount?.address.toLowerCase() === innerValue.toLowerCase()) {
         return null;
       }
 
