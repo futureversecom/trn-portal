@@ -10,6 +10,7 @@ import type { ProxyDefinition, RecoveryConfig } from '@polkadot/types/interfaces
 import type { KeyringAddress, KeyringJson$Meta } from '@polkadot/ui-keyring/types';
 import type { AccountBalance, Delegation } from '../types';
 
+import { useEthereumWallet } from '@trnsp/custom/providers/EthereumWallet';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { ApiPromise } from '@polkadot/api';
@@ -178,6 +179,7 @@ function Account ({ account: { address, meta }, className = '', delegation, filt
   const [isTransferOpen, toggleTransfer] = useToggle();
   const [isDelegateOpen, toggleDelegate] = useToggle();
   const [isUndelegateOpen, toggleUndelegate] = useToggle();
+  const { removeAccount } = useEthereumWallet();
 
   useEffect((): void => {
     if (balancesAll) {
@@ -243,7 +245,7 @@ function Account ({ account: { address, meta }, className = '', delegation, filt
   );
 
   const _onForget = useCallback(
-    (): void => {
+    async (): Promise<void> => {
       if (!address) {
         return;
       }
@@ -255,6 +257,7 @@ function Account ({ account: { address, meta }, className = '', delegation, filt
 
       try {
         keyring.forgetAccount(address);
+        await removeAccount?.(address);
         status.status = 'success';
         status.message = t<string>('account forgotten');
       } catch (error) {
@@ -262,7 +265,7 @@ function Account ({ account: { address, meta }, className = '', delegation, filt
         status.message = (error as Error).message;
       }
     },
-    [address, t]
+    [address, removeAccount, t]
   );
 
   const _clearDemocracyLocks = useCallback(
@@ -378,7 +381,7 @@ function Account ({ account: { address, meta }, className = '', delegation, filt
           onClick={togglePassword}
         />
       ),
-      !(isInjected || isDevelopment) && (
+      !(isDevelopment) && (
         <Menu.Item
           icon='trash-alt'
           key='forgetAccount'
@@ -505,6 +508,7 @@ function Account ({ account: { address, meta }, className = '', delegation, filt
               address={address}
               key='modal-forget-account'
               onClose={toggleForget}
+              // eslint-disable-next-line @typescript-eslint/no-misused-promises
               onForget={_onForget}
             />
           )}
