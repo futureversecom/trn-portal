@@ -233,6 +233,7 @@ function getDevTypes (): Record<string, Record<string, string>> {
 async function createApi (apiUrl: string, signer: ApiSigner, onError: (error: unknown) => void): Promise<Record<string, Record<string, string>>> {
   const isLight = apiUrl.startsWith('light://');
   const typesRpc = getApiOptions();
+  console.log({typesRpc});
   const types = getDevTypes();
 
   try {
