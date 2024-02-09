@@ -57,7 +57,7 @@ export function EthereumWalletCtxRoot ({ children }: Props): React.ReactElement<
     }
 
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
-    connectedAccounts.forEach(async (account, index) => {
+    connectedAccounts.forEach(async (account) => {
       await addAccount(api, account);
     });
   }, [connectedAccounts, isApiReady, api]);
