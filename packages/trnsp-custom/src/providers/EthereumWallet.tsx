@@ -59,10 +59,6 @@ export function EthereumWalletCtxRoot ({ children }: Props): React.ReactElement<
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
     connectedAccounts.forEach(async (account, index) => {
       await addAccount(api, account);
-
-      if (index === 0) {
-        setActiveAccount({ address: account, connected: false });
-      }
     });
   }, [connectedAccounts, isApiReady, api]);
 
@@ -74,6 +70,11 @@ export function EthereumWalletCtxRoot ({ children }: Props): React.ReactElement<
     const handleAccountsChange = (accounts: string) => {
       setActiveAccount({ address: ethers.getAddress(accounts[0]), connected: true });
     };
+
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    window.ethereum.request?.({
+      method: 'eth_requestAccounts'
+    }).then(handleAccountsChange);
 
     window.ethereum.on('accountsChanged', handleAccountsChange);
 
