@@ -14,7 +14,7 @@
     "url": "https://github.com/futureversecom/trn-portal.git"
   },
   "sideEffects": false,
-  "version": "1.0.0",
+  "version": "1.1.0",
   "workspaces": [
     "packages/*"
   ],
