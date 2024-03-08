@@ -109,6 +109,7 @@ function TxSigned ({ className, currentItem, requestAddress }: Props): React.Rea
             });
           }
         } catch (error) {
+          queueSetTxStatus(currentItem.id, 'error', null, error as Error);
           const { code, message } = error as {code: number, message: string};
 
           if (code) {
