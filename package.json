@@ -1,24 +1,20 @@
 {
-  "bugs": "https://github.com/polkadot-js/apps/issues",
+  "bugs": "https://github.com/futureversecom/trn-portal/issues",
   "description": "A portal into the Root Network",
   "engines": {
-    "node": ">=14.0.0"
+    "node": ">=18.12.0"
   },
-  "homepage": "https://github.com/polkadot-js/apps#readme",
+  "homepage": "https://github.com/futureversecom/trn-portal#readme",
   "license": "Apache-2.0",
-  "name": "@futureverse/trnsp",
+  "name": "@therootnetwork/portal",
   "packageManager": "yarn@3.2.0",
   "private": true,
   "repository": {
     "type": "git",
-    "url": "https://github.com/polkadot-js/apps.git"
+    "url": "https://github.com/futureversecom/trn-portal.git"
   },
   "sideEffects": false,
-  "version": "0.124.2-96-x",
-  "versions": {
-    "git": "0.124.2-96-x",
-    "npm": "0.124.1"
-  },
+  "version": "1.1.0",
   "workspaces": [
     "packages/*"
   ],
@@ -70,8 +66,7 @@
     "@crustio/crust-pin": "^1.0.0",
     "@pinata/sdk": "^1.2.1",
     "@polkadot/dev": "^0.69.6",
-    "@therootnetwork/api": "^1.0.5",
-    "@therootnetwork/api-types": "^1.0.0",
+    "@therootnetwork/api": "1.0.7-next.1",
     "@types/chart.js": "^2.9.37",
     "@types/file-saver": "^2.0.5",
     "@types/jest": "^29.4.0",

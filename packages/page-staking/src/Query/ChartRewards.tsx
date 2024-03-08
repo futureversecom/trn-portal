@@ -1,4 +1,4 @@
-// Copyright 2017-2023 @polkadot/app-staking authors & contributors
+// Copyright 2017-2024 @polkadot/app-staking authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
 import type { DeriveEraRewards, DeriveOwnSlashes, DeriveStakerPoints } from '@polkadot/api-derive/types';
@@ -54,7 +54,9 @@ function extractRewards (labels: string[], erasRewards: DeriveEraRewards[], ownS
     }
   });
 
-  return [slashSet, rewardSet, avgSet];
+  return [slashSet];
+
+  // return [slashSet, rewardSet, avgSet];
 }
 
 function ChartRewards ({ labels, validatorId }: Props): React.ReactElement<Props> {
@@ -85,9 +87,9 @@ function ChartRewards ({ labels, validatorId }: Props): React.ReactElement<Props
   );
 
   const legends = useMemo(() => [
-    t<string>('{{currency}} slashed', { replace: { currency } }),
-    t<string>('{{currency}} rewards', { replace: { currency } }),
-    t<string>('{{currency}} average', { replace: { currency } })
+    t<string>('{{currency}} slashed', { replace: { currency } })
+    // t<string>('{{currency}} rewards', { replace: { currency } }),
+    // t<string>('{{currency}} average', { replace: { currency } })
   ], [currency, t]);
 
   return (
@@ -95,7 +97,7 @@ function ChartRewards ({ labels, validatorId }: Props): React.ReactElement<Props
       colors={COLORS_REWARD}
       labels={labels}
       legends={legends}
-      title={t<string>('rewards & slashes')}
+      title={t<string>('slashes')}
       values={values}
     />
   );

@@ -1,4 +1,4 @@
-// Copyright 2017-2023 @polkadot/app-accounts authors & contributors
+// Copyright 2017-2024 @polkadot/app-accounts authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
 import React from 'react';
@@ -24,7 +24,7 @@ function getContent (mode: Mode, t: <T = string> (key: string) => T): React.Reac
     case 'account':
       return (
         <>
-          <p>{t<string>('You are about to remove this account from your list of available accounts. Once completed, should you need to access it again, you will have to re-create the account either via seed or via a backup file.')}</p>
+          <p>{t<string>('You are about to remove this account from your list of available accounts. Once completed, should you need to access it again, you will have to re-create the account either via seed, via a backup file or via MetaMask.')}</p>
           <p>{t<string>('This operation does not remove the history of the account from the chain, nor any associated funds from the account. The forget operation only limits your access to the account on this browser.')}</p>
         </>
       );

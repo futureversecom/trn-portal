@@ -1,4 +1,4 @@
-// Copyright 2017-2023 @polkadot/app-staking authors & contributors
+// Copyright 2017-2024 @polkadot/app-staking authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
 import type { DeriveStakingOverview } from '@polkadot/api-derive/types';
@@ -84,10 +84,10 @@ function StakingApp ({ basePath, className = '' }: Props): React.ReactElement<Pr
     [api, hasAccounts]
   );
 
-  const hasStashes = useMemo(
-    () => hasAccounts && !!ownStashes && (ownStashes.length !== 0),
-    [hasAccounts, ownStashes]
-  );
+  // const hasStashes = useMemo(
+  //   () => hasAccounts && !!ownStashes && (ownStashes.length !== 0),
+  //   [hasAccounts, ownStashes]
+  // );
 
   const ownValidators = useMemo(
     () => (ownStashes || []).filter(({ isStashValidating }) => isStashValidating),
@@ -114,10 +114,10 @@ function StakingApp ({ basePath, className = '' }: Props): React.ReactElement<Pr
       name: 'actions',
       text: t<string>('Accounts')
     },
-    hasStashes && isFunction(api.query.staking.activeEra) && {
-      name: 'payout',
-      text: t<string>('Payouts')
-    },
+    // hasStashes && isFunction(api.query.staking.activeEra) && {
+    //   name: 'payout',
+    //   text: t<string>('Payouts')
+    // },
     isFunction(api.query.nominationPools?.minCreateBond) && {
       name: 'pools',
       text: t<string>('Pools')
@@ -127,10 +127,10 @@ function StakingApp ({ basePath, className = '' }: Props): React.ReactElement<Pr
       name: 'targets',
       text: t<string>('Targets')
     },
-    hasStashes && isFunction((api.query.voterBagsList || api.query.bagsList || api.query.voterList)?.counterForListNodes) && {
-      name: 'bags',
-      text: t<string>('Bags')
-    },
+    // hasStashes && isFunction((api.query.voterBagsList || api.query.bagsList || api.query.voterList)?.counterForListNodes) && {
+    //   name: 'bags',
+    //   text: t<string>('Bags')
+    // },
     {
       count: slashes.reduce((count, [, unapplied]) => count + unapplied.length, 0),
       name: 'slashes',
@@ -141,7 +141,7 @@ function StakingApp ({ basePath, className = '' }: Props): React.ReactElement<Pr
       name: 'query',
       text: t<string>('Validator stats')
     }
-  ].filter((q): q is { name: string; text: string } => !!q), [api, hasStashes, slashes, t]);
+  ].filter((q): q is { name: string; text: string } => !!q), [api, slashes, t]);
 
   return (
     <StyledMain className={`${className} staking--App`}>

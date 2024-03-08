@@ -1,4 +1,4 @@
-// Copyright 2017-2023 @polkadot/app-assets authors & contributors
+// Copyright 2017-2024 @polkadot/app-assets authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
 import type { BN } from '@polkadot/util';
@@ -87,7 +87,19 @@ function Transfer ({ accountId, assetId, className, minBalance, siFormat: [siDec
             </Modal.Columns>
           </Modal.Content>
           <Modal.Actions>
-            <TxButton
+            { assetId.toString() === '1' && <TxButton
+              accountId={accountId}
+              icon='paper-plane'
+              isDisabled={!recipientId || !amount}
+              label={t<string>('Send')}
+              onStart={toggleOpen}
+              params={[recipientId, amount]}
+              tx={
+                isProtected
+                  ? api.tx.balances.transferKeepAlive
+                  : api.tx.balances.transfer}
+            />}
+            { assetId.toString() !== '1' && <TxButton
               accountId={accountId}
               icon='paper-plane'
               isDisabled={!recipientId || !amount}
@@ -98,7 +110,7 @@ function Transfer ({ accountId, assetId, className, minBalance, siFormat: [siDec
                 isProtected
                   ? api.tx.assets.transferKeepAlive
                   : api.tx.assets.transfer}
-            />
+            />}
           </Modal.Actions>
         </Modal>
       )}

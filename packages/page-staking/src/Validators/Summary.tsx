@@ -1,4 +1,4 @@
-// Copyright 2017-2023 @polkadot/app-staking authors & contributors
+// Copyright 2017-2024 @polkadot/app-staking authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
 import type { DeriveStakingOverview } from '@polkadot/api-derive/types';
@@ -22,7 +22,7 @@ interface Props {
 function Summary ({ className = '', stakingOverview, targets: { counterForNominators, inflation: { idealStake, inflation, stakedFraction }, nominators, waitingIds } }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
 
-  const percent = <span className='percent'>%</span>;
+  // const percent = <span className='percent'>%</span>;
 
   return (
     <StyledSummaryBox className={className}>
@@ -63,6 +63,7 @@ function Summary ({ className = '', stakingOverview, targets: { counterForNomina
           }
         </CardSummary>
       </section>
+      {/*
       <section>
         {(idealStake > 0) && Number.isFinite(idealStake) && (
           <CardSummary
@@ -88,7 +89,7 @@ function Summary ({ className = '', stakingOverview, targets: { counterForNomina
             <>{inflation.toFixed(1)}{percent}</>
           </CardSummary>
         )}
-      </section>
+      </section>*/}
       <section>
         <SummarySession />
       </section>

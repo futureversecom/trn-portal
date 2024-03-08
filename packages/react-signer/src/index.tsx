@@ -1,4 +1,4 @@
-// Copyright 2017-2023 @polkadot/react-signer authors & contributors
+// Copyright 2017-2024 @polkadot/react-signer authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
 import type { QueueTx, QueueTxMessageSetStatus, QueueTxResult } from '@polkadot/react-components/Status/types';
@@ -122,7 +122,7 @@ function Signer ({ children, className = '' }: Props): React.ReactElement<Props>
   );
 
   const { connectedAccounts } = useEthereumWallet();
-  const canSignExternally = !!requestAddress && connectedAccounts.indexOf(requestAddress.toLowerCase()) >= 0;
+  const canSignExternally = !!requestAddress && connectedAccounts.indexOf(requestAddress) >= 0;
 
   return (
     <>

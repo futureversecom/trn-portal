@@ -1,13 +1,14 @@
-// Copyright 2017-2023 @polkadot/app-assets authors & contributors
+// Copyright 2017-2024 @polkadot/app-assets authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { PalletAssetsAssetAccount } from '@polkadot/types/lookup';
+import type { ApiPromise } from '@polkadot/api';
+import type { FrameSystemAccountInfo, PalletAssetsAssetAccount } from '@polkadot/types/lookup';
 import type { Option } from '@polkadot/types-codec';
-import type { BN } from '@polkadot/util';
 
 import { useMemo } from 'react';
 
 import { createNamedHook, useAccounts, useApi, useCall } from '@polkadot/react-hooks';
+import { BN, BN_ONE } from '@polkadot/util';
 
 interface AccountResult {
   accountId: string;
@@ -23,7 +24,7 @@ function isOptional (value: PalletAssetsAssetAccount | Option<PalletAssetsAssetA
   return (value as Option<PalletAssetsAssetAccount>).isSome || (value as Option<PalletAssetsAssetAccount>).isNone;
 }
 
-const OPTS = {
+const ASSETS_OPTS = {
   transform: ([[params], accounts]: [[[BN, string][]], (PalletAssetsAssetAccount | Option<PalletAssetsAssetAccount>)[]]): Result => ({
     accounts: params
       .map(([, accountId], index) => {
@@ -45,16 +46,42 @@ const OPTS = {
   withParamsTransform: true
 };
 
+const BALANCES_OPTS = {
+  transform: ([[accountIds], accounts]: [[string[]], FrameSystemAccountInfo[]], api: ApiPromise): Result => ({
+    accounts: accounts.map((account, index) => {
+      const { data: { feeFrozen, free, miscFrozen } } = account;
+      const balance = free.sub(BN.max(feeFrozen, miscFrozen));
+
+      return {
+        account: api.registry.createType('PalletAssetsAssetAccount', {
+          balance,
+          extra: null,
+          isFrozen: false,
+          reason: null
+        }),
+        accountId: accountIds[index]
+      };
+    }).filter((a): a is AccountResult => !!a.account && !a.account.balance.isZero()),
+    assetId: BN_ONE
+  }),
+  withParamsTransform: true
+};
+
 function useBalancesImpl (id?: BN | null): AccountResult[] | null {
   const { api } = useApi();
   const { allAccounts } = useAccounts();
   const keys = useMemo(
-    () => [allAccounts.map((a) => [id, a])],
+    () => id ? [allAccounts.map((a) => [id, a])] : [[]],
     [allAccounts, id]
   );
-  const query = useCall(keys && api.query.assets.account.multi, keys, OPTS);
+  const isBalances = id?.toString() === '1';
 
-  return (query && id && (query.assetId === id) && query.accounts) || null;
+  const balancesQuery = useCall(isBalances && api.query.system.account.multi, [allAccounts], BALANCES_OPTS);
+  const assetsQuery = useCall(keys && api.query.assets.account.multi, keys, ASSETS_OPTS);
+
+  return (isBalances
+    ? balancesQuery && balancesQuery.accounts
+    : assetsQuery && id && (assetsQuery.assetId === id) && assetsQuery.accounts) || null;
 }
 
 export default createNamedHook('useBalances', useBalancesImpl);

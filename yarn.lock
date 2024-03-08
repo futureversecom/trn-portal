@@ -2221,43 +2221,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@futureverse/trnsp@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "@futureverse/trnsp@workspace:."
-  dependencies:
-    "@babel/core": ^7.21.0
-    "@babel/register": ^7.21.0
-    "@babel/runtime": ^7.21.0
-    "@crustio/crust-pin": ^1.0.0
-    "@pinata/sdk": ^1.2.1
-    "@polkadot/dev": ^0.69.6
-    "@therootnetwork/api": ^1.0.5
-    "@therootnetwork/api-types": ^1.0.0
-    "@types/chart.js": ^2.9.37
-    "@types/file-saver": ^2.0.5
-    "@types/jest": ^29.4.0
-    "@types/react-beautiful-dnd": ^13.1.3
-    "@types/react-copy-to-clipboard": ^5.0.4
-    "@types/react-dom": ^18.0.11
-    "@types/react-router-dom": ^5.3.3
-    "@types/store": ^2.0.2
-    "@types/styled-components": ^5.1.26
-    "@types/styled-theming": ^2.2.5
-    concurrently: ^7.6.0
-    devtron: ^1.4.0
-    dnslink-cloudflare: ^3.0.0
-    electron: ^21.4.1
-    electron-builder: 23.6.0
-    electron-builder-notarize: ^1.5.1
-    i18next-scanner: ^4.1.1
-    react: ^18.2.0
-    react-dom: ^18.2.0
-    react-is: ^18.2.0
-    source-map-explorer: ^2.5.3
-    styled-components: ^5.3.6
-  languageName: unknown
-  linkType: soft
-
 "@humanwhocodes/config-array@npm:^0.11.8":
   version: 0.11.8
   resolution: "@humanwhocodes/config-array@npm:0.11.8"
@@ -4659,23 +4622,50 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@therootnetwork/api-types@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "@therootnetwork/api-types@npm:1.0.0"
-  dependencies:
-    "@polkadot/types": ^10.9.1
-  checksum: 2082c84ed169b0809722ea59f5c5450471588af5c55a13adc18b7750776546d62ca27879b15a35b0a1586676a0851cd7c956e45bab86ea844ed889d9ebf4e3b1
+"@therootnetwork/api@npm:1.0.7-next.1":
+  version: 1.0.7-next.1
+  resolution: "@therootnetwork/api@npm:1.0.7-next.1"
+  peerDependencies:
+    "@polkadot/api": ^10.8.1
+  checksum: a32bf212d243af0c9887bfa017bc8a11a6df0ea129e4b7c3c4af30289eca67aade671a854723b45a10bdfae5cbc230594beb9f925ee5500e422589bca78528dd
   languageName: node
   linkType: hard
 
-"@therootnetwork/api@npm:^1.0.5":
-  version: 1.0.5
-  resolution: "@therootnetwork/api@npm:1.0.5"
-  peerDependencies:
-    "@polkadot/api": ^10.8.1
-  checksum: 66889ee506ce253b4d1cd50eb1c3914bf2df1db089cd99f1acb000c8a9115cd403067a8c014e4fee0fd5a493fbec8b3d813e2263b95eec96baea3414eb455039
-  languageName: node
-  linkType: hard
+"@therootnetwork/portal@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "@therootnetwork/portal@workspace:."
+  dependencies:
+    "@babel/core": ^7.21.0
+    "@babel/register": ^7.21.0
+    "@babel/runtime": ^7.21.0
+    "@crustio/crust-pin": ^1.0.0
+    "@pinata/sdk": ^1.2.1
+    "@polkadot/dev": ^0.69.6
+    "@therootnetwork/api": 1.0.7-next.1
+    "@types/chart.js": ^2.9.37
+    "@types/file-saver": ^2.0.5
+    "@types/jest": ^29.4.0
+    "@types/react-beautiful-dnd": ^13.1.3
+    "@types/react-copy-to-clipboard": ^5.0.4
+    "@types/react-dom": ^18.0.11
+    "@types/react-router-dom": ^5.3.3
+    "@types/store": ^2.0.2
+    "@types/styled-components": ^5.1.26
+    "@types/styled-theming": ^2.2.5
+    concurrently: ^7.6.0
+    devtron: ^1.4.0
+    dnslink-cloudflare: ^3.0.0
+    electron: ^21.4.1
+    electron-builder: 23.6.0
+    electron-builder-notarize: ^1.5.1
+    i18next-scanner: ^4.1.1
+    react: ^18.2.0
+    react-dom: ^18.2.0
+    react-is: ^18.2.0
+    source-map-explorer: ^2.5.3
+    styled-components: ^5.3.6
+  languageName: unknown
+  linkType: soft
 
 "@tokenizer/token@npm:^0.3.0":
   version: 0.3.0

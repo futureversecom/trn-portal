@@ -1,8 +1,10 @@
 /* eslint-disable header/header */
 
 import { ExternalProvider } from '@ethersproject/providers';
+import { ethers } from 'ethers';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 
+import { ApiPromise } from '@polkadot/api';
 import { useApi } from '@polkadot/react-hooks/useApi';
 import { Option } from '@polkadot/types';
 import { Codec } from '@polkadot/types/types';
@@ -13,11 +15,10 @@ import { useLocalStorage } from '../hooks/useLocalStorage';
 export interface EthereumWallet {
   hasEthereumWallet: boolean;
   connectedAccounts: string[];
-  activeAccount?: string;
+  activeAccount?: { address: string, connected: boolean };
   requestAccounts?: () => Promise<void>;
+  removeAccount?: (address: string) => Promise<void>;
 }
-
-export const STORAGE_KEY = 'ETHEREUM_WALLET_ACCOUNTS';
 
 interface MetaMaskIshProvider extends ExternalProvider {
   on: (event: string, handler: (args: any) => void) => void;
@@ -41,12 +42,9 @@ interface Props {
 }
 
 export function EthereumWalletCtxRoot ({ children }: Props): React.ReactElement<Props> {
-  const [connectedAccounts, setConnectedAccounts] = useLocalStorage<string[]>(
-    STORAGE_KEY, []
-  );
+  const [connectedAccounts, setConnectedAccounts] = useLocalStorage<string[]>('METAMASK_WALLET', []);
   const { api, isApiReady } = useApi();
-  const [activeAccount, setActiveAccount] = useState<string>();
-
+  const [activeAccount, setActiveAccount] = useState<{address: string, connected: boolean}>();
   const [hasEthereumWallet, setHasEthereumWallet] = useState<boolean>(!!window?.ethereum);
 
   useEffect(() => {
@@ -54,60 +52,61 @@ export function EthereumWalletCtxRoot ({ children }: Props): React.ReactElement<
   }, []);
 
   useEffect(() => {
-    if (!connectedAccounts.length || !hasEthereumWallet || !isApiReady) {
+    if (!connectedAccounts.length || !isApiReady) {
       return;
     }
 
-    const handleAccountsChanged = async (accounts: string[]) => {
-      if (!accounts?.length) {
-        return;
-      }
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+    connectedAccounts.forEach(async (account) => {
+      await addAccount(api, account);
+    });
+  }, [connectedAccounts, isApiReady, api]);
 
-      const address = accounts[0];
-      const holder = (await api.query.futurepass.holders(address)) as Option<Codec>;
+  useEffect(() => {
+    if (!hasEthereumWallet) {
+      return;
+    }
 
-      if (holder.isSome) {
-        addAddress(holder.toString());
-      }
-
-      setActiveAccount(address);
-
-      if (connectedAccounts.indexOf(address) >= 0) {
-        return;
-      }
-
-      setConnectedAccounts([...connectedAccounts, address]);
+    const handleAccountsChange = (accounts: string) => {
+      setActiveAccount({ address: ethers.getAddress(accounts[0]), connected: true });
     };
 
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    window?.ethereum?.request?.({ method: 'eth_accounts' }).then(async (acc: string[]) => {
-      await handleAccountsChanged(acc);
-    });
-    window?.ethereum?.on?.('accountsChanged', (acc: string[]) => {
-      (async (acc: string[]) => {
-        await handleAccountsChanged(acc);
-      })(acc).catch(console.log);
-    });
+    window.ethereum.request?.({
+      method: 'eth_requestAccounts'
+    }).then(handleAccountsChange);
 
-    return () => window?.ethereum?.removeListener?.('accountsChanged', (acc: string[]) => {
-      (async (acc: string[]) => {
-        await handleAccountsChanged(acc);
-      })(acc).catch(console.log);
-    });
-  }, [connectedAccounts, hasEthereumWallet, isApiReady, setConnectedAccounts, api]);
+    window.ethereum.on('accountsChanged', handleAccountsChange);
+
+    return () => window.ethereum.removeListener('accountsChanged', handleAccountsChange);
+  }, [hasEthereumWallet]);
 
   const requestAccounts = useCallback(async () => {
     try {
-      const result = await window?.ethereum?.request?.({
+      const [{ caveats: [{ value: accounts }] }] = await window?.ethereum?.request?.({
         method: 'wallet_requestPermissions',
         params: [
           { eth_accounts: {} }
         ]
       }) as unknown as {caveats: {value: string[]}[]}[];
 
-      const accounts = result[0]?.caveats?.[0]?.value as unknown as string[] ?? [];
+      const accountsToStore: string[] = [];
 
-      setConnectedAccounts(accounts);
+      for (const account of accounts) {
+        const checksum = ethers.getAddress(account);
+
+        if (connectedAccounts.includes(checksum)) {
+          continue;
+        }
+
+        accountsToStore.push(checksum);
+      }
+
+      if (!accountsToStore.length) {
+        return;
+      }
+
+      setConnectedAccounts([...connectedAccounts, ...accountsToStore]);
     } catch (error) {
       const { code } = error as { code?: number };
 
@@ -118,17 +117,33 @@ export function EthereumWalletCtxRoot ({ children }: Props): React.ReactElement<
 
       console.error(error);
     }
-  }, [setConnectedAccounts]);
+  }, [connectedAccounts, setConnectedAccounts]);
 
-  useEffect(() => {
-    if (!isApiReady) {
+  const removeAccount = useCallback(async (address: string) => {
+    const remove = (address: string) => {
+      const checksum = ethers.getAddress(address);
+
+      (keyring as unknown as Keyring).forgetAccount(checksum);
+    };
+
+    const fpAddress = (await api.query.futurepass.holders(address)) as Option<Codec>;
+
+    if (fpAddress.isSome) {
+      remove(fpAddress.toString());
+    }
+
+    const connectedAccountsIndex = connectedAccounts.indexOf(address);
+
+    if (connectedAccountsIndex < 0) {
       return;
     }
 
-    connectedAccounts.forEach(addAddress);
-  }, [isApiReady, connectedAccounts]);
+    connectedAccounts.splice(connectedAccountsIndex, 1);
 
-  return <EthereumWalletCtx.Provider value={{ activeAccount, connectedAccounts, hasEthereumWallet, requestAccounts }}>
+    setConnectedAccounts([...connectedAccounts]);
+  }, [api.query.futurepass, connectedAccounts, setConnectedAccounts]);
+
+  return <EthereumWalletCtx.Provider value={{ activeAccount, connectedAccounts, hasEthereumWallet, removeAccount, requestAccounts }}>
     {children}
   </EthereumWalletCtx.Provider>;
 }
@@ -137,16 +152,26 @@ export function useEthereumWallet (): EthereumWallet {
   return useContext(EthereumWalletCtx);
 }
 
-function addAddress (address: string) {
-  const hex = address.replace('0x', '');
-  const meta = {
-    // add `isEthereumWallet` to easily target the account
-    isEthereumWallet: true,
-    // add `isInjected` so the account can show up in `extension` group
-    isInjected: true,
-    name: `${hex.substring(0, 4)}..${hex.substring(hex.length - 4, hex.length)}`,
-    whenCreated: Date.now()
+async function addAccount (api: ApiPromise, address: string) {
+  const add = (address: string, meta = {}) => {
+    const hex = address.replace('0x', '');
+    const checksum = ethers.getAddress(address);
+
+    (keyring as unknown as Keyring).addExternal(checksum, {
+      // add `isEthereumWallet` to easily target the account
+      genesisHash: keyring.genesisHash,
+      isEthereumWallet: true,
+      name: `${hex.substring(0, 4)}..${hex.substring(hex.length - 4, hex.length)}`,
+      whenCreated: Date.now(),
+      ...meta
+    });
   };
 
-  (keyring as unknown as Keyring).addExternal(address, meta);
+  add(address, { isInjected: true });
+
+  const fpAddress = (await api.query.futurepass.holders(address)) as Option<Codec>;
+
+  if (fpAddress.isSome) {
+    add(fpAddress.toString(), { isProxied: true });
+  }
 }

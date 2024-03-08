@@ -1,4 +1,4 @@
-// Copyright 2017-2023 @polkadot/app-accounts authors & contributors
+// Copyright 2017-2024 @polkadot/app-accounts authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
 import type { SubmittableExtrinsic } from '@polkadot/api/types';
@@ -10,6 +10,7 @@ import type { ProxyDefinition, RecoveryConfig } from '@polkadot/types/interfaces
 import type { KeyringAddress, KeyringJson$Meta } from '@polkadot/ui-keyring/types';
 import type { AccountBalance, Delegation } from '../types';
 
+import { useEthereumWallet } from '@trnsp/custom/providers/EthereumWallet';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { ApiPromise } from '@polkadot/api';
@@ -178,6 +179,7 @@ function Account ({ account: { address, meta }, className = '', delegation, filt
   const [isTransferOpen, toggleTransfer] = useToggle();
   const [isDelegateOpen, toggleDelegate] = useToggle();
   const [isUndelegateOpen, toggleUndelegate] = useToggle();
+  const { removeAccount } = useEthereumWallet();
 
   useEffect((): void => {
     if (balancesAll) {
@@ -243,7 +245,7 @@ function Account ({ account: { address, meta }, className = '', delegation, filt
   );
 
   const _onForget = useCallback(
-    (): void => {
+    async (): Promise<void> => {
       if (!address) {
         return;
       }
@@ -255,6 +257,7 @@ function Account ({ account: { address, meta }, className = '', delegation, filt
 
       try {
         keyring.forgetAccount(address);
+        await removeAccount?.(address);
         status.status = 'success';
         status.message = t<string>('account forgotten');
       } catch (error) {
@@ -262,7 +265,7 @@ function Account ({ account: { address, meta }, className = '', delegation, filt
         status.message = (error as Error).message;
       }
     },
-    [address, t]
+    [address, removeAccount, t]
   );
 
   const _clearDemocracyLocks = useCallback(
@@ -378,7 +381,7 @@ function Account ({ account: { address, meta }, className = '', delegation, filt
           onClick={togglePassword}
         />
       ),
-      !(isInjected || isDevelopment) && (
+      !(isDevelopment) && (
         <Menu.Item
           icon='trash-alt'
           key='forgetAccount'
@@ -434,18 +437,18 @@ function Account ({ account: { address, meta }, className = '', delegation, filt
           label={t<string>('Delegate democracy votes')}
           onClick={toggleDelegate}
         />
-      ),
-      isFunction(api.api.query.proxy?.proxies) && (
-        <Menu.Item
-          icon='sitemap'
-          key='proxy-overview'
-          label={proxy?.[0].length
-            ? t<string>('Manage proxies')
-            : t<string>('Add proxy')
-          }
-          onClick={toggleProxyOverview}
-        />
       )
+      // isFunction(api.api.query.proxy?.proxies) && (
+      //   <Menu.Item
+      //     icon='sitemap'
+      //     key='proxy-overview'
+      //     label={proxy?.[0].length
+      //       ? t<string>('Manage proxies')
+      //       : t<string>('Add proxy')
+      //     }
+      //     onClick={toggleProxyOverview}
+      //   />
+      // )
     ], t<string>('Delegate')),
     isEditable && !api.isDevelopment && createMenuGroup('genesisGroup', [
       <ChainLock
@@ -456,7 +459,7 @@ function Account ({ account: { address, meta }, className = '', delegation, filt
       />
     ])
   ].filter((i) => i),
-  [_clearDemocracyLocks, _clearReferendaLocks, _showOnHardware, _vestingVest, api, delegation, democracyUnlockTx, genesisHash, identity, isDevelopment, isEditable, isEthereum, isExternal, isHardware, isInjected, isMultisig, multiInfos, onSetGenesisHash, proxy, referendaUnlockTx, recoveryInfo, t, toggleBackup, toggleDelegate, toggleDerive, toggleForget, toggleIdentityMain, toggleIdentitySub, toggleMultisig, togglePassword, toggleProxyOverview, toggleRecoverAccount, toggleRecoverSetup, toggleUndelegate, vestingVestTx]);
+  [_clearDemocracyLocks, _clearReferendaLocks, _showOnHardware, _vestingVest, api, delegation, democracyUnlockTx, genesisHash, identity, isDevelopment, isEditable, isEthereum, isExternal, isHardware, isInjected, isMultisig, multiInfos, onSetGenesisHash, referendaUnlockTx, recoveryInfo, t, toggleBackup, toggleDelegate, toggleDerive, toggleForget, toggleIdentityMain, toggleIdentitySub, toggleMultisig, togglePassword, toggleRecoverAccount, toggleRecoverSetup, toggleUndelegate, vestingVestTx]);
 
   if (!isVisible) {
     return null;
@@ -505,6 +508,7 @@ function Account ({ account: { address, meta }, className = '', delegation, filt
               address={address}
               key='modal-forget-account'
               onClose={toggleForget}
+              // eslint-disable-next-line @typescript-eslint/no-misused-promises
               onForget={_onForget}
             />
           )}

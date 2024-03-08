@@ -1,4 +1,4 @@
-// Copyright 2017-2023 @polkadot/react-components authors & contributors
+// Copyright 2017-2024 @polkadot/react-components authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
 import type { ComponentMap } from '@polkadot/react-params/types';
@@ -42,7 +42,7 @@ export const balanceEvents = [
   'nominationPools.Bonded', 'nominationPools.PaidOut', 'nominationPools.PoolSlashed', 'nominationPools.Unbonded', 'nominationPools.UnbondingPoolSlashed',
   'referenda.DecisionDepositPlaced', 'referenda.DecisionDepositRefunded', 'referenda.DepositSlashed', 'referenda.SubmissionDepositRefunded',
   'staking.Bonded', 'staking.Rewarded', 'staking.Unbonded', 'staking.Withdrawn',
-  'transactionPayment.TransactionFeePaid',
+  // 'transactionPayment.TransactionFeePaid',
   'treasury.Deposit'
 ];
 

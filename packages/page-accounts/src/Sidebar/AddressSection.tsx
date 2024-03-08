@@ -1,4 +1,4 @@
-// Copyright 2017-2023 @polkadot/page-accounts authors & contributors
+// Copyright 2017-2024 @polkadot/page-accounts authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
 import React from 'react';
@@ -31,10 +31,10 @@ function AddressSection ({ accountIndex, defaultValue, editingName, flags, onCha
         value={value}
       />
       <div className='ui--AddressSection__AddressColumn'>
-        <AccountName
-          override={
-            editingName
-              ? (
+        { editingName && (
+          <AccountName
+            override={
+              (
                 <Input
                   className='name--input'
                   defaultValue={defaultValue}
@@ -43,13 +43,16 @@ function AddressSection ({ accountIndex, defaultValue, editingName, flags, onCha
                   withLabel={false}
                 />
               )
-              : flags.isEditable
-                ? (defaultValue.toUpperCase() || t<string>('<unknown>'))
-                : undefined
-          }
-          value={value}
-          withSidebar={false}
-        />
+            }
+            value={value}
+            withSidebar={false}
+          />) }
+        { !editingName && (
+          <AccountName
+            defaultName={defaultValue.toUpperCase() || t<string>('<unknown>')}
+            value={value}
+            withSidebar={false}
+          />) }
         <div className='ui--AddressMenu-addr'>
           {value}
         </div>

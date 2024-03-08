@@ -1,4 +1,4 @@
-// Copyright 2017-2023 @polkadot/react-components authors & contributors
+// Copyright 2017-2024 @polkadot/react-components authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
 import type { DropdownItemProps } from 'semantic-ui-react';
@@ -200,7 +200,7 @@ class InputAddress extends React.PureComponent<Props, State> {
       const { isSigner } = this.props;
       const { innerValue } = this.state;
 
-      if (!isSigner || !innerValue || !activeAccount || activeAccount.toLowerCase() === innerValue.toLowerCase()) {
+      if (!isSigner || !innerValue || !activeAccount || activeAccount?.address.toLowerCase() === innerValue.toLowerCase()) {
         return null;
       }
 

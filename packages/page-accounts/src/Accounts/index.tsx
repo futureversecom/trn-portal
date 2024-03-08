@@ -1,4 +1,4 @@
-// Copyright 2017-2023 @polkadot/app-accounts authors & contributors
+// Copyright 2017-2024 @polkadot/app-accounts authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
 import type { ActionStatus } from '@polkadot/react-components/Status/types';
@@ -168,10 +168,10 @@ function Overview ({ className = '', onStatusChange }: Props): React.ReactElemen
   );
 
   // proxy support
-  const hasPalletProxy = useMemo(
-    () => isFunction(api.tx.proxy?.addProxy),
-    [api]
-  );
+  // const hasPalletProxy = useMemo(
+  //   () => isFunction(api.tx.proxy?.addProxy),
+  //   [api]
+  // );
 
   const accountsMap = useMemo(
     () => allAccounts
@@ -377,12 +377,12 @@ function Overview ({ className = '', onStatusChange }: Props): React.ReactElemen
             label={t<string>('Multisig')}
             onClick={toggleMultisig}
           />
-          <Button
+          {/* <Button
             icon='plus'
             isDisabled={!hasPalletProxy || !hasAccounts}
             label={t<string>('Proxied')}
             onClick={toggleProxy}
-          />
+          /> */}
         </Button.Group>
       </SummaryBox>
       {!isNextTick || !sortedAccounts.length

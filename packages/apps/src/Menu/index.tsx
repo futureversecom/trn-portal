@@ -1,4 +1,4 @@
-// Copyright 2017-2023 @polkadot/apps authors & contributors
+// Copyright 2017-2024 @polkadot/apps authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
 import type { Route, Routes } from '@polkadot/apps-routing/types';
@@ -66,9 +66,13 @@ function extractGroups (routing: Routes, groupNames: Record<string, string>, api
     )
     .map(({ name, routes }): Group => ({
       name,
-      routes: routes.filter(({ display }) =>
-        checkVisible(apiProps, allowTeleport, hasAccounts, hasSudo, display)
-      )
+      routes: routes.filter(({ display, group }) => {
+        if (group === 'governance') {
+          return false;
+        }
+
+        return checkVisible(apiProps, allowTeleport, hasAccounts, hasSudo, display);
+      })
     }))
     .filter(({ routes }) => routes.length);
 }
