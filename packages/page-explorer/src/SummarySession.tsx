@@ -26,9 +26,10 @@ function SummarySession ({ className, withEra = true, withSession = true }: Prop
   const forcing = useCall<Forcing>(api.query.staking?.forceEra);
 
   const eraLabel = t<string>('era');
-  const sessionLabel = api.query.babe
-    ? t<string>('epoch')
-    : t<string>('session');
+  // const sessionLabel = api.query.babe
+  //   ? t<string>('epoch')
+  //   : t<string>('session');
+  const sessionLabel = t<string>('session');
   const activeEraStart = sessionInfo?.activeEraStart.unwrapOr(null);
 
   return (
