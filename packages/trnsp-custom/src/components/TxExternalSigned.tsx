@@ -6,16 +6,14 @@ import type { BN } from '@polkadot/util';
 
 import React, { useCallback, useEffect, useState } from 'react';
 
-import { SubmittableResult } from '@polkadot/api';
 import { Button, ErrorBoundary, Modal, Output, styled } from '@polkadot/react-components';
-import { QueueTxStatus } from '@polkadot/react-components/Status/types';
 import { useApi, useQueue, useToggle } from '@polkadot/react-hooks';
 import Address from '@polkadot/react-signer/Address';
 import Tip from '@polkadot/react-signer/Tip';
 import Transaction from '@polkadot/react-signer/Transaction';
 import { useTranslation } from '@polkadot/react-signer/translate';
 import { handleTxResults } from '@polkadot/react-signer/util';
-import { nextTick } from '@polkadot/util';
+import { nextTick, u8aToHex } from '@polkadot/util';
 
 import { signWithEthereumWallet } from '../utils/signWithEthereumWallet';
 
@@ -31,6 +29,7 @@ interface InnerTx {
 }
 
 const EMPTY_INNER: InnerTx = { innerHash: null, innerTx: null };
+const NOOP = () => undefined;
 
 function TxSigned ({ className, currentItem, requestAddress }: Props): React.ReactElement<Props> | null {
   const { t } = useTranslation();
@@ -90,6 +89,7 @@ function TxSigned ({ className, currentItem, requestAddress }: Props): React.Rea
 
         try {
           const signedExtrinsic = await signWithEthereumWallet(api, senderInfo.signAddress, currentItem.extrinsic, { tip });
+          const signature = u8aToHex(signedExtrinsic.signature);
 
           queueSetTxStatus(currentItem.id, 'sending');
 
@@ -97,16 +97,9 @@ function TxSigned ({ className, currentItem, requestAddress }: Props): React.Rea
             currentItem.txStartCb && currentItem.txStartCb();
             const unsubscribe: () => void = await signedExtrinsic.send(handleTxResults('signAndSend', queueSetTxStatus, currentItem, () => unsubscribe()));
           } else {
-            const unsubscribe = await api.rpc.author.submitAndWatchExtrinsic(currentItem.extrinsic, (res): void => {
-              const status = res.type.toLowerCase() as QueueTxStatus;
+            const { id, signerCb = NOOP } = currentItem;
 
-              queueSetTxStatus(currentItem.id, status, res);
-
-              if (currentItem?.txUpdateCb) {
-                currentItem?.txUpdateCb(res as unknown as SubmittableResult);
-                unsubscribe();
-              }
-            });
+            signerCb(id, { id, signature });
           }
         } catch (error) {
           queueSetTxStatus(currentItem.id, 'error', null, error as Error);
