@@ -120,11 +120,13 @@ function useAccountInfoImpl (value: string | null, isContract = false): UseAccou
         const accountOrAddress = keyring.getAccount(value) || keyring.getAddress(value);
         const isOwned = isAccount(value);
         const isInContacts = isAddress(value);
+        const genesisHash: string = accountOrAddress?.meta.genesisHash as string;
+        const isDevelopment: boolean = accountOrAddress?.meta.isTesting as boolean;
 
-        setGenesisHash(accountOrAddress?.meta.genesisHash || null);
+        setGenesisHash(genesisHash || null);
         setFlags((flags): AddressFlags => ({
           ...flags,
-          isDevelopment: accountOrAddress?.meta.isTesting || false,
+          isDevelopment: isDevelopment || false,
           isEditable: !!(!identity?.display && (isInContacts || accountOrAddress?.meta.isMultisig || accountOrAddress?.meta.isExternal)) || false,
           isEthereum: isHex(value, 160),
           isExternal: !!accountOrAddress?.meta.isExternal || false,
@@ -136,7 +138,7 @@ function useAccountInfoImpl (value: string | null, isContract = false): UseAccou
           isProxied: !!accountOrAddress?.meta.isProxied || false
         }));
         setMeta(accountOrAddress?.meta);
-        setName(accountOrAddress?.meta.name || '');
+        setName(accountOrAddress?.meta.name as string || '');
         setSortedTags(accountOrAddress?.meta.tags ? (accountOrAddress.meta.tags as string[]).sort() : []);
       } catch (error) {
         // ignore

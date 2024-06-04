@@ -15,7 +15,8 @@ export function getContractAbi (address: string | null): Abi | null {
   const meta = getAddressMeta(address, 'contract');
 
   try {
-    const data = (meta.contract && JSON.parse(meta.contract.abi)) as string;
+    const contractAbi: string = (meta.contract as { abi: string }).abi;
+    const data = (meta.contract && JSON.parse(contractAbi)) as string;
 
     abi = new Abi(data, api.registry.getChainProperties());
   } catch (error) {

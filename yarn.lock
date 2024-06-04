@@ -2938,6 +2938,7 @@ __metadata:
   resolution: "@polkadot/app-addresses@workspace:packages/page-addresses"
   dependencies:
     "@babel/runtime": ^7.21.0
+    "@polkadot/keyring": ^12.6.2
     "@polkadot/react-components": ^0.124.2-96-x
     "@testing-library/react": ^13.4.0
     file-saver: ^2.0.5
@@ -3630,13 +3631,13 @@ __metadata:
     "@fortawesome/fontawesome-svg-core": ^6.3.0
     "@fortawesome/free-solid-svg-icons": ^6.3.0
     "@fortawesome/react-fontawesome": ^0.2.0
-    "@polkadot/keyring": ^10.4.2
+    "@polkadot/keyring": ^12.6.2
     "@polkadot/react-api": ^0.124.2-96-x
     "@polkadot/react-identicon": ^2.12.1
     "@polkadot/react-qr": ^2.12.1
     "@polkadot/react-query": ^0.124.2-96-x
     "@polkadot/ui-keyring": ^3.6.6
-    "@polkadot/ui-settings": ^2.12.1
+    "@polkadot/ui-settings": ^3.6.6
     "@polkadot/util": ^10.4.2
     "@polkadot/util-crypto": ^10.4.2
     "@types/chartjs-plugin-crosshair": ^1.1.1
@@ -3912,7 +3913,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@polkadot/ui-settings@npm:2.12.1, @polkadot/ui-settings@npm:^2.12.1":
+"@polkadot/ui-settings@npm:2.12.1":
   version: 2.12.1
   resolution: "@polkadot/ui-settings@npm:2.12.1"
   dependencies:
@@ -3928,7 +3929,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@polkadot/ui-settings@npm:3.6.6":
+"@polkadot/ui-settings@npm:3.6.6, @polkadot/ui-settings@npm:^3.6.6":
   version: 3.6.6
   resolution: "@polkadot/ui-settings@npm:3.6.6"
   dependencies:
@@ -17710,30 +17711,12 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"rxjs@npm:*, rxjs@npm:^7.0.0, rxjs@npm:^7.8.0":
+"rxjs@npm:^7.8.0":
   version: 7.8.0
   resolution: "rxjs@npm:7.8.0"
   dependencies:
     tslib: ^2.1.0
   checksum: 61b4d4fd323c1043d8d6ceb91f24183b28bcf5def4f01ca111511d5c6b66755bc5578587fe714ef5d67cf4c9f2e26f4490d4e1d8cabf9bd5967687835e9866a2
-  languageName: node
-  linkType: hard
-
-"rxjs@npm:6, rxjs@npm:^6.6.6":
-  version: 6.6.7
-  resolution: "rxjs@npm:6.6.7"
-  dependencies:
-    tslib: ^1.9.0
-  checksum: bc334edef1bb8bbf56590b0b25734ba0deaf8825b703256a93714308ea36dff8a11d25533671adf8e104e5e8f256aa6fdfe39b2e248cdbd7a5f90c260acbbd1b
-  languageName: node
-  linkType: hard
-
-"rxjs@npm:^7.8.1":
-  version: 7.8.1
-  resolution: "rxjs@npm:7.8.1"
-  dependencies:
-    tslib: ^2.1.0
-  checksum: de4b53db1063e618ec2eca0f7965d9137cabe98cf6be9272efe6c86b47c17b987383df8574861bcced18ebd590764125a901d5506082be84a8b8e364bf05f119
   languageName: node
   linkType: hard
 

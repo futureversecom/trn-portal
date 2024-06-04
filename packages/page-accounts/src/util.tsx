@@ -97,10 +97,10 @@ function comparator (accountsMap: Record<string, SortedAccount>, balances: Recor
       return make(accountQualifiedName, (a, b) => a.localeCompare(b));
 
     case 'name':
-      return make((acc) => getAddressMeta(acc.address).name ?? '', (a, b) => a.localeCompare(b));
+      return make((acc) => getAddressMeta(acc.address).name ?? '', (a, b) => (a as string).localeCompare(b as string));
 
     case 'date':
-      return make((acc) => acc.account?.meta.whenCreated ?? 0, (a, b) => a - b);
+      return make((acc) => acc.account?.meta.whenCreated ?? 0, (a, b) => ((a as number) - (b as number)));
 
     case 'balances':
       return make((acc) => balances[acc.address]?.total ?? BN_ZERO, (a, b) => a.cmp(b));
