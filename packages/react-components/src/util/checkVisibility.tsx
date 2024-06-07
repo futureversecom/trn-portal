@@ -5,6 +5,7 @@ import type { DeriveAccountInfo } from '@polkadot/api-derive/types';
 
 import { ApiPromise } from '@polkadot/api';
 import { keyring } from '@polkadot/ui-keyring';
+import { KeyringAddress } from '@polkadot/ui-keyring/types';
 import { isFunction } from '@polkadot/util';
 
 export function checkVisibility (api: ApiPromise, address: string, accountInfo: DeriveAccountInfo, filterName = '', onlyNamed = false): boolean {
@@ -30,10 +31,10 @@ export function checkVisibility (api: ApiPromise, address: string, accountInfo: 
     }
 
     if (!isVisible) {
-      const account = keyring.getAddress(address);
+      const account: KeyringAddress = keyring.getAddress(address) as KeyringAddress;
 
       isVisible = account?.meta?.name
-        ? account.meta.name.toLowerCase().includes(filterLower)
+        ? (account.meta.name as string).toLowerCase().includes(filterLower)
         : false;
     }
   } else {

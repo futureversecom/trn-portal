@@ -68,9 +68,10 @@ function Address ({ address, className = '', filter, isFavorite, toggleFavorite 
 
   useEffect((): void => {
     const current = keyring.getAddress(address);
+    const genesisHash: string | null = (current?.meta?.genesisHash) as string || null;
 
     setCurrent(current || null);
-    setGenesisHash((current && current.meta.genesisHash) || null);
+    setGenesisHash(genesisHash);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -90,7 +91,7 @@ function Address ({ address, className = '', filter, isFavorite, toggleFavorite 
     const account = keyring.getAddress(address);
 
     _setTags(account?.meta?.tags as string[] || []);
-    setAccName(account?.meta?.name || '');
+    setAccName(account?.meta?.name as string || '');
   }, [_setTags, address]);
 
   useEffect((): void => {

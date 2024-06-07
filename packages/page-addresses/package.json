@@ -14,6 +14,7 @@
   "version": "0.124.2-96-x",
   "dependencies": {
     "@babel/runtime": "^7.21.0",
+    "@polkadot/keyring": "^12.6.2",
     "@polkadot/react-components": "^0.124.2-96-x",
     "file-saver": "^2.0.5"
   },

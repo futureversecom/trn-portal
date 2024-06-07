@@ -90,13 +90,13 @@ function createOption (address: string): Option | null {
   let name: string | undefined;
 
   if (pair) {
-    name = pair.meta.name;
+    name = (pair.meta.name as string);
   } else {
     const addr = keyring.getAddress(address);
 
     if (addr) {
-      name = addr.meta.name;
-      isRecent = addr.meta.isRecent;
+      name = (addr.meta.name as string);
+      isRecent = (addr.meta.isRecent as boolean);
     } else {
       isRecent = true;
     }
