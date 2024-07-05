@@ -9,6 +9,7 @@ import { useMemo } from 'react';
 
 import { createNamedHook, useAccounts, useApi, useCall } from '@polkadot/react-hooks';
 import { BN, BN_ONE } from '@polkadot/util';
+import { RuntimeVersion } from "@polkadot/types/interfaces";
 
 interface AccountResult {
   accountId: string;
@@ -46,11 +47,14 @@ const ASSETS_OPTS = {
   withParamsTransform: true
 };
 
+let specVersion: number | undefined = 0;
+
 const BALANCES_OPTS = {
   transform: ([[accountIds], accounts]: [[string[]], FrameSystemAccountInfo[]], api: ApiPromise): Result => ({
     accounts: accounts.map((account, index) => {
-      const { data: { feeFrozen, free, miscFrozen } } = account;
-      const balance = free.sub(BN.max(feeFrozen, miscFrozen));
+      // @ts-ignore
+      const { data: { feeFrozen, free, frozen, miscFrozen, reserved } } = account;
+      const balance = (specVersion as number) < 55 ? free.sub(BN.max(feeFrozen, miscFrozen)) : (free.add(reserved)).sub(frozen);
 
       return {
         account: api.registry.createType('PalletAssetsAssetAccount', {
@@ -78,6 +82,9 @@ function useBalancesImpl (id?: BN | null): AccountResult[] | null {
 
   const balancesQuery = useCall(isBalances && api.query.system.account.multi, [allAccounts], BALANCES_OPTS);
   const assetsQuery = useCall(keys && api.query.assets.account.multi, keys, ASSETS_OPTS);
+
+  const runtimeVersion = useCall<RuntimeVersion>( api.rpc.state.subscribeRuntimeVersion);
+  specVersion = runtimeVersion?.specVersion?.toNumber();
 
   return (isBalances
     ? balancesQuery && balancesQuery.accounts
