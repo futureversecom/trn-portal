@@ -8,8 +8,8 @@ import type { Option } from '@polkadot/types-codec';
 import { useMemo } from 'react';
 
 import { createNamedHook, useAccounts, useApi, useCall } from '@polkadot/react-hooks';
+import { RuntimeVersion } from '@polkadot/types/interfaces';
 import { BN, BN_ONE } from '@polkadot/util';
-import { RuntimeVersion } from "@polkadot/types/interfaces";
 
 interface AccountResult {
   accountId: string;
@@ -83,7 +83,8 @@ function useBalancesImpl (id?: BN | null): AccountResult[] | null {
   const balancesQuery = useCall(isBalances && api.query.system.account.multi, [allAccounts], BALANCES_OPTS);
   const assetsQuery = useCall(keys && api.query.assets.account.multi, keys, ASSETS_OPTS);
 
-  const runtimeVersion = useCall<RuntimeVersion>( api.rpc.state.subscribeRuntimeVersion);
+  const runtimeVersion = useCall<RuntimeVersion>(api.rpc.state.subscribeRuntimeVersion);
+
   specVersion = runtimeVersion?.specVersion?.toNumber();
 
   return (isBalances
