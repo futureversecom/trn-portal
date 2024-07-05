@@ -52,6 +52,7 @@ let specVersion: number | undefined = 0;
 const BALANCES_OPTS = {
   transform: ([[accountIds], accounts]: [[string[]], FrameSystemAccountInfo[]], api: ApiPromise): Result => ({
     accounts: accounts.map((account, index) => {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       const { data: { feeFrozen, free, frozen, miscFrozen, reserved } } = account;
       const balance = (specVersion as number) < 55 ? free.sub(BN.max(feeFrozen, miscFrozen)) : (free.add(reserved)).sub(frozen);
