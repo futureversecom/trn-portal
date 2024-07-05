@@ -3,9 +3,11 @@
 
 import type { Option } from '../settings/types';
 
+import { HexString } from '@polkadot/util/types';
+
 interface BaseOption {
   dnslink?: string;
-  genesisHash?: string;
+  genesisHash?: HexString;
   homepage?: string;
   paraId?: number;
   summary?: string;
@@ -28,7 +30,7 @@ export interface EndpointOption extends BaseOption {
 }
 
 export interface LinkOption extends BaseOption, Option {
-  genesisHashRelay?: string;
+  genesisHashRelay?: HexString;
   isChild?: boolean;
   isDevelopment?: boolean;
   isLightClient?: boolean;

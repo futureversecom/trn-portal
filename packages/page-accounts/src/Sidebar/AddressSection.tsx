@@ -19,7 +19,7 @@ interface Props {
   accountIndex: string | undefined,
 }
 
-function AddressSection ({ accountIndex, defaultValue, editingName, flags, onChange, value }: Props): React.ReactElement<Props> {
+function AddressSection ({ accountIndex, defaultValue, editingName, onChange, value }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
   const [isCopyShown, toggleIsCopyShown] = useToggle();
   const NOOP = () => undefined;

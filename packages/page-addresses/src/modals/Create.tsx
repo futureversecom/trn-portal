@@ -60,7 +60,7 @@ function Create ({ onClose, onStatusChange }: Props): React.ReactElement<Props> 
           const old = keyring.getAddress(address);
 
           if (old) {
-            const newName = old.meta.name || name;
+            const newName: string = old.meta.name as string || name;
 
             isAddressExisting = true;
             isAddressValid = true;

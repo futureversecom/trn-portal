@@ -9,6 +9,7 @@ import React, { useEffect, useState } from 'react';
 import { Input, InputBalance, Modal, Toggle, TxButton } from '@polkadot/react-components';
 import { getAddressMeta } from '@polkadot/react-components/util';
 import { useApi, useCall } from '@polkadot/react-hooks';
+import { KeyringJson$Meta } from '@polkadot/ui-keyring/types';
 import { u8aToString } from '@polkadot/util';
 
 import { useTranslation } from '../translate';
@@ -61,7 +62,12 @@ function IdentityMain ({ address, className = '', onClose }: Props): React.React
   const [hasRiot, setHasRiot] = useState(false);
   const [hasTwitter, setHasTwitter] = useState(false);
   const [hasWeb, setHasWeb] = useState(false);
-  const [valDisplay, setValDisplay] = useState(() => (getAddressMeta(address).name || '').replace(/\(.*\)/, '').trim());
+  const [valDisplay, setValDisplay] = useState(() => {
+    const addressMeta: KeyringJson$Meta = getAddressMeta(address);
+    const meta: string = (addressMeta?.name || '') as unknown as string;
+
+    return meta.replace(/\(.*\)/, '').trim();
+  });
   const [valEmail, setValEmail] = useState('');
   const [valLegal, setValLegal] = useState('');
   const [valRiot, setValRiot] = useState('');
