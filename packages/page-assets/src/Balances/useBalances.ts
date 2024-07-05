@@ -55,9 +55,8 @@ const BALANCES_OPTS = {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       const { data: { feeFrozen, free, frozen, miscFrozen, reserved } } = account;
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      const balance = (specVersion as number) < 55 ? free.sub(BN.max(feeFrozen, miscFrozen)) : (free.add(reserved)).sub(frozen);
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      const balance = (specVersion as number) < 55 ? free.sub(BN.max(feeFrozen, miscFrozen)) : (free.add(reserved as BN)).sub(frozen as BN);
 
       return {
         account: api.registry.createType('PalletAssetsAssetAccount', {
