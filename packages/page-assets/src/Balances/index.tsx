@@ -25,7 +25,6 @@ function Balances ({ className, infos = [] }: Props): React.ReactElement<Props> 
 
   const headerRef = useRef<([React.ReactNode?, string?, number?] | false)[]>([
     [t<string>('accounts'), 'start'],
-    [t<string>('frozen'), 'start'],
     [t<string>('sufficient'), 'start'],
     [],
     []

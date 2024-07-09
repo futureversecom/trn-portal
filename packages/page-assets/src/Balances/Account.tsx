@@ -26,16 +26,13 @@ interface Props {
   siFormat: [number, string];
 }
 
-function Account ({ account: { balance, isFrozen, reason, sufficient }, accountId, assetId, className, minBalance, siFormat }: Props): React.ReactElement<Props> {
+function Account ({ account: { balance, reason, sufficient }, accountId, assetId, className, minBalance, siFormat }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
 
   return (
     <tr className={className}>
       <td className='address'>
         <AddressSmall value={accountId} />
-      </td>
-      <td className='start'>
-        {isFrozen.isTrue ? t<string>('Yes') : t<string>('No')}
       </td>
       <td className='start'>
         {sufficient
