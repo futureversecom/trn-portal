@@ -31,13 +31,17 @@ function needsApiCheck (api: ApiPromise): boolean {
     api.tx.staking.bond(ZERO_ACCOUNT, BN_ONE, { Account: ZERO_ACCOUNT });
   } catch {
     console.warn('Unable to create staking bond transaction, try bond via version 55 way');
+
     try {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       api.tx.staking.bond(BN_ONE, { Account: ZERO_ACCOUNT });
     } catch {
       console.warn('Unable to create staking bond transaction, disabling staking route');
+
       return false;
     }
+
     return true;
   }
 
