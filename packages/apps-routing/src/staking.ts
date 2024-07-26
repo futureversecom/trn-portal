@@ -30,9 +30,15 @@ function needsApiCheck (api: ApiPromise): boolean {
     // we need to be able to bond
     api.tx.staking.bond(ZERO_ACCOUNT, BN_ONE, { Account: ZERO_ACCOUNT });
   } catch {
-    console.warn('Unable to create staking bond transaction, disabling staking route');
-
-    return false;
+    console.warn('Unable to create staking bond transaction, try bond via version 55 way');
+    try {
+      // @ts-ignore
+      api.tx.staking.bond(BN_ONE, { Account: ZERO_ACCOUNT });
+    } catch {
+      console.warn('Unable to create staking bond transaction, disabling staking route');
+      return false;
+    }
+    return true;
   }
 
   return true;
