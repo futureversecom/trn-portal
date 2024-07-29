@@ -27,22 +27,19 @@ function needsApiCheck (api: ApiPromise): boolean {
   }
 
   try {
+    const specVersion = (api.runtimeVersion.specVersion).toNumber();
     // we need to be able to bond
-    api.tx.staking.bond(ZERO_ACCOUNT, BN_ONE, { Account: ZERO_ACCOUNT });
-  } catch {
-    console.warn('Unable to create staking bond transaction, try bond via version 55 way');
-
-    try {
+    if (specVersion < 55) {
+      api.tx.staking.bond(ZERO_ACCOUNT, BN_ONE, {Account: ZERO_ACCOUNT});
+    } else {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       api.tx.staking.bond(BN_ONE, { Account: ZERO_ACCOUNT });
-    } catch {
-      console.warn('Unable to create staking bond transaction, disabling staking route');
-
-      return false;
     }
+  } catch {
+    console.warn('Unable to create staking bond transaction, disabling staking route');
 
-    return true;
+    return false;
   }
 
   return true;
