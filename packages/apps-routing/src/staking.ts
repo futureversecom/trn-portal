@@ -28,9 +28,10 @@ function needsApiCheck (api: ApiPromise): boolean {
 
   try {
     const specVersion = (api.runtimeVersion.specVersion).toNumber();
+
     // we need to be able to bond
     if (specVersion < 55) {
-      api.tx.staking.bond(ZERO_ACCOUNT, BN_ONE, {Account: ZERO_ACCOUNT});
+      api.tx.staking.bond(ZERO_ACCOUNT, BN_ONE, { Account: ZERO_ACCOUNT });
     } else {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
