@@ -76,7 +76,21 @@ const definitions: OverrideBundleDefinition = {
         },
         CollectionUuid: 'u32',
         SerialNumber: 'u32',
-        TokenId: '(CollectionUuid, SerialNumber)'
+        TokenId: '(CollectionUuid, SerialNumber)',
+        CollectionDetail: {
+          owner: "AccountId",
+          name: "Vec<u8>",
+          metadataScheme: "Vec<u8>",
+          royaltiesSchedule: "Option<Vec<(T::AccountId, Permill)>>",
+          maxIssuance: "Option<u32>",
+          originChain: "Text",
+          nextSerialNumber: "u32",
+          collectionIssuance: "u32",
+          crossChainCompatibility: "CrossChainCompatibility",
+        },
+        CrossChainCompatibility: {
+          xrpl: "bool",
+        },
       }
     }
   ],
@@ -229,7 +243,17 @@ const definitions: OverrideBundleDefinition = {
           }
         ],
         type: 'Json'
-      }
+      },
+      collectionDetails: {
+        description: "Returns the collection info for a NFT collection",
+        params: [
+          {
+            name: "collectionId",
+            type: "u32",
+          },
+        ],
+        type: "CollectionDetail",
+      },
     }
   }
 };
