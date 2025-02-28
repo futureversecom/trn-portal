@@ -5,7 +5,7 @@ import React from 'react';
 
 import { styled } from '@polkadot/react-components';
 
-import { useTranslation } from '../translate';
+import { useTranslation } from '../translate.js';
 
 interface Props {
   className?: string;
@@ -19,7 +19,7 @@ function VotingLink ({ className }: Props): React.ReactElement<Props> {
       className={className}
       href='#/council/motions'
     >
-      {t<string>('Voting')}
+      {t('Voting')}
     </StyledA>
   );
 }

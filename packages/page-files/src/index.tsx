@@ -7,8 +7,8 @@ import React, { useRef } from 'react';
 
 import { Tabs } from '@polkadot/react-components';
 
-import CrustFiles from './CrustFiles';
-import { useTranslation } from './translate';
+import CrustFiles from './CrustFiles.js';
+import { useTranslation } from './translate.js';
 
 interface Props {
   basePath: string;
@@ -22,7 +22,7 @@ function FilesApp ({ basePath, className }: Props): React.ReactElement<Props> {
     {
       isRoot: true,
       name: 'crust',
-      text: t<string>('Your Files')
+      text: t('Your Files')
     }
   ]);
 

@@ -1,7 +1,7 @@
 // Copyright 2017-2025 @polkadot/app-preimages authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { HashState } from './types';
+import type { HashState } from './types.js';
 
 import React, { useState } from 'react';
 
@@ -9,8 +9,8 @@ import { Button, InputAddress, Modal, TxButton } from '@polkadot/react-component
 import { useToggle } from '@polkadot/react-hooks';
 import { Available } from '@polkadot/react-query';
 
-import { useTranslation } from '../../translate';
-import Proposal, { EMPTY_PROPOSAL } from './Partial';
+import { useTranslation } from '../../translate.js';
+import Proposal, { EMPTY_PROPOSAL } from './Partial.js';
 
 interface Props {
   className?: string;
@@ -30,17 +30,17 @@ function Add ({ className, imageHash }: Props): React.ReactElement<Props> {
       {isAddOpen && (
         <Modal
           className={className}
-          header={t<string>('Submit preimage')}
+          header={t('Submit preimage')}
           onClose={toggleAdd}
           size='large'
         >
           <Modal.Content>
-            <Modal.Columns hint={t<string>('This account will pay the fees for the preimage, based on the size thereof.')}>
+            <Modal.Columns hint={t('This account will pay the fees for the preimage, based on the size thereof.')}>
               <InputAddress
-                label={t<string>('send from account')}
+                label={t('send from account')}
                 labelExtra={
                   <Available
-                    label={<span className='label'>{t<string>('transferrable')}</span>}
+                    label={<span className='label'>{t('transferable')}</span>}
                     params={accountId}
                   />
                 }
@@ -56,7 +56,7 @@ function Add ({ className, imageHash }: Props): React.ReactElement<Props> {
               extrinsic={notePreimageTx}
               icon='plus'
               isDisabled={!accountId || !isMatched || !notePreimageTx}
-              label={t<string>('Submit preimage')}
+              label={t('Submit preimage')}
               onStart={toggleAdd}
             />
           </Modal.Actions>
@@ -64,7 +64,7 @@ function Add ({ className, imageHash }: Props): React.ReactElement<Props> {
       )}
       <Button
         icon='plus'
-        label={t<string>('Add preimage')}
+        label={t('Add preimage')}
         onClick={toggleAdd}
       />
     </>

@@ -3,17 +3,15 @@
 
 import type { KeyringItemType } from '@polkadot/ui-keyring/types';
 
-import { KeyringJson$Meta } from '@polkadot/ui-keyring/types';
-
-import { getAddressMeta } from './getAddressMeta';
-// import { toShortAddress } from './toShortAddress';
+import { getAddressMeta } from './getAddressMeta.js';
+// import { toShortAddress } from './toShortAddress.js';
 
 // isName, isDefault, name
 export function getAddressName (address: string, type: KeyringItemType | null = null, defaultName?: string): [boolean, boolean, string] {
-  const meta: KeyringJson$Meta = getAddressMeta(address, type);
+  const meta = getAddressMeta(address, type);
 
   return meta.name
-    ? [false, false, (meta.name as string).toUpperCase()]
+    ? [false, false, meta.name.toUpperCase()]
     : defaultName
       ? [false, true, defaultName.toUpperCase()]
       : [true, false, address]; // toShortAddress(address)];

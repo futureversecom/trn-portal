@@ -1,33 +1,36 @@
 // Copyright 2017-2025 @polkadot/app-bounties authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { PartialQueueTxExtrinsic, QueueProps, QueueTxExtrinsicAdd } from '@polkadot/react-components/Status/types';
-import type { PalletBountiesBounty } from '@polkadot/types/lookup';
+/* global jest, expect */
 
-import { fireEvent, render, RenderResult, within } from '@testing-library/react';
+import type { RenderResult } from '@testing-library/react';
+import type { ApiPromise } from '@polkadot/api';
+import type { DeriveCollectiveProposal } from '@polkadot/api-derive/types';
+import type { ApiProps } from '@polkadot/react-api/types';
+import type { PartialQueueTxExtrinsic, QueueProps, QueueTxExtrinsicAdd } from '@polkadot/react-components/Status/types';
+import type { BountyIndex } from '@polkadot/types/interfaces';
+import type { PalletBountiesBounty, PalletBountiesBountyStatus } from '@polkadot/types/lookup';
+import type { BountyApi } from '../../src/hooks/index.js';
+
+import { fireEvent, render, within } from '@testing-library/react';
 import React, { Suspense } from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 
-import { ApiPromise } from '@polkadot/api';
-import { DeriveCollectiveProposal } from '@polkadot/api-derive/types';
-import Bounties from '@polkadot/app-bounties/Bounties';
-import { BountyApi } from '@polkadot/app-bounties/hooks';
-import { lightTheme } from '@polkadot/apps/themes';
 import { POLKADOT_GENESIS } from '@polkadot/apps-config';
-import { ApiCtx } from '@polkadot/react-api';
-import { ApiProps } from '@polkadot/react-api/types';
+import { lightTheme } from '@polkadot/react-components';
 import { KeyringCtxRoot } from '@polkadot/react-hooks';
+import { ApiCtx } from '@polkadot/react-hooks/ctx/Api';
 import { QueueCtx } from '@polkadot/react-hooks/ctx/Queue';
 import { balanceOf } from '@polkadot/test-support/creation/balance';
-import { BountyFactory } from '@polkadot/test-support/creation/bounties/bountyFactory';
+import { BountyFactory } from '@polkadot/test-support/creation/bounties';
 import { TypeRegistry } from '@polkadot/types/create';
-import { BountyIndex, BountyStatus } from '@polkadot/types/interfaces';
 
-import { mockBountyHooks } from '../hooks/defaults';
-import { clickButtonWithName } from '../utils/clickButtonWithName';
-import { clickElementWithTestId } from '../utils/clickElementWithTestId';
-import { clickElementWithText } from '../utils/clickElementWithText';
+import Bounties from '../../src/Bounties.js';
+import { mockBountyHooks } from '../hooks/defaults.js';
+import { clickButtonWithName } from '../utils/clickButtonWithName.js';
+import { clickElementWithTestId } from '../utils/clickElementWithTestId.js';
+import { clickElementWithText } from '../utils/clickElementWithText.js';
 
 function aGenesisHash () {
   return new TypeRegistry().createType('Hash', POLKADOT_GENESIS);
@@ -56,8 +59,8 @@ interface RenderedBountiesPage {
 export class BountiesPage {
   aBounty: ({ status, value }?: Partial<PalletBountiesBounty>) => PalletBountiesBounty;
   aBountyIndex: (index?: number) => BountyIndex;
-  aBountyStatus: (status: string) => BountyStatus;
-  bountyStatusWith: ({ curator, status }: { curator?: string, status?: string, }) => BountyStatus;
+  aBountyStatus: (status: string) => PalletBountiesBountyStatus;
+  bountyStatusWith: ({ curator, status }: { curator?: string, status?: string, }) => PalletBountiesBountyStatus;
   bountyWith: ({ status, value }: { status?: string, value?: number }) => PalletBountiesBounty;
 
   findByRole?: FindOne;

@@ -6,7 +6,7 @@ import React from 'react';
 import { CardSummary, SummaryBox } from '@polkadot/react-components';
 import { formatNumber } from '@polkadot/util';
 
-import { useTranslation } from '../translate';
+import { useTranslation } from '../translate.js';
 
 interface Props {
   className?: string;
@@ -18,7 +18,7 @@ function Summary ({ className, numAssets }: Props): React.ReactElement<Props> {
 
   return (
     <SummaryBox className={className}>
-      <CardSummary label={t<string>('assets')}>
+      <CardSummary label={t('assets')}>
         {formatNumber(numAssets)}
       </CardSummary>
     </SummaryBox>

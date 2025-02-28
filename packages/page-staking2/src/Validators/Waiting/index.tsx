@@ -1,16 +1,16 @@
 // Copyright 2017-2025 @polkadot/app-staking authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { SessionInfo, Validator } from '../../types';
+import type { SessionInfo, Validator } from '../../types.js';
 
 import React, { useRef } from 'react';
 
 import { Table } from '@polkadot/react-components';
 import { useNextTick } from '@polkadot/react-hooks';
 
-import { useTranslation } from '../../translate';
-import useValidatorsWaiting from '../../useValidatorsWaiting';
-import Entry from './Entry';
+import { useTranslation } from '../../translate.js';
+import useValidatorsWaiting from '../../useValidatorsWaiting.js';
+import Entry from './Entry.js';
 
 interface Props {
   className?: string;
@@ -28,14 +28,14 @@ function Waiting ({ className = '', favorites, legend, sessionInfo, toggleFavori
 
   const header = useRef<[string?, string?, number?][]>([
     // favorite, badges, details, expand
-    [t<string>('waiting'), 'start', 4]
+    [t('waiting'), 'start', 4]
   ]);
 
   return (
     <Table
       className={className}
-      empty={isNextTick && validatorsWaiting && t<string>('No waiting validators found')}
-      emptySpinner={t<string>('Retrieving waiting validators')}
+      empty={isNextTick && validatorsWaiting && t('No waiting validators found')}
+      emptySpinner={t('Retrieving waiting validators')}
       header={header.current}
       isSplit
       legend={legend}

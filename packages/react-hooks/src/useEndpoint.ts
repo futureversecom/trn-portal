@@ -7,9 +7,9 @@ import { useMemo } from 'react';
 
 import { createWsEndpoints } from '@polkadot/apps-config';
 
-import { createNamedHook } from './createNamedHook';
+import { createNamedHook } from './createNamedHook.js';
 
-const endpoints = createWsEndpoints((k: string, v?: string) => v || k);
+const endpoints = createWsEndpoints((k, v) => v?.toString() || k);
 
 export function getEndpoint (apiUrl?: string): LinkOption | null {
   return endpoints.find(({ value }) => value === apiUrl) || null;

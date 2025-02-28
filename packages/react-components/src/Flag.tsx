@@ -1,12 +1,12 @@
-// Copyright 2017-2025 @polkadot/app-accounts authors & contributors
+// Copyright 2017-2025 @polkadot/react-components authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { FlagColor } from './types';
+import type { FlagColor } from './types.js';
 
 import React from 'react';
 
-import { styled } from './styled';
-import Tag from './Tag';
+import { styled } from './styled.js';
+import Tag from './Tag.js';
 
 interface FlagProps {
   className?: string;

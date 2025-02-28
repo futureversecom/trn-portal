@@ -1,7 +1,7 @@
 // Copyright 2017-2025 @polkadot/apps-config authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { EndpointOption } from './types';
+import type { EndpointOption } from './types.js';
 
 import { chainsRootnetPNG } from '../ui/logos/chains';
 

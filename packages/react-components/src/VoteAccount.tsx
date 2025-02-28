@@ -3,8 +3,8 @@
 
 import React from 'react';
 
-import InputAddress from './InputAddress';
-import { useTranslation } from './translate';
+import InputAddress from './InputAddress/index.js';
+import { useTranslation } from './translate.js';
 
 interface Props {
   className?: string;
@@ -19,7 +19,7 @@ function VoteAccount ({ className = '', filter, onChange }: Props): React.ReactE
     <InputAddress
       className={className}
       filter={filter}
-      label={t<string>('vote with account')}
+      label={t('vote with account')}
       onChange={onChange}
       type='account'
       withLabel

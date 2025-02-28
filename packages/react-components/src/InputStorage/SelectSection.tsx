@@ -2,11 +2,12 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import type { QueryableStorageEntry } from '@polkadot/api/types';
-import type { DropdownOptions } from '../util/types';
+import type { DropdownOptions } from '../util/types.js';
 
 import React from 'react';
 
-import Dropdown from '../Dropdown';
+import Dropdown from '../Dropdown.js';
+import { filterDropdownItems } from '../util/index.js';
 
 interface Props {
   className?: string;
@@ -24,6 +25,7 @@ function SelectSection ({ className = '', defaultValue, isError, onChange, optio
       defaultValue={defaultValue}
       isError={isError}
       onChange={onChange}
+      onSearch={filterDropdownItems}
       options={options}
       value={section}
       withLabel={false}

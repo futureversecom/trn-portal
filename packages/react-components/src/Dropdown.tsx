@@ -1,15 +1,15 @@
 // Copyright 2017-2025 @polkadot/react-components authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { DropdownItemProps, DropdownProps } from 'semantic-ui-react';
+import type { DropdownItemProps, DropdownProps, StrictDropdownProps } from 'semantic-ui-react';
 
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Button as SUIButton, Dropdown as SUIDropdown } from 'semantic-ui-react';
 
 import { isUndefined } from '@polkadot/util';
 
-import Labelled from './Labelled';
-import { styled } from './styled';
+import Labelled from './Labelled.js';
+import { styled } from './styled.js';
 
 interface Props<Option extends DropdownItemProps> {
   allowAdd?: boolean;
@@ -28,7 +28,7 @@ interface Props<Option extends DropdownItemProps> {
   onBlur?: () => void;
   onChange?: (value: any) => void;
   onClose?: () => void;
-  onSearch?: (filteredOptions: any[], query: string) => Option[];
+  onSearch?: StrictDropdownProps['search'];
   options: (React.ReactNode | Option)[];
   placeholder?: string;
   renderLabel?: (item: any) => any;

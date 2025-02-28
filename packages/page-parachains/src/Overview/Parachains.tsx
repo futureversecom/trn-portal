@@ -2,17 +2,17 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import type { ParaId } from '@polkadot/types/interfaces';
-import type { LeasePeriod, QueuedAction, ScheduledProposals } from '../types';
+import type { LeasePeriod, QueuedAction, ScheduledProposals } from '../types.js';
 
 import React, { useMemo, useRef } from 'react';
 
 import { Table } from '@polkadot/react-components';
 import { useBestNumber, useIsParasLinked } from '@polkadot/react-hooks';
 
-import { useTranslation } from '../translate';
-import Parachain from './Parachain';
-import useEvents from './useEvents';
-import useValidators from './useValidators';
+import { useTranslation } from '../translate.js';
+import Parachain from './Parachain.js';
+import useEvents from './useEvents.js';
+import useValidators from './useValidators.js';
 
 interface Props {
   actionsQueue: QueuedAction[];
@@ -59,17 +59,17 @@ function Parachains ({ actionsQueue, ids, leasePeriod, scheduled }: Props): Reac
   const [validators, validatorMap] = useValidators(ids);
 
   const headerRef = useRef<([React.ReactNode?, string?, number?] | false)[]>([
-    [t<string>('parachains'), 'start', 2],
+    [t('parachains'), 'start', 2],
     ['', 'media--1400'],
-    [t<string>('head'), 'start media--1500'],
-    [t<string>('lifecycle'), 'start'],
+    [t('head'), 'start media--1500'],
+    [t('lifecycle'), 'start'],
     [],
-    [t<string>('included'), undefined, 2],
-    [t<string>('backed'), 'no-pad-left media--900'],
-    [t<string>('timeout'), 'no-pad-left media--1600'],
-    [t<string>('chain'), 'no-pad-left'],
-    [t<string>('in/out'), 'media--1700', 2],
-    [t<string>('leases'), 'media--1100']
+    [t('included'), undefined, 2],
+    [t('backed'), 'no-pad-left media--900'],
+    [t('timeout'), 'no-pad-left media--1600'],
+    [t('chain'), 'no-pad-left'],
+    [t('in/out'), 'media--1700', 2],
+    [t('leases'), 'media--1100']
   ]);
 
   const scheduledIds = useMemo(
@@ -89,7 +89,7 @@ function Parachains ({ actionsQueue, ids, leasePeriod, scheduled }: Props): Reac
 
   return (
     <Table
-      empty={knownIds && t<string>('There are no registered parachains')}
+      empty={knownIds && t('There are no registered parachains')}
       header={headerRef.current}
     >
       {knownIds?.map(([id, key]): React.ReactNode => (

@@ -1,15 +1,13 @@
 // Copyright 2017-2025 @polkadot/react-components authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { ThemeProps } from '../types';
-
 import { createGlobalStyle } from 'styled-components';
 
-import cssComponents from './components';
-import cssForm from './form';
-import cssMedia from './media';
-import cssSemantic from './semantic';
-import cssTheme from './theme';
+import cssComponents from './components.js';
+import cssForm from './form.js';
+import cssMedia from './media.js';
+import cssSemantic from './semantic.js';
+import cssTheme from './theme.js';
 
 interface Props {
   uiHighlight?: string;
@@ -20,7 +18,7 @@ const FACTORS = [0.2126, 0.7152, 0.0722];
 const PARTS = [0, 2, 4];
 const VERY_DARK = 16;
 
-const defaultHighlight = '#f19135';
+export const defaultHighlight = '#f19135';
 
 function getHighlight (uiHighlight: string | undefined): string {
   return (uiHighlight || defaultHighlight);
@@ -62,7 +60,7 @@ function hexToRGB (hex: string, alpha?: string) {
     : `rgb(${r}, ${g}, ${b})`;
 }
 
-export default createGlobalStyle<Props & ThemeProps>(({ theme, uiHighlight }: Props & ThemeProps) => `
+export default createGlobalStyle<Props>(({ uiHighlight }: Props) => `
   .highlight--all {
     background: ${getHighlight(uiHighlight)} !important;
     border-color: ${getHighlight(uiHighlight)} !important;
@@ -309,8 +307,8 @@ export default createGlobalStyle<Props & ThemeProps>(({ theme, uiHighlight }: Pr
 
   .theme--dark,
   .theme--light {
-    .ui--Tabs .tabLinkActive .tabLinkText::after{
-        background: ${getHighlight(uiHighlight)};
+    .ui--Tabs .active .tabLinkText::after {
+      background: ${getHighlight(uiHighlight)};
     }
 
     .ui.primary.button,
@@ -560,9 +558,9 @@ export default createGlobalStyle<Props & ThemeProps>(({ theme, uiHighlight }: Pr
   }
 
   /* Add our overrides */
-  ${cssSemantic(theme)}
+  ${cssSemantic}
   ${cssTheme}
   ${cssForm}
   ${cssMedia}
-  ${cssComponents(theme)}
+  ${cssComponents}
 `);

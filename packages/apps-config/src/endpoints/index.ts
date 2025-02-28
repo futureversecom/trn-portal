@@ -1,26 +1,22 @@
 // Copyright 2017-2025 @polkadot/apps-config authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { TFunction, TOptions } from '../types';
-import type { LinkOption } from './types';
+import type { TFunction, TOptions } from '../types.js';
+import type { LinkOption } from './types.js';
 
-import { createDev, createOwn } from './development';
-import { prodChains } from './production';
-import { testChains } from './testing';
-import { expandEndpoints } from './util';
+import { createCustom, createDev, createOwn } from './development.js';
+import { prodChains } from './production.js';
+import { testChains } from './testing.js';
+import { expandEndpoints } from './util.js';
 
-export { CUSTOM_ENDPOINT_KEY } from './development';
-export * from './production';
-export * from './testing';
+export { CUSTOM_ENDPOINT_KEY } from './development.js';
+export * from './production.js';
+export * from './testing.js';
 
-function defaultT (keyOrText: string, text?: string, options?: TOptions): string {
+function defaultT (keyOrText: string, text?: string | TOptions, options?: TOptions): string {
   return (
-    (
-      options &&
-      options.replace &&
-      options.replace.host
-    ) ||
-    text ||
+    (options?.replace?.host as string) ||
+    text?.toString() ||
     keyOrText
   );
 }

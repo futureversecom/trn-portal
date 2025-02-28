@@ -1,7 +1,7 @@
 // Copyright 2017-2025 @polkadot/app-alliance authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { Member as MemberType, Rule } from '../types';
+import type { Member as MemberType, Rule } from '../types.js';
 
 import React from 'react';
 
@@ -9,7 +9,7 @@ import { CardSummary, SummaryBox } from '@polkadot/react-components';
 import { useIpfsLink } from '@polkadot/react-hooks';
 import { formatNumber } from '@polkadot/util';
 
-import { useTranslation } from '../translate';
+import { useTranslation } from '../translate.js';
 
 interface Props {
   className?: string;
@@ -19,11 +19,11 @@ interface Props {
 
 function Summary ({ className, members, rule }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
-  const ipfsLink = useIpfsLink(rule && rule.cid && rule.cid.ipfs);
+  const ipfsLink = useIpfsLink(rule?.cid?.ipfs);
 
   return (
     <SummaryBox className={className}>
-      <CardSummary label={t<string>('rule')}>
+      <CardSummary label={t('rule')}>
         {rule
           ? rule.hasRule
             ? ipfsLink
@@ -34,12 +34,12 @@ function Summary ({ className, members, rule }: Props): React.ReactElement<Props
                   target='_blank'
                 >{ipfsLink.ipfsShort}</a>
               )
-              : t<string>('yes')
-            : t<string>('no')
-          : <span className='--tmp'>{t<string>('no')}</span>
+              : t('yes')
+            : t('no')
+          : <span className='--tmp'>{t('no')}</span>
         }
       </CardSummary>
-      <CardSummary label={t<string>('members')}>
+      <CardSummary label={t('members')}>
         {members
           ? formatNumber(members.length)
           : <span className='--tmp'>99</span>

@@ -5,11 +5,11 @@ import React from 'react';
 
 import { InputFile } from '@polkadot/react-components';
 
-import Bare from './Bare';
+import Bare from './Bare.js';
 
 interface Props {
   className?: string;
-  defaultValue?: any;
+  defaultValue?: unknown;
   isDisabled?: boolean;
   isError?: boolean;
   label?: React.ReactNode;

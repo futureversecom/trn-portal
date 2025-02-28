@@ -2,18 +2,18 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import type { ParaId } from '@polkadot/types/interfaces';
-import type { LeaseInfo, LeasePeriod, QueuedAction } from '../types';
+import type { LeaseInfo, LeasePeriod, QueuedAction } from '../types.js';
 
 import React, { useMemo } from 'react';
 
 import { AddressSmall, ParaLink, Table, TxButton } from '@polkadot/react-components';
 import { useAccounts, useApi } from '@polkadot/react-hooks';
 
-import Lifecycle from '../Overview/Lifecycle';
-// import ParachainInfo from '../Overview/ParachainInfo';
-import Periods from '../Overview/Periods';
-import { useTranslation } from '../translate';
-import useThreadInfo from './useThreadInfo';
+import Lifecycle from '../Overview/Lifecycle.js';
+// import ParachainInfo from '../Overview/ParachainInfo.js';
+import Periods from '../Overview/Periods.js';
+import { useTranslation } from '../translate.js';
+import useThreadInfo from './useThreadInfo.js';
 
 interface Props {
   id: ParaId;
@@ -29,8 +29,7 @@ function Parathread ({ id, leasePeriod, leases, nextAction }: Props): React.Reac
   const { headHex, lifecycle, manager } = useThreadInfo(id);
 
   const periods = useMemo(
-    () => leasePeriod?.currentPeriod && leases &&
-      leases.map(({ period }) => period),
+    () => leasePeriod?.currentPeriod && leases?.map(({ period }) => period),
     [leasePeriod?.currentPeriod, leases]
   );
 
@@ -64,7 +63,7 @@ function Parathread ({ id, leasePeriod, leases, nextAction }: Props): React.Reac
                 periods={periods}
               />
             )
-            : t<string>('None')
+            : t('None')
         )}
       </td>
       <td className='button media--900'>
@@ -72,7 +71,7 @@ function Parathread ({ id, leasePeriod, leases, nextAction }: Props): React.Reac
           accountId={manager}
           icon='times'
           isDisabled={!isManager}
-          label={t<string>('Deregister')}
+          label={t('Deregister')}
           params={[id]}
           tx={api.tx.registrar.deregister}
         />

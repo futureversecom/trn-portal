@@ -1,9 +1,9 @@
-// Copyright 2017-2025 @polkadot/react-components authors & contributors
+// Copyright 2017-2025 @polkadot/react-hooks authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
 import { useEffect, useRef, useState } from 'react';
 
-import { useIsMountedRef } from './useIsMountedRef';
+import { useIsMountedRef } from './useIsMountedRef.js';
 
 export function useTimer <T> (stateFn: (prev: T) => T, initial: T, interval: number): T {
   const [state, setState] = useState(initial);

@@ -2,16 +2,16 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import type { ParaId } from '@polkadot/types/interfaces';
-import type { AuctionInfo, Campaign, Campaigns, WinnerData, Winning } from '../types';
+import type { AuctionInfo, Campaign, Campaigns, WinnerData, Winning } from '../types.js';
 
 import React, { useCallback, useMemo, useRef } from 'react';
 
 import { Table } from '@polkadot/react-components';
 import { useApi, useCall } from '@polkadot/react-hooks';
 
-import { useTranslation } from '../translate';
-import { useLeaseRangeMax } from '../useLeaseRanges';
-import WinRange from './WinRange';
+import { useTranslation } from '../translate.js';
+import { useLeaseRangeMax } from '../useLeaseRanges.js';
+import WinRange from './WinRange.js';
 
 interface Props {
   auctionInfo?: AuctionInfo;
@@ -27,16 +27,16 @@ function Auction ({ auctionInfo, campaigns, className, winningData }: Props): Re
   const newRaise = useCall<ParaId[]>(api.query.crowdloan.newRaise);
 
   const headerRef = useRef<([React.ReactNode?, string?, number?] | false)[]>([
-    [t<string>('bids'), 'start', 3],
-    [t<string>('bidder'), 'address'],
-    [t<string>('crowdloan')],
-    [t<string>('leases')],
-    [t<string>('value')]
+    [t('bids'), 'start', 3],
+    [t('bidder'), 'address'],
+    [t('crowdloan')],
+    [t('leases')],
+    [t('value')]
   ]);
 
   const loans = useMemo(
     (): Campaign[] | undefined => {
-      if (newRaise && auctionInfo && auctionInfo.leasePeriod && campaigns.funds) {
+      if (newRaise && auctionInfo?.leasePeriod && campaigns.funds) {
         const leasePeriodStart = auctionInfo.leasePeriod;
         const leasePeriodEnd = leasePeriodStart.add(rangeMax);
 
@@ -94,16 +94,16 @@ function Auction ({ auctionInfo, campaigns, className, winningData }: Props): Re
     <Table
       className={className}
       empty={
-        newRaise && auctionInfo && auctionInfo.numAuctions && winningData && (
+        newRaise && auctionInfo?.numAuctions && winningData && (
           auctionInfo.endBlock && !winningData.length
-            ? t<string>('No winners in this auction')
-            : t<string>('No ongoing auction')
+            ? t('No winners in this auction')
+            : t('No ongoing auction')
         )
       }
       header={headerRef.current}
       noBodyTag
     >
-      {auctionInfo && auctionInfo.leasePeriod && winningData && loans && (
+      {auctionInfo?.leasePeriod && winningData && loans && (
         winningData.length
           ? winningData.map(({ blockNumber, winners }, round) => (
             <tbody key={round}>

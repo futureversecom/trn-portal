@@ -3,16 +3,17 @@
 
 import type { SubmittableExtrinsic, SubmittableExtrinsicFunction } from '@polkadot/api/types';
 import type { RawParam } from '@polkadot/react-params/types';
-import type { DecodedExtrinsic } from './types';
+import type { DecodedExtrinsic } from './types.js';
 
 import React, { useCallback, useState } from 'react';
 
-import { Button, Extrinsic, InputAddress, MarkError, TxButton } from '@polkadot/react-components';
+import { Button, InputAddress, MarkError, TxButton } from '@polkadot/react-components';
 import { useApi } from '@polkadot/react-hooks';
+import { Extrinsic } from '@polkadot/react-params';
 import { BalanceFree } from '@polkadot/react-query';
 
-import Decoded from './Decoded';
-import { useTranslation } from './translate';
+import Decoded from './Decoded.js';
+import { useTranslation } from './translate.js';
 
 interface Props {
   className?: string;
@@ -62,10 +63,10 @@ function Selection ({ className, defaultValue }: Props): React.ReactElement<Prop
     <div className={className}>
       <InputAddress
         isSigner={true}
-        label={t<string>('using the selected account')}
+        label={t('using the selected account')}
         labelExtra={
           <BalanceFree
-            label={<label>{t<string>('free balance')}</label>}
+            label={<label>{t('free balance')}</label>}
             params={accountId}
           />
         }
@@ -75,7 +76,7 @@ function Selection ({ className, defaultValue }: Props): React.ReactElement<Prop
       <Extrinsic
         defaultArgs={defaultArgs}
         defaultValue={defaultFn}
-        label={t<string>('submit the following extrinsic')}
+        label={t('submit the following extrinsic')}
         onChange={_onExtrinsicChange}
         onError={_onExtrinsicError}
       />
@@ -91,14 +92,14 @@ function Selection ({ className, defaultValue }: Props): React.ReactElement<Prop
           extrinsic={extrinsic}
           icon='sign-in-alt'
           isUnsigned
-          label={t<string>('Submit Unsigned')}
+          label={t('Submit Unsigned')}
           withSpinner
         />
         <TxButton
           accountId={accountId}
           extrinsic={extrinsic}
           icon='sign-in-alt'
-          label={t<string>('Submit Transaction')}
+          label={t('Submit Transaction')}
         />
       </Button.Group>
     </div>

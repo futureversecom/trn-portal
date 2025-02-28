@@ -9,7 +9,7 @@ import { InputAddress, Labelled, styled } from '@polkadot/react-components';
 import { Nonce } from '@polkadot/react-query';
 import { BN_ZERO } from '@polkadot/util';
 
-import { useTranslation } from '../translate';
+import { useTranslation } from '../translate.js';
 
 interface Props {
   className?: string;
@@ -33,7 +33,7 @@ function Account ({ className = '', defaultValue, isError, onChange }: Props): R
         <InputAddress
           defaultValue={defaultValue}
           isError={isError}
-          label={t<string>('sign data from account')}
+          label={t('sign data from account')}
           onChange={setAccountId}
           placeholder='0x...'
           type='account'
@@ -42,7 +42,7 @@ function Account ({ className = '', defaultValue, isError, onChange }: Props): R
       {accountId && (
         <Labelled
           className='small'
-          label={t<string>('with an index of')}
+          label={t('with an index of')}
         >
           <Nonce
             callOnResult={setAccountNonce}

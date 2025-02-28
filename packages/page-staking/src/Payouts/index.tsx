@@ -1,11 +1,10 @@
 // Copyright 2017-2025 @polkadot/app-staking authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { TFunction } from 'i18next';
 import type { DeriveStakerReward } from '@polkadot/api-derive/types';
 import type { OwnPool } from '@polkadot/app-staking2/Pools/types';
 import type { StakerState } from '@polkadot/react-hooks/types';
-import type { PayoutStash, PayoutValidator } from './types';
+import type { PayoutStash, PayoutValidator } from './types.js';
 
 import React, { useMemo, useRef, useState } from 'react';
 
@@ -13,11 +12,11 @@ import { Button, MarkWarning, styled, Table, ToggleGroup } from '@polkadot/react
 import { useApi, useBlockInterval, useCall, useOwnEraRewards } from '@polkadot/react-hooks';
 import { BN, BN_THREE } from '@polkadot/util';
 
-import ElectionBanner from '../ElectionBanner';
-import { useTranslation } from '../translate';
-import PayButton from './PayButton';
-import Stash from './Stash';
-import Validator from './Validator';
+import ElectionBanner from '../ElectionBanner.js';
+import { useTranslation } from '../translate.js';
+import PayButton from './PayButton.js';
+import Stash from './Stash.js';
+import Validator from './Validator.js';
 
 interface Props {
   className?: string;
@@ -61,6 +60,7 @@ function groupByValidator (allRewards: Record<string, DeriveStakerReward[]>): Pa
                 } else {
                   entry.eras.push({
                     era: reward.era,
+                    isClaimed: reward.isClaimed,
                     stashes: { [stashId]: value }
                   });
                 }
@@ -72,6 +72,7 @@ function groupByValidator (allRewards: Record<string, DeriveStakerReward[]>): Pa
                   available: value,
                   eras: [{
                     era: reward.era,
+                    isClaimed: reward.isClaimed,
                     stashes: { [stashId]: value }
                   }],
                   total,
@@ -98,6 +99,7 @@ function extractStashes (allRewards: Record<string, DeriveStakerReward[]>): Payo
       stashId
     }))
     .filter(({ available }) => !available.isZero())
+    .filter(({ rewards }) => rewards.some((r) => !r.isClaimed))
     .sort((a, b) => b.available.cmp(a.available));
 }
 
@@ -124,7 +126,7 @@ function getAvailable (allRewards: Record<string, DeriveStakerReward[]> | null |
   return {};
 }
 
-function getOptions (blockTime: BN, eraLength: BN | undefined, historyDepth: BN | undefined, t: TFunction): EraSelection[] {
+function getOptions (blockTime: BN, eraLength: BN | undefined, historyDepth: BN | undefined, t: (key: string, options?: { replace: Record<string, unknown> }) => string): EraSelection[] {
   if (!eraLength || !historyDepth) {
     return [{ text: '', value: 0 }];
   }
@@ -142,7 +144,7 @@ function getOptions (blockTime: BN, eraLength: BN | undefined, historyDepth: BN 
     }
 
     eraSelection.push({
-      text: t<string>('{{days}} days', { replace: { days: days.toString() } }),
+      text: t('{{days}} days', { replace: { days: days.toString() } }),
       value: dayBlocks.div(eraLength).toNumber()
     });
 
@@ -150,7 +152,7 @@ function getOptions (blockTime: BN, eraLength: BN | undefined, historyDepth: BN 
   }
 
   eraSelection.push({
-    text: t<string>('Max, {{eras}} eras', { replace: { eras: historyDepth.toNumber() } }),
+    text: t('Max, {{eras}} eras', { replace: { eras: historyDepth.toNumber() } }),
     value: historyDepth.toNumber()
   });
 
@@ -167,7 +169,7 @@ function Payouts ({ className = '', historyDepth, isInElection, ownPools, ownVal
   const blockTime = useBlockInterval();
 
   const poolStashes = useMemo(
-    () => ownPools && ownPools.map(({ stashId }) => stashId),
+    () => ownPools?.map(({ stashId }) => stashId),
     [ownPools]
   );
 
@@ -185,9 +187,9 @@ function Payouts ({ className = '', historyDepth, isInElection, ownPools, ownVal
 
   const headerStashes = useMemo<[React.ReactNode?, string?, number?][]>(
     () => [
-      [myStashesIndex ? t<string>('payout/stash') : t<string>('overall/validator'), 'start', 2],
-      [t<string>('eras'), 'start'],
-      [myStashesIndex ? t<string>('own') : t<string>('total')],
+      [myStashesIndex ? t('payout/stash') : t('overall/validator'), 'start', 2],
+      [t('eras'), 'start'],
+      [myStashesIndex ? t('own') : t('total')],
       [('remaining')],
       [undefined, undefined, 3]
     ],
@@ -195,16 +197,16 @@ function Payouts ({ className = '', historyDepth, isInElection, ownPools, ownVal
   );
 
   const headerValidatorsRef = useRef<[React.ReactNode?, string?, number?][]>([
-    [t<string>('payout/validator'), 'start', 2],
-    [t<string>('eras'), 'start'],
-    [t<string>('own')],
+    [t('payout/validator'), 'start', 2],
+    [t('eras'), 'start'],
+    [t('own')],
     [('remaining')],
     [undefined, undefined, 3]
   ]);
 
   const valOptions = useMemo(() => [
-    { isDisabled: !hasOwnValidators, text: t<string>('Own validators'), value: 'val' },
-    { text: t<string>('Own stashes'), value: 'all' }
+    { isDisabled: !hasOwnValidators, text: t('Own validators'), value: 'val' },
+    { text: t('Own stashes'), value: 'all' }
   ], [hasOwnValidators, t]);
 
   const footerStash = useMemo(() => (
@@ -248,17 +250,17 @@ function Payouts ({ className = '', historyDepth, isInElection, ownPools, ownVal
           className='warning centered'
           withIcon={false}
         >
-          <p>{t<string>('Payouts of rewards for a validator can be initiated by any account. This means that as soon as a validator or nominator requests a payout for an era, all the nominators for that validator will be rewarded. Each user does not need to claim individually and the suggestion is that validators should claim rewards for everybody as soon as an era ends.')}</p>
-          <p>{t<string>('If you have not claimed rewards straight after the end of the era, the validator is in the active set and you are seeing no rewards, this would mean that the reward payout transaction was made by another account on your behalf. Always check your favorite explorer to see any historic payouts made to your accounts.')}</p>
+          <p>{t('Payouts of rewards for a validator can be initiated by any account. This means that as soon as a validator or nominator requests a payout for an era, all the nominators for that validator will be rewarded. Each user does not need to claim individually and the suggestion is that validators should claim rewards for everybody as soon as an era ends.')}</p>
+          <p>{t('If you have not claimed rewards straight after the end of the era, the validator is in the active set and you are seeing no rewards, this would mean that the reward payout transaction was made by another account on your behalf. Always check your favorite explorer to see any historic payouts made to your accounts.')}</p>
         </MarkWarning>
       )}
       <Table
         empty={!isLoadingRewards && stashes && (
           myStashesIndex
-            ? t<string>('No pending payouts for your stashes')
-            : t<string>('No pending payouts for your validators')
+            ? t('No pending payouts for your stashes')
+            : t('No pending payouts for your validators')
         )}
-        emptySpinner={t<string>('Retrieving info for the selected eras, this will take some time')}
+        emptySpinner={t('Retrieving info for the selected eras, this will take some time')}
         footer={footerStash}
         header={headerStashes}
         isFixed
@@ -271,7 +273,7 @@ function Payouts ({ className = '', historyDepth, isInElection, ownPools, ownVal
           />
         ))}
       </Table>
-      {(myStashesIndex === 1) && !isLoadingRewards && validators && (validators.length !== 0) && (
+      {(myStashesIndex === 1) && !isLoadingRewards && validators && (validators.length !== 0) && validators.filter(({ eras }) => eras.some((e) => !e.isClaimed)).length > 0 && (
         <Table
           footer={footerVal}
           header={headerValidatorsRef.current}

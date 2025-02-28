@@ -3,7 +3,7 @@
 
 import type { Balance, BlockNumber } from '@polkadot/types/interfaces';
 import type { BN } from '@polkadot/util';
-import type { MapMember } from '../types';
+import type { MapMember } from '../types.js';
 
 import React, { useCallback, useMemo } from 'react';
 
@@ -12,8 +12,8 @@ import { useAccounts, useApi } from '@polkadot/react-hooks';
 import { BlockToTime, FormatBalance } from '@polkadot/react-query';
 import { formatNumber } from '@polkadot/util';
 
-import { useTranslation } from '../translate';
-import DesignKusama from './DesignKusama';
+import { useTranslation } from '../translate.js';
+import DesignKusama from './DesignKusama.js';
 
 interface Props {
   bestNumber?: BN;
@@ -21,7 +21,7 @@ interface Props {
   value: MapMember;
 }
 
-function renderJSXPayouts (bestNumber: BN, payouts: [BlockNumber, Balance][]): JSX.Element[] {
+function renderJSXPayouts (bestNumber: BN, payouts: [BlockNumber, Balance][]): React.ReactElement<unknown>[] {
   return payouts.map(([bn, value], index) => (
     <div
       className='payout'
@@ -66,7 +66,7 @@ function Member ({ bestNumber, className = '', value: { accountId, isCandidateVo
   );
 
   const votedOn = useMemo(
-    () => [isCandidateVoter && t<string>('Candidate'), isDefenderVoter && t<string>('Defender')]
+    () => [isCandidateVoter && t('Candidate'), isDefenderVoter && t('Defender')]
       .filter((s): s is string => !!s)
       .join(', '),
     [isCandidateVoter, isDefenderVoter, t]
@@ -80,43 +80,43 @@ function Member ({ bestNumber, className = '', value: { accountId, isCandidateVo
           {(isCandidateVoter || isDefenderVoter) && (
             <Tag
               color='blue'
-              label={t<string>('voted')}
+              label={t('voted')}
             />
           )}
           {isWarned && (
             <Tag
               color='orange'
-              label={t<string>('strikes')}
+              label={t('strikes')}
             />
           )}
           {isHead && (
             <Tag
               color='green'
-              label={t<string>('society head')}
+              label={t('society head')}
             />
           )}
           {isFounder && (
             <Tag
               color='green'
-              label={t<string>('founder')}
+              label={t('founder')}
             />
           )}
           {isSkeptic && (
             <Tag
               color='yellow'
-              label={t<string>('skeptic')}
+              label={t('skeptic')}
             />
           )}
           {isSuspended && (
             <Tag
               color='red'
-              label={t<string>('suspended')}
+              label={t('suspended')}
             />
           )}
           {availablePayout && (
             <Tag
               color='grey'
-              label={t<string>('payout')}
+              label={t('payout')}
             />
           )}
         </div>
@@ -126,7 +126,7 @@ function Member ({ bestNumber, className = '', value: { accountId, isCandidateVo
           <Expander
             className='payoutExpander'
             renderChildren={renderPayouts}
-            summary={t<string>('Payouts ({{count}})', { replace: { count: formatNumber(payouts.length) } })}
+            summary={t('Payouts ({{count}})', { replace: { count: formatNumber(payouts.length) } })}
           />
         )}
         {isOwner && availablePayout && (

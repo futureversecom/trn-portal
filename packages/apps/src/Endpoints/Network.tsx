@@ -1,14 +1,14 @@
 // Copyright 2017-2025 @polkadot/apps authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { Network } from './types';
+import type { Network } from './types.js';
 
 import React, { useCallback, useMemo } from 'react';
 
 import { ChainImg, styled } from '@polkadot/react-components';
 
-import { useTranslation } from '../translate';
-import Url from './Url';
+import { useTranslation } from '../translate.js';
+import Url from './Url.js';
 
 interface Props {
   affinity?: string; // unused - previous selection
@@ -56,12 +56,12 @@ function NetworkDisplay ({ apiUrl, className = '', setApiUrl, value: { isChild, 
           {isSelected && (isRelay || !!paraId) && (
             <div className='endpointExtra'>
               {isRelay
-                ? t<string>('Relay chain')
+                ? t('Relay chain')
                 : paraId && paraId < 1000
-                  ? t<string>('{{relay}} System', { replace: { relay } })
+                  ? t('{{relay}} System', { replace: { relay } })
                   : paraId && paraId < 2000
-                    ? t<string>('{{relay}} Common', { replace: { relay } })
-                    : t<string>('{{relay}} Parachain', { replace: { relay } })
+                    ? t('{{relay}} Common', { replace: { relay } })
+                    : t('{{relay}} Parachain', { replace: { relay } })
               }
             </div>
           )}

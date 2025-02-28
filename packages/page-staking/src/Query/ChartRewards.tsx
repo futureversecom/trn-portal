@@ -2,16 +2,16 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import type { DeriveEraRewards, DeriveOwnSlashes, DeriveStakerPoints } from '@polkadot/api-derive/types';
-import type { LineData, Props } from './types';
+import type { LineData, Props } from './types.js';
 
 import React, { useEffect, useMemo, useState } from 'react';
 
 import { useApi, useCall } from '@polkadot/react-hooks';
 import { BN, formatBalance } from '@polkadot/util';
 
-import { useTranslation } from '../translate';
-import Chart from './Chart';
-import { balanceToNumber } from './util';
+import { useTranslation } from '../translate.js';
+import Chart from './Chart.js';
+import { balanceToNumber } from './util.js';
 
 const COLORS_REWARD = ['#8c2200', '#008c22', '#acacac'];
 
@@ -87,9 +87,9 @@ function ChartRewards ({ labels, validatorId }: Props): React.ReactElement<Props
   );
 
   const legends = useMemo(() => [
-    t<string>('{{currency}} slashed', { replace: { currency } })
-    // t<string>('{{currency}} rewards', { replace: { currency } }),
-    // t<string>('{{currency}} average', { replace: { currency } })
+    t('{{currency}} slashed', { replace: { currency } })
+    // t('{{currency}} rewards', { replace: { currency } }),
+    // t('{{currency}} average', { replace: { currency } })
   ], [currency, t]);
 
   return (
@@ -97,7 +97,7 @@ function ChartRewards ({ labels, validatorId }: Props): React.ReactElement<Props
       colors={COLORS_REWARD}
       labels={labels}
       legends={legends}
-      title={t<string>('slashes')}
+      title={t('slashes')}
       values={values}
     />
   );

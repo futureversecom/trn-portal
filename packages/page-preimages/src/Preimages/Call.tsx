@@ -5,10 +5,12 @@ import type { Preimage } from '@polkadot/react-hooks/types';
 
 import React from 'react';
 
-import { AddressMini, CallExpander, MarkError, MarkWarning } from '@polkadot/react-components';
+import { AddressMini, MarkError, MarkWarning } from '@polkadot/react-components';
 import { ZERO_ACCOUNT } from '@polkadot/react-hooks/useWeight';
+import { CallExpander } from '@polkadot/react-params';
+import { Null } from '@polkadot/types-codec';
 
-import { useTranslation } from '../translate';
+import { useTranslation } from '../translate.js';
 
 interface Props {
   className?: string;
@@ -27,7 +29,7 @@ function PreimageCall ({ className = '', value }: Props): React.ReactElement<Pro
             <>
               {value.proposal && (
                 <CallExpander
-                  labelHash={t<string>('call')}
+                  labelHash={t('call')}
                   value={value.proposal}
                 />
               )}
@@ -47,7 +49,9 @@ function PreimageCall ({ className = '', value }: Props): React.ReactElement<Pro
           ? value.deposit
             ? (
               <AddressMini
-                balance={value.deposit.amount}
+                // HACK: In the rare case that the value is passed down as a Null Codec type as seen with Tangle
+                // We ensure to handle that case. ref: https://github.com/polkadot-js/apps/issues/10793
+                balance={!(value.deposit.amount instanceof Null) ? value.deposit.amount : undefined}
                 value={value.deposit.who}
                 withBalance
               />

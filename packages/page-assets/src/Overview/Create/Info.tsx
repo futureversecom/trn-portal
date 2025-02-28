@@ -1,8 +1,9 @@
 // Copyright 2017-2025 @polkadot/app-assets authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
+import type { BitLength } from '@polkadot/react-components/types';
 import type { BN } from '@polkadot/util';
-import type { InfoState } from './types';
+import type { InfoState } from './types.js';
 
 import React, { useEffect, useMemo, useState } from 'react';
 
@@ -10,7 +11,7 @@ import { Input, InputAddress, InputBalance, InputNumber, Modal } from '@polkadot
 import { useApi } from '@polkadot/react-hooks';
 import { BN_ZERO } from '@polkadot/util';
 
-import { useTranslation } from '../../translate';
+import { useTranslation } from '../../translate.js';
 
 interface Props {
   assetIds: BN[];
@@ -19,6 +20,8 @@ interface Props {
   onChange: (info: InfoState | null) => void;
   openId: BN;
 }
+
+const ASSET_ID_BIT_LENGTH: BitLength = 128;
 
 function Info ({ assetIds, className = '', defaultValue, onChange, openId }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
@@ -69,55 +72,56 @@ function Info ({ assetIds, className = '', defaultValue, onChange, openId }: Pro
 
   return (
     <Modal.Content className={className}>
-      <Modal.Columns hint={t<string>('The account that is to be used to create this asset and setup the initial metadata.')}>
+      <Modal.Columns hint={t('The account that is to be used to create this asset and setup the initial metadata.')}>
         <InputAddress
           defaultValue={initial?.accountId}
-          label={t<string>('creator account')}
+          label={t('creator account')}
           onChange={setAccountId}
           type='account'
         />
       </Modal.Columns>
-      <Modal.Columns hint={t<string>('The descriptive name for this asset.')}>
+      <Modal.Columns hint={t('The descriptive name for this asset.')}>
         <Input
           autoFocus
           defaultValue={initial?.assetName}
           isError={!isValidName}
-          label={t<string>('asset name')}
+          label={t('asset name')}
           onChange={setAssetName}
         />
       </Modal.Columns>
-      <Modal.Columns hint={t<string>('The symbol that will represent this asset.')}>
+      <Modal.Columns hint={t('The symbol that will represent this asset.')}>
         <Input
           defaultValue={initial?.assetSymbol}
           isError={!isValidSymbol}
-          label={t<string>('asset symbol')}
+          label={t('asset symbol')}
           onChange={setAssetSymbol}
         />
       </Modal.Columns>
-      <Modal.Columns hint={t<string>('The number of decimals for this token. Max allowed via the UI is set to 20.')}>
+      <Modal.Columns hint={t('The number of decimals for this token. Max allowed via the UI is set to 20.')}>
         <InputNumber
           defaultValue={initial?.assetDecimals}
           isError={!isValidDecimals}
-          label={t<string>('asset decimals')}
+          label={t('asset decimals')}
           onChange={setAssetDecimals}
         />
       </Modal.Columns>
-      <Modal.Columns hint={t<string>('The minimum balance for the asset. This is specified in the units and decimals as requested.')}>
+      <Modal.Columns hint={t('The minimum balance for the asset. This is specified in the units and decimals as requested.')}>
         <InputBalance
           defaultValue={initial?.minBalance}
           isZeroable={false}
-          label={t<string>('minimum balance')}
+          label={t('minimum balance')}
           onChange={setMinBalance}
           siDecimals={siDecimals}
           siSymbol={siSymbol}
         />
       </Modal.Columns>
-      <Modal.Columns hint={t<string>('The selected id for the asset. This should not match an already-existing asset id.')}>
+      <Modal.Columns hint={t('The selected id for the asset. This should not match an already-existing asset id.')}>
         <InputNumber
+          bitLength={ASSET_ID_BIT_LENGTH}
           defaultValue={initial?.assetId || initialId}
           isError={!isValidId}
           isZeroable={false}
-          label={t<string>('asset id')}
+          label={t('asset id')}
           onChange={setAssetId}
         />
       </Modal.Columns>

@@ -77,7 +77,7 @@ function useBalancesImpl (id?: BN | null): AccountResult[] | null {
   const { api } = useApi();
   const { allAccounts } = useAccounts();
   const keys = useMemo(
-    () => id ? [allAccounts.map((a) => [id, a])] : [[]],
+    () => [allAccounts.map((a) => [id, a]).filter((tup) => !!tup[0])],
     [allAccounts, id]
   );
   const isBalances = id?.toString() === '1';

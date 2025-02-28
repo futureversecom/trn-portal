@@ -6,20 +6,21 @@ import type { Hash } from '@polkadot/types/interfaces';
 import type { PalletConvictionVotingTally, PalletRankedCollectiveTally, PalletReferendaDeposit, PalletReferendaReferendumStatusConvictionVotingTally, PalletReferendaReferendumStatusRankedCollectiveTally, PalletReferendaTrackInfo } from '@polkadot/types/lookup';
 import type { BN } from '@polkadot/util';
 import type { HexString } from '@polkadot/util/types';
-import type { Referendum, ReferendumProps as Props } from '../types';
+import type { Referendum, ReferendumProps as Props } from '../types.js';
 
 import React, { useMemo } from 'react';
 
-import { CallExpander, Progress } from '@polkadot/react-components';
+import { Progress } from '@polkadot/react-components';
 import { useApi, usePreimage } from '@polkadot/react-hooks';
 import { getPreimageHash } from '@polkadot/react-hooks/usePreimage';
+import { CallExpander } from '@polkadot/react-params';
 
-import { useTranslation } from '../translate';
-import Deposits from './Deposits';
-import RefEnd from './RefEnd';
-import { unwrapDeposit } from './util';
-import Vote from './Vote';
-import Votes from './Votes';
+import { useTranslation } from '../translate.js';
+import Deposits from './Deposits/index.js';
+import Vote from './Vote/index.js';
+import RefEnd from './RefEnd.js';
+import { unwrapDeposit } from './util.js';
+import Votes from './Votes.js';
 
 interface Expanded {
   decisionDeposit: PalletReferendaDeposit | null;
@@ -92,10 +93,10 @@ function Ongoing ({ isMember, members, palletReferenda, palletVote, ranks, track
   return (
     <>
       <td className='all'>
-        {preimage && preimage.proposal
+        {preimage?.proposal
           ? (
             <CallExpander
-              labelHash={t<string>('preimage')}
+              labelHash={t('preimage')}
               value={preimage.proposal}
               withHash
             />
@@ -114,10 +115,10 @@ function Ongoing ({ isMember, members, palletReferenda, palletVote, ranks, track
       <RefEnd
         label={
           confirmEnd
-            ? t<string>('Confirming')
+            ? t('Confirming')
             : decideEnd
-              ? t<string>('Deciding')
-              : t<string>('Preparing')
+              ? t('Deciding')
+              : t('Preparing')
         }
         when={periodEnd}
       />

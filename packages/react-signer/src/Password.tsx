@@ -8,8 +8,8 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { Modal, Password, styled, Toggle } from '@polkadot/react-components';
 import { keyring } from '@polkadot/ui-keyring';
 
-import { useTranslation } from './translate';
-import { UNLOCK_MINS } from './util';
+import { useTranslation } from './translate.js';
+import { UNLOCK_MINS } from './util.js';
 
 interface Props {
   address: string;
@@ -23,7 +23,7 @@ interface Props {
 function getPair (address: string): KeyringPair | null {
   try {
     return keyring.getPair(address);
-  } catch (error) {
+  } catch {
     return null;
   }
 }
@@ -54,10 +54,10 @@ function Unlock ({ address, className, error, onChange, onEnter, tabIndex }: Pro
       <Password
         autoFocus
         isError={!!error}
-        label={t<string>('unlock account with password')}
+        label={t('unlock account with password')}
         labelExtra={
           <Toggle
-            label={t<string>('unlock for {{expiry}} min', { replace: { expiry: UNLOCK_MINS } })}
+            label={t('unlock for {{expiry}} min', { replace: { expiry: UNLOCK_MINS } })}
             onChange={setIsUnlockCached}
             value={isUnlockCached}
           />

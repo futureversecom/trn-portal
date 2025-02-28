@@ -5,17 +5,17 @@ import type { CombinatorFunction } from '@polkadot/api/promise/Combinator';
 import type { DeriveStakingAccount } from '@polkadot/api-derive/types';
 import type { AccountId, ValidatorPrefs } from '@polkadot/types/interfaces';
 import type { Codec, ITuple } from '@polkadot/types/types';
-import type { StakerState } from './types';
+import type { StakerState } from './types.js';
 
 import { useEffect, useMemo, useState } from 'react';
 
 import { u8aConcat, u8aToHex } from '@polkadot/util';
 
-import { createNamedHook } from './createNamedHook';
-import { useAccounts } from './useAccounts';
-import { useApi } from './useApi';
-import { useIsMountedRef } from './useIsMountedRef';
-import { useOwnStashes } from './useOwnStashes';
+import { createNamedHook } from './createNamedHook.js';
+import { useAccounts } from './useAccounts.js';
+import { useApi } from './useApi.js';
+import { useIsMountedRef } from './useIsMountedRef.js';
+import { useOwnStashes } from './useOwnStashes.js';
 
 type ValidatorInfo = ITuple<[ValidatorPrefs, Codec]> | ValidatorPrefs;
 type Queried = Record<string, [boolean, DeriveStakingAccount, ValidatorInfo]>;
@@ -26,7 +26,15 @@ function toIdString (id?: AccountId | null): string | null {
     : null;
 }
 
-function getStakerState (stashId: string, allAccounts: string[], [isOwnStash, { controllerId: _controllerId, exposure, nextSessionIds: _nextSessionIds, nominators, rewardDestination, sessionIds: _sessionIds, stakingLedger, validatorPrefs }, validateInfo]: [boolean, DeriveStakingAccount, ValidatorInfo]): StakerState {
+const QUERY_OPTS = {
+  withClaimedRewardsEras: true,
+  withDestination: true,
+  withLedger: true,
+  withNominations: true,
+  withPrefs: true
+};
+
+function getStakerState (stashId: string, allAccounts: string[], [isOwnStash, { claimedRewardsEras, controllerId: _controllerId, exposureMeta, exposurePaged, nextSessionIds: _nextSessionIds, nominators, rewardDestination, sessionIds: _sessionIds, stakingLedger, validatorPrefs }, validateInfo]: [boolean, DeriveStakingAccount, ValidatorInfo]): StakerState {
   const isStashNominating = !!(nominators?.length);
   const isStashValidating = !(Array.isArray(validateInfo) ? validateInfo[1].isEmpty : validateInfo.isEmpty);
   const nextSessionIds = _nextSessionIds instanceof Map
@@ -40,9 +48,11 @@ function getStakerState (stashId: string, allAccounts: string[], [isOwnStash, { 
   const controllerId = toIdString(_controllerId);
 
   return {
+    claimedRewardsEras,
     controllerId,
     destination: rewardDestination,
-    exposure,
+    exposureMeta,
+    exposurePaged,
     hexSessionIdNext: u8aToHex(nextConcat, 48),
     hexSessionIdQueue: u8aToHex(currConcat.length ? currConcat : nextConcat, 48),
     isLoading: false,
@@ -77,7 +87,7 @@ function useOwnStashInfosImpl (): StakerState[] | undefined {
       if (ownStashes.length) {
         const stashIds = ownStashes.map(([stashId]) => stashId);
         const fns = [
-          [api.derive.staking.accounts, stashIds],
+          [api.derive.staking.accounts, stashIds, QUERY_OPTS],
           [api.query.staking.validators.multi, stashIds]
         ] as unknown as CombinatorFunction[];
 

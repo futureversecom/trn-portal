@@ -7,8 +7,8 @@ import React, { useMemo } from 'react';
 
 import { useToggle } from '@polkadot/react-hooks';
 
-import Icon from './Icon';
-import { styled } from './styled';
+import Icon from './Icon.js';
+import { styled } from './styled.js';
 
 interface Meta {
   docs: Text[];
@@ -42,7 +42,7 @@ function splitParts (value: string): string[] {
 }
 
 function formatMeta (meta?: Meta): [React.ReactNode, React.ReactNode] | null {
-  if (!meta || !meta.docs.length) {
+  if (!meta?.docs.length) {
     return null;
   }
 

@@ -2,13 +2,13 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import type { FlagColor } from '@polkadot/react-components/types';
-import type { Member as MemberType } from '../types';
+import type { Member as MemberType } from '../types.js';
 
 import React from 'react';
 
 import { AddressSmall, Tag } from '@polkadot/react-components';
 
-import { useTranslation } from '../translate';
+import { useTranslation } from '../translate.js';
 
 interface Props {
   className?: string;
@@ -28,7 +28,7 @@ function Member ({ className, value: { accountId, info: { rank } } }: Props): Re
         <Tag
           className='absolute'
           color={COLOR_LST[rank.toNumber()] || COLOR_DEF}
-          hover={t<string>('Membership rank')}
+          hover={t('Membership rank')}
           label={rank.toString()}
         />
       </td>

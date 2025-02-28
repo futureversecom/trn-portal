@@ -1,24 +1,25 @@
 // Copyright 2017-2025 @polkadot/app-bounties authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { BountyIndex, BountyStatus } from '@polkadot/types/interfaces';
+import type { DeriveCollectiveProposal } from '@polkadot/api-derive/types';
+import type { BountyIndex } from '@polkadot/types/interfaces';
+import type { PalletBountiesBountyStatus } from '@polkadot/types/lookup';
 import type { BN } from '@polkadot/util';
+import type { ValidUnassignCuratorAction } from '../types.js';
 
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 
-import { DeriveCollectiveProposal } from '@polkadot/api-derive/types';
 import { Menu, Popup } from '@polkadot/react-components';
 import { useCollectiveMembers, useToggle } from '@polkadot/react-hooks';
 
-import { determineUnassignCuratorAction } from '../helpers';
-import { useBountyStatus, useUserRole } from '../hooks';
-import { useTranslation } from '../translate';
-import { ValidUnassignCuratorAction } from '../types';
-import BountyRejectCurator from './BountyRejectCurator';
-import CloseBounty from './CloseBounty';
-import ExtendBountyExpiryAction from './ExtendBountyExpiryAction';
-import GiveUp from './GiveUp';
-import SlashCurator from './SlashCurator';
+import { determineUnassignCuratorAction } from '../helpers/index.js';
+import { useBountyStatus, useUserRole } from '../hooks/index.js';
+import { useTranslation } from '../translate.js';
+import BountyRejectCurator from './BountyRejectCurator.js';
+import CloseBounty from './CloseBounty.js';
+import ExtendBountyExpiryAction from './ExtendBountyExpiryAction.js';
+import GiveUp from './GiveUp.js';
+import SlashCurator from './SlashCurator.js';
 
 interface Props {
   bestNumber: BN;
@@ -26,7 +27,7 @@ interface Props {
   description: string;
   index: BountyIndex;
   proposals?: DeriveCollectiveProposal[];
-  status: BountyStatus;
+  status: PalletBountiesBountyStatus;
 }
 
 function Index ({ bestNumber, className, description, index, proposals, status }: Props): React.ReactElement<Props> | null {
@@ -45,9 +46,9 @@ function Index ({ bestNumber, className, description, index, proposals, status }
   const availableSlashActions = determineUnassignCuratorAction(roles, status, blocksUntilUpdate);
 
   const slashCuratorActionNames = useRef<Record<ValidUnassignCuratorAction, string>>({
-    SlashCuratorAction: t<string>('Slash curator'),
-    SlashCuratorMotion: t<string>('Slash curator (Council)'),
-    UnassignCurator: t<string>('Unassign curator')
+    SlashCuratorAction: t('Slash curator'),
+    SlashCuratorMotion: t('Slash curator (Council)'),
+    UnassignCurator: t('Unassign curator')
   });
 
   const existingCloseBountyProposal = useMemo(
@@ -130,28 +131,28 @@ function Index ({ bestNumber, className, description, index, proposals, status }
               {showCloseBounty && (
                 <Menu.Item
                   key='closeBounty'
-                  label={t<string>('Close')}
+                  label={t('Close')}
                   onClick={toggleCloseBounty}
                 />
               )}
               {showRejectCurator && (
                 <Menu.Item
                   key='rejectCurator'
-                  label={t<string>('Reject curator')}
+                  label={t('Reject curator')}
                   onClick={toggleRejectCurator}
                 />
               )}
               {showExtendExpiry && (
                 <Menu.Item
                   key='extendExpiry'
-                  label={t<string>('Extend expiry')}
+                  label={t('Extend expiry')}
                   onClick={toggleExtendExpiry}
                 />
               )}
               {showGiveUpCurator && (
                 <Menu.Item
                   key='giveUpCurator'
-                  label={t<string>('Give up')}
+                  label={t('Give up')}
                   onClick={toggleGiveUpCurator}
                 />
               )}

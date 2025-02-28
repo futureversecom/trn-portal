@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import type { BN } from '@polkadot/util';
-import type { PalletReferenda, PalletVote, ReferendaGroup } from '../types';
+import type { PalletReferenda, PalletVote, ReferendaGroup } from '../types.js';
 
 import React, { useMemo, useState } from 'react';
 
@@ -11,15 +11,15 @@ import { Button, Dropdown, styled } from '@polkadot/react-components';
 import { useAccounts, useApi, useCall } from '@polkadot/react-hooks';
 import { BN_ZERO } from '@polkadot/util';
 
-import { useTranslation } from '../translate';
-import useReferenda from '../useReferenda';
-import useSummary from '../useSummary';
-import Delegate from './Delegate';
-import Group from './Group';
-import Submit from './Submit';
-import Summary from './Summary';
+import { useTranslation } from '../translate.js';
+import useReferenda from '../useReferenda.js';
+import useSummary from '../useSummary.js';
+import Delegate from './Delegate/index.js';
+import Submit from './Submit/index.js';
+import Group from './Group.js';
+import Summary from './Summary.js';
 
-export { useCounterNamed as useCounter } from '../useCounter';
+export { useCounterNamed as useCounter } from '../useCounter.js';
 
 interface Props {
   className?: string;
@@ -41,12 +41,12 @@ function Referenda ({ className, isConvictionVote, members, palletReferenda, pal
   const [trackSelected, setTrackSelected] = useState(-1);
 
   const activeIssuance = useMemo(
-    () => totalIssuance && totalIssuance.sub(inactiveIssuance || BN_ZERO),
+    () => totalIssuance?.sub(inactiveIssuance || BN_ZERO),
     [inactiveIssuance, totalIssuance]
   );
 
   const trackOpts = useMemo(
-    () => [{ text: t<string>('All active/available tracks'), value: -1 }].concat(
+    () => [{ text: t('All active/available tracks'), value: -1 }].concat(
       grouped
         .map(({ trackId, trackName }) => ({
           text: trackName,
@@ -83,7 +83,7 @@ function Referenda ({ className, isConvictionVote, members, palletReferenda, pal
       <Button.Group>
         <Dropdown
           className='topDropdown media--800'
-          label={t<string>('selected track')}
+          label={t('selected track')}
           onChange={setTrackSelected}
           options={trackOpts}
           value={trackSelected}

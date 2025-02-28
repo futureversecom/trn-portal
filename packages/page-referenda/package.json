@@ -1,5 +1,8 @@
 {
   "bugs": "https://github.com/polkadot-js/apps/issues",
+  "engines": {
+    "node": ">=18"
+  },
   "homepage": "https://github.com/polkadot-js/apps/tree/master/packages/page-referenda#readme",
   "license": "Apache-2.0",
   "name": "@polkadot/app-referenda",
@@ -11,11 +14,13 @@
   },
   "sideEffects": false,
   "type": "module",
-  "version": "0.124.2-96-x",
-  "dependencies": {
-    "@babel/runtime": "^7.21.0"
-  },
+  "version": "0.150.1",
   "devDependencies": {
-    "chart.js": "^3.9.1"
+    "chart.js": "^4.4.1"
+  },
+  "peerDependencies": {
+    "react": "*",
+    "react-dom": "*",
+    "react-is": "*"
   }
 }

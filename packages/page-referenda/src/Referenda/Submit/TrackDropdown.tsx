@@ -2,14 +2,14 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import type { BN } from '@polkadot/util';
-import type { PalletReferenda, TrackDescription } from '../../types';
+import type { PalletReferenda, TrackDescription } from '../../types.js';
 
 import React from 'react';
 
 import { Dropdown, styled } from '@polkadot/react-components';
 
-import { useTranslation } from '../../translate';
-import useTrackOptions from './useTrackOptions';
+import { useTranslation } from '../../translate.js';
+import useTrackOptions from './useTrackOptions.js';
 
 interface Props {
   className?: string;
@@ -28,7 +28,7 @@ function TrackDropdown ({ className, exclude, include, onChange, palletReferenda
     <Dropdown
       className={className}
       defaultValue={trackOpts[0].value}
-      label={t<string>('submission track')}
+      label={t('submission track')}
       onChange={onChange}
       options={trackOpts}
     />

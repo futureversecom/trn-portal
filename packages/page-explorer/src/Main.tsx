@@ -11,11 +11,11 @@ import React, { useRef } from 'react';
 
 import { Columar, styled, ToggleGroup } from '@polkadot/react-components';
 
-import BlockHeaders from './BlockHeaders';
-import Events from './Events';
-import Query from './Query';
-import Summary from './Summary';
-import { useTranslation } from './translate';
+import BlockHeaders from './BlockHeaders.js';
+import Events from './Events.js';
+import Query from './Query.js';
+import Summary from './Summary.js';
+import {useTranslation} from "./translate";
 
 interface Props {
   eventCount: number;

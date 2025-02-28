@@ -12,7 +12,7 @@ import { styled } from '@polkadot/react-components/styled';
 import { useApi, useCall } from '@polkadot/react-hooks';
 import { formatBalance } from '@polkadot/util';
 
-import FormatBalance from './FormatBalance';
+import FormatBalance from './FormatBalance.js';
 
 interface Props {
   children?: React.ReactNode;

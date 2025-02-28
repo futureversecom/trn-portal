@@ -7,8 +7,8 @@ import React, { useRef } from 'react';
 
 import { Table } from '@polkadot/react-components';
 
-import { useTranslation } from '../translate';
-import Candidate from './Candidate';
+import { useTranslation } from '../translate.js';
+import Candidate from './Candidate.js';
 
 interface Props {
   allMembers: string[];
@@ -22,9 +22,9 @@ function Candidates ({ allMembers, candidates, className = '', isMember, ownMemb
   const { t } = useTranslation();
 
   const headerRef = useRef<[React.ReactNode?, string?, number?][]>([
-    [t<string>('candidates'), 'start'],
-    [t<string>('bid kind'), 'start'],
-    [t<string>('value')],
+    [t('candidates'), 'start'],
+    [t('bid kind'), 'start'],
+    [t('value')],
     [undefined, 'expand'],
     []
   ]);
@@ -32,7 +32,7 @@ function Candidates ({ allMembers, candidates, className = '', isMember, ownMemb
   return (
     <Table
       className={className}
-      empty={candidates && t<string>('No candidates')}
+      empty={candidates && t('No candidates')}
       header={headerRef.current}
     >
       {candidates?.map((candidate): React.ReactNode => (

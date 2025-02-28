@@ -1,11 +1,13 @@
 // Copyright 2017-2025 @polkadot/apps-config authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
+/// <reference types="@polkadot/dev-test/globals.d.ts" />
+
 import { assert, isString } from '@polkadot/util';
 import { WebSocket } from '@polkadot/x-ws';
 
-import { createWsEndpoints } from '../endpoints';
-import { fetchJson } from './fetch';
+import { createWsEndpoints } from '../endpoints/index.js';
+import { fetchJson } from './fetch.js';
 
 interface Endpoint {
   name: string;
@@ -18,6 +20,10 @@ interface DnsResponse {
 }
 
 const TIMEOUT = 60_000;
+
+function noopHandler () {
+  // ignore
+}
 
 describe('check endpoints', (): void => {
   const checks = createWsEndpoints()
@@ -34,41 +40,17 @@ describe('check endpoints', (): void => {
       ws: value
     }))
     .filter((v): v is Endpoint => !!v.ws);
-  let completed = 0;
-  let errored = 0;
-  let websocket: WebSocket | null = null;
-
-  afterEach((): void => {
-    if (websocket) {
-      websocket.onclose = null;
-      websocket.onerror = null;
-      websocket.onopen = null;
-      websocket.onmessage = null;
-
-      try {
-        websocket.close();
-      } catch {
-        // ignore
-      }
-
-      websocket = null;
-    }
-
-    completed++;
-
-    if (completed === checks.length) {
-      process.exit(errored);
-    }
-  });
 
   for (const { name, ws: endpoint } of checks) {
-    it(`${name} @ ${endpoint}`, async (): Promise<unknown> => {
+    it(`${name} @ ${endpoint}`, async (): Promise<void> => {
       const [,, hostWithPort] = endpoint.split('/');
       const [host] = hostWithPort.split(':');
+      let websocket: WebSocket | null = null;
+      let closeTimerId: ReturnType<typeof setTimeout> | null = null;
 
-      return fetchJson<DnsResponse>(`https://dns.google/resolve?name=${host}`)
+      await fetchJson<DnsResponse>(`https://dns.google/resolve?name=${host}`)
         .then((json) =>
-          assert(json && json.Answer, 'No DNS entry')
+          assert(json?.Answer, 'No DNS entry')
         )
         .then(() =>
           new Promise((resolve, reject): void => {
@@ -90,21 +72,45 @@ describe('check endpoints', (): void => {
 
             websocket.onmessage = (message: { data: string }): void => {
               try {
-                const result = (JSON.parse(message.data) as { result: unknown }).result as string;
+                const result = (JSON.parse(message.data) as { result?: string }).result;
 
-                assert(result.startsWith('0x'), 'Invalid response');
+                assert(result?.startsWith('0x'), 'Invalid/non-hex response');
                 resolve(result);
               } catch (e) {
                 reject(e);
               }
             };
+
+            closeTimerId = setTimeout(
+              () => {
+                closeTimerId = null;
+                reject(new Error('Connection timeout'));
+              },
+              TIMEOUT
+            );
           })
         )
-        .catch((e) => {
-          errored++;
+        .finally(() => {
+          if (closeTimerId) {
+            clearTimeout(closeTimerId);
+            closeTimerId = null;
+          }
 
-          throw e;
+          if (websocket) {
+            websocket.onclose = noopHandler;
+            websocket.onerror = noopHandler;
+            websocket.onopen = noopHandler;
+            websocket.onmessage = noopHandler;
+
+            try {
+              websocket.close();
+            } catch (e) {
+              console.error((e as Error).message);
+            }
+
+            websocket = null;
+          }
         });
-    }, TIMEOUT);
+    });
   }
 });

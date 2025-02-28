@@ -1,13 +1,13 @@
-// Copyright 2017-2025 @polkadot/app-accounts authors & contributors
+// Copyright 2017-2025 @polkadot/react-components authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
 import React from 'react';
 
-import Button from './Button';
-import { styled } from './styled';
+import Button from './Button/index.js';
+import { styled } from './styled.js';
 
 interface Props {
-  button?: React.ReactNode;
+  buttons?: React.ReactNode;
   children: React.ReactNode;
   className?: string;
   dataTestId?: string;
@@ -17,7 +17,7 @@ interface Props {
   sidebarRef: React.RefObject<HTMLDivElement>;
 }
 
-function Sidebar ({ button, children, className = '', dataTestId = '', onClose, position, sidebarRef }: Props): React.ReactElement<Props> {
+function Sidebar ({ buttons, children, className = '', dataTestId = '', onClose, position, sidebarRef }: Props): React.ReactElement<Props> {
   return (
     <StyledDiv
       className={`${className} ui--Sidebar ${position}Position`}
@@ -25,7 +25,7 @@ function Sidebar ({ button, children, className = '', dataTestId = '', onClose, 
       ref={sidebarRef}
     >
       <Button.Group className='ui--Sidebar-buttons'>
-        {button}
+        {buttons}
         <Button
           dataTestId='close-sidebar-button'
           icon='times'

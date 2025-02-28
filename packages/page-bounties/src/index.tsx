@@ -5,10 +5,10 @@ import React, { useRef } from 'react';
 
 import { Tabs } from '@polkadot/react-components';
 
-import Bounties from './Bounties';
-import { useTranslation } from './translate';
+import Bounties from './Bounties.js';
+import { useTranslation } from './translate.js';
 
-export { default as useCounter } from './useCounter';
+export { default as useCounter } from './useCounter.js';
 
 interface Props {
   basePath: string;
@@ -22,7 +22,7 @@ function BountiesApp ({ basePath, className = '' }: Props): React.ReactElement<P
     {
       isRoot: true,
       name: 'index',
-      text: t<string>('Overview')
+      text: t('Overview')
     }
   ]);
 

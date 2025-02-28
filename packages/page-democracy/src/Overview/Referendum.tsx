@@ -11,12 +11,12 @@ import { useAccounts, useApi, useBestNumber, useCall, useToggle } from '@polkado
 import { BlockToTime } from '@polkadot/react-query';
 import { BN, BN_ONE, formatNumber, isBoolean } from '@polkadot/util';
 
-import { useTranslation } from '../translate';
-import useChangeCalc from '../useChangeCalc';
-import PreImageButton from './PreImageButton';
-import ProposalCell from './ProposalCell';
-import ReferendumVotes from './ReferendumVotes';
-import Voting from './Voting';
+import { useTranslation } from '../translate.js';
+import useChangeCalc from '../useChangeCalc.js';
+import PreImageButton from './PreImageButton.js';
+import ProposalCell from './ProposalCell.js';
+import ReferendumVotes from './ReferendumVotes.js';
+import Voting from './Voting.js';
 
 interface Props {
   className?: string;
@@ -98,7 +98,7 @@ function Referendum ({ className = '', value: { allAye, allNay, image, imageHash
         />
         <td className='number together media--1200'>
           <BlockToTime value={remainBlock} />
-          {t<string>('{{blocks}} blocks', { replace: { blocks: formatNumber(remainBlock) } })}
+          {t('{{blocks}} blocks', { replace: { blocks: formatNumber(remainBlock) } })}
         </td>
         <td className='number together media--1400'>
           <BlockToTime value={enactBlock.sub(bestNumber)} />
@@ -117,8 +117,8 @@ function Referendum ({ className = '', value: { allAye, allNay, image, imageHash
               color={isPassing ? 'green' : 'red'}
               hover={
                 isPassing
-                  ? t<string>('{{threshold}}, passing', { replace: { threshold } })
-                  : t<string>('{{threshold}}, not passing', { replace: { threshold } })
+                  ? t('{{threshold}}, passing', { replace: { threshold } })
+                  : t('{{threshold}}, not passing', { replace: { threshold } })
               }
               icon={isPassing ? 'check' : 'times'}
             />

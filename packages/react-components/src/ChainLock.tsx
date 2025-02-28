@@ -1,20 +1,22 @@
-// Copyright 2017-2025 @polkadot/app-accounts authors & contributors
+// Copyright 2017-2025 @polkadot/react-components authors & contributors
 // SPDX-License-Identifier: Apache-2.0
+
+import type { HexString } from '@polkadot/util/types';
 
 import React, { useCallback, useMemo } from 'react';
 
 import { useApi } from '@polkadot/react-hooks';
 import { chains } from '@polkadot/ui-settings/defaults/chains';
 
-import { styled } from './styled';
-import Toggle from './Toggle';
-import { useTranslation } from './translate';
+import { styled } from './styled.js';
+import Toggle from './Toggle.js';
+import { useTranslation } from './translate.js';
 
 interface Props {
   className?: string;
   genesisHash: string | null;
   isDisabled?: boolean;
-  onChange: (genesisHash: string | null) => void;
+  onChange: (genesisHash: HexString | null) => void;
 }
 
 function calcLock (apiGenesis: string, genesisHash: string | null): boolean {
@@ -56,7 +58,7 @@ function ChainLock ({ className = '', genesisHash, isDisabled, onChange }: Props
     <StyledToggle
       className={className}
       isDisabled={isDisabled}
-      label={t<string>('only this network')}
+      label={t('only this network')}
       onChange={_onChange}
       preventDefault
       value={isTiedToChain}

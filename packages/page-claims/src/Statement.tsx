@@ -7,8 +7,8 @@ import React from 'react';
 
 import { styled } from '@polkadot/react-components';
 
-import { useTranslation } from './translate';
-import { getStatement } from './util';
+import { useTranslation } from './translate.js';
+import { getStatement } from './util.js';
 
 export interface Props {
   className?: string;
@@ -28,7 +28,7 @@ function StatementFullText ({ statementUrl, systemChain }: { statementUrl?: stri
         : null;
 
     default:
-      return <p>{t<string>('Warning: we did not find any attest statement for {{chain}}', { replace: { chain: systemChain } })}</p>;
+      return <p>{t('Warning: we did not find any attest statement for {{chain}}', { replace: { chain: systemChain } })}</p>;
   }
 }
 
@@ -42,7 +42,7 @@ function Statement ({ className, kind, systemChain }: Props): React.ReactElement
 
   return (
     <StyledDiv className={className}>
-      {t<string>('Please read these terms and conditions carefully. By submitting this statement, you are deemed to have accepted these Terms and Conditions. If you do not agree to these terms, please refrain from accessing or proceeding. You can also find them at:')}
+      {t('Please read these terms and conditions carefully. By submitting this statement, you are deemed to have accepted these Terms and Conditions. If you do not agree to these terms, please refrain from accessing or proceeding. You can also find them at:')}
       <a
         className='statementUrl'
         href={statementUrl}

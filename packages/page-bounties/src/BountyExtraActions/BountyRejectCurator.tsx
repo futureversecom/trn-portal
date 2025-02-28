@@ -5,11 +5,11 @@ import type { AccountId, BountyIndex } from '@polkadot/types/interfaces';
 
 import React from 'react';
 
-import { useBounties } from '@polkadot/app-bounties/hooks';
 import { InputAddress, Modal, TxButton } from '@polkadot/react-components';
 
-import { truncateTitle } from '../helpers';
-import { useTranslation } from '../translate';
+import { truncateTitle } from '../helpers/index.js';
+import { useBounties } from '../hooks/index.js';
+import { useTranslation } from '../translate.js';
 
 interface Props {
   curatorId: AccountId;
@@ -24,15 +24,15 @@ function BountyRejectCurator ({ curatorId, description, index, toggleOpen }: Pro
 
   return (
     <Modal
-      header={`${t<string>('reject curator')} - "${truncateTitle(description, 30)}"`}
+      header={`${t('reject curator')} - "${truncateTitle(description, 30)}"`}
       onClose={toggleOpen}
       size='large'
     >
       <Modal.Content>
-        <Modal.Columns hint={t<string>('Only the account proposed as curator by the council can create the unassign curator transaction ')}>
+        <Modal.Columns hint={t('Only the account proposed as curator by the council can create the unassign curator transaction ')}>
           <InputAddress
             isDisabled
-            label={t<string>('curator account')}
+            label={t('curator account')}
             type='account'
             value={curatorId.toString()}
             withLabel
@@ -43,7 +43,7 @@ function BountyRejectCurator ({ curatorId, description, index, toggleOpen }: Pro
         <TxButton
           accountId={curatorId}
           icon='times'
-          label={t<string>('Reject')}
+          label={t('Reject')}
           onStart={toggleOpen}
           params={[index]}
           tx={unassignCurator}

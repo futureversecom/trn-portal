@@ -1,9 +1,13 @@
 // Copyright 2017-2025 @polkadot/apps-config authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { assert, isNumber, isString } from '@polkadot/util';
+/// <reference types="@polkadot/dev-test/globals.d.ts" />
 
-import { createWsEndpoints } from '.';
+import { strict as assert } from 'node:assert';
+
+import { isNumber, isString } from '@polkadot/util';
+
+import { createWsEndpoints } from './index.js';
 
 interface Endpoint {
   name: string;
@@ -45,19 +49,28 @@ describe('urls are sorted', (): void => {
     return !hasDevelopment;
   });
 
-  filtered.forEach(({ isHeader, text, textBy }, index): void => {
+  filtered.forEach(({ isHeader, paraId, text, textBy }, index): void => {
     if (isHeader) {
       lastHeader = text as string;
     } else {
       it(`${lastHeader}:: ${text as string}:: ${textBy}`, (): void => {
+        const item = filtered[index - 1];
+
         assert((
-          filtered[index - 1].isHeader ||
-          filtered[index - 1].linked ||
-          (isNumber(filtered[index - 1].paraId) && (filtered[index - 1].paraId as number) < 2000) ||
-          filtered[index - 1].text === '' ||
-          text === filtered[index - 1].text ||
-          (text as string).localeCompare(filtered[index - 1].text as string) === 1
-        ), `${lastHeader}:: ${text as string} needs to be before ${filtered[index - 1].text as string}`);
+          item.isHeader ||
+          item.linked ||
+          (
+            isNumber(item.paraId) &&
+            (
+              item.paraId < 2000
+                ? isNumber(paraId) && paraId >= 2000
+                : false
+            )
+          ) ||
+          item.text === '' ||
+          text === item.text ||
+          (text as string).localeCompare(item.text as string) === 1
+        ), `${lastHeader}:: ${text as string} needs to be before ${item.text as string}`);
       });
     }
   });
@@ -88,9 +101,11 @@ describe('urls are not duplicated', (): void => {
       return map;
     }, {} as Record<string, string[]>);
 
-  it.each(Object.entries(map))('%s', (url, paths): void => {
-    assert(paths.length === 1, `${url} appears multiple times - ${paths.map((p) => `\n\t"${p}"`).join('')}`);
-  });
+  for (const [url, paths] of Object.entries<string[]>(map)) {
+    it(`${url}`, (): void => {
+      assert(paths.length === 1, `${url} appears multiple times - ${paths.map((p) => `\n\t"${p}"`).join('')}`);
+    });
+  }
 });
 
 describe('endpopints naming', (): void => {
@@ -111,27 +126,27 @@ describe('endpopints naming', (): void => {
       [`${e.name}:: ${e.provider}`]: e
     }), {});
 
-  describe.each(Object.keys(endpoints))('%s', (key): void => {
-    const { name, provider } = endpoints[key];
+  for (const [key, { name, provider }] of Object.entries<Endpoint>(endpoints)) {
+    describe(`${key}`, (): void => {
+      it(`[${key}] has no emojis`, (): void => {
+        assert(!emoji.test(name), `${name} should not contain any emojis`);
+        assert(!emoji.test(provider), `${name}:: ${provider} should not contain any emojis`);
+      });
 
-    it(`[${key}] has no emojis`, (): void => {
-      assert(!emoji.test(name), `${name} should not contain any emojis`);
-      assert(!emoji.test(provider), `${name}:: ${provider} should not contain any emojis`);
-    });
+      it(`[${key}] not all uppercase`, (): void => {
+        assert(!provider.includes(' ') || (provider.toLocaleUpperCase() !== provider), `${name}:: ${provider} should not be all uppercase`);
+      });
 
-    it(`[${key}] not all uppercase`, (): void => {
-      assert(!provider.includes(' ') || (provider.toLocaleUpperCase() !== provider), `${name}:: ${provider} should not be all uppercase`);
-    });
+      it(`[${key}] does not contain "Parachain`, (): void => {
+        assert(!name.includes('Parachain'), `${name} should not contain "Parachain" (redundant)`);
+      });
 
-    it(`[${key}] does not contain "Parachain`, (): void => {
-      assert(!name.includes('Parachain'), `${name} should not contain "Parachain" (redundant)`);
+      it(`[${key}] does not contain a relay name`, (): void => {
+        assert(!name.includes(' ') || !name.includes('Kusama'), `${name} should not contain "Kusama" (redundant)`);
+        assert(!name.includes(' ') || !name.includes('Polkadot'), `${name} should not contain "Polkadot" (redundant)`);
+        assert(!name.includes(' ') || !name.includes('Rococo'), `${name} should not contain "Rococo" (redundant)`);
+        assert(!name.includes(' ') || !name.includes('Westend'), `${name} should not contain "Westend" (redundant)`);
+      });
     });
-
-    it(`[${key}] does not contain a relay name`, (): void => {
-      assert(!name.includes(' ') || !name.includes('Kusama'), `${name} should not contain "Kusama" (redundant)`);
-      assert(!name.includes(' ') || !name.includes('Polkadot'), `${name} should not contain "Polkadot" (redundant)`);
-      assert(!name.includes(' ') || !name.includes('Rococo'), `${name} should not contain "Rococo" (redundant)`);
-      assert(!name.includes(' ') || !name.includes('Westend'), `${name} should not contain "Westend" (redundant)`);
-    });
-  });
+  }
 });
