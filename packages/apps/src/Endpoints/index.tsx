@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import type { LinkOption } from '@polkadot/apps-config/endpoints/types';
-import type { Group } from './types';
+import type { Group } from './types.js';
 
 // ok, this seems to be an eslint bug, this _is_ a package import
 import punycode from 'punycode/';
@@ -11,11 +11,12 @@ import store from 'store';
 
 import { createWsEndpoints, CUSTOM_ENDPOINT_KEY } from '@polkadot/apps-config';
 import { Button, Input, Sidebar, styled } from '@polkadot/react-components';
+import { useApi } from '@polkadot/react-hooks';
 import { settings } from '@polkadot/ui-settings';
 import { isAscii } from '@polkadot/util';
 
-import { useTranslation } from '../translate';
-import GroupDisplay from './Group';
+import { useTranslation } from '../translate.js';
+import GroupDisplay from './Group.js';
 
 interface Props {
   className?: string;
@@ -118,11 +119,31 @@ function loadAffinities (groups: Group[]): Record<string, string> {
     }), {});
 }
 
-function isSwitchDisabled (hasUrlChanged: boolean, apiUrl: string, isUrlValid: boolean): boolean {
+function isSwitchDisabled (hasUrlChanged: boolean, apiUrl: string, isUrlValid: boolean, isLocalFork?: boolean): boolean {
   if (!hasUrlChanged) {
-    return true;
+    if (isLocalFork) {
+      return false;
+    } else {
+      return true;
+    }
   } else if (apiUrl.startsWith('light://')) {
     return false;
+  } else if (isUrlValid) {
+    return false;
+  }
+
+  return true;
+}
+
+function isLocalForkDisabled (hasUrlChanged: boolean, apiUrl: string, isUrlValid: boolean, isLocalFork?: boolean): boolean {
+  if (!hasUrlChanged) {
+    if (isLocalFork) {
+      return true;
+    } else {
+      return false;
+    }
+  } else if (apiUrl.startsWith('light://')) {
+    return true;
   } else if (isUrlValid) {
     return false;
   }
@@ -133,6 +154,7 @@ function isSwitchDisabled (hasUrlChanged: boolean, apiUrl: string, isUrlValid: b
 function Endpoints ({ className = '', offset, onClose }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
   const linkOptions = createWsEndpoints(t);
+  const { isLocalFork } = useApi();
   const [groups, setGroups] = useState(() => combineEndpoints(linkOptions));
   const [{ apiUrl, groupIndex, hasUrlChanged, isUrlValid }, setApiUrl] = useState<UrlState>(() => extractUrlState(settings.get().apiUrl, groups));
   const [storedCustomEndpoints, setStoredCustomEndpoints] = useState<string[]>(() => getCustomEndpoints());
@@ -223,12 +245,32 @@ function Endpoints ({ className = '', offset, onClose }: Props): React.ReactElem
 
   const _onApply = useCallback(
     (): void => {
+      store.set('localFork', '');
       settings.set({ ...(settings.get()), apiUrl });
       window.location.assign(`${window.location.origin}${window.location.pathname}?rpc=${encodeURIComponent(apiUrl)}${window.location.hash}`);
-      // window.location.reload();
+
+      if (!hasUrlChanged) {
+        window.location.reload();
+      }
+
       onClose();
     },
-    [apiUrl, onClose]
+    [apiUrl, onClose, hasUrlChanged]
+  );
+
+  const _onLocalFork = useCallback(
+    (): void => {
+      store.set('localFork', apiUrl);
+      settings.set({ ...(settings.get()), apiUrl });
+      window.location.assign(`${window.location.origin}${window.location.pathname}?rpc=${encodeURIComponent(apiUrl)}${window.location.hash}`);
+
+      if (!hasUrlChanged) {
+        window.location.reload();
+      }
+
+      onClose();
+    },
+    [apiUrl, onClose, hasUrlChanged]
   );
 
   const _saveApiEndpoint = useCallback(
@@ -245,19 +287,33 @@ function Endpoints ({ className = '', offset, onClose }: Props): React.ReactElem
   );
 
   const canSwitch = useMemo(
-    () => isSwitchDisabled(hasUrlChanged, apiUrl, isUrlValid),
-    [hasUrlChanged, apiUrl, isUrlValid]
+    () => isSwitchDisabled(hasUrlChanged, apiUrl, isUrlValid, isLocalFork),
+    [hasUrlChanged, apiUrl, isUrlValid, isLocalFork]
+  );
+
+  const canLocalFork = useMemo(
+    () => isLocalForkDisabled(hasUrlChanged, apiUrl, isUrlValid, isLocalFork),
+    [hasUrlChanged, apiUrl, isUrlValid, isLocalFork]
   );
 
   return (
     <StyledSidebar
-      button={
-        <Button
-          icon='sync'
-          isDisabled={canSwitch}
-          label={t<string>('Switch')}
-          onClick={_onApply}
-        />
+      buttons={
+        <>
+          <Button
+            icon='code-fork'
+            isDisabled={canLocalFork}
+            label={t('Fork Locally')}
+            onClick={_onLocalFork}
+            tooltip='fork-locally-btn'
+          />
+          <Button
+            icon='sync'
+            isDisabled={canSwitch}
+            label={t('Switch')}
+            onClick={_onApply}
+          />
+        </>
       }
       className={className}
       offset={offset}
@@ -282,7 +338,7 @@ function Endpoints ({ className = '', offset, onClose }: Props): React.ReactElem
                 className='endpointCustom'
                 isError={!isUrlValid}
                 isFull
-                label={t<string>('custom endpoint')}
+                label={t('custom endpoint')}
                 onChange={_onChangeCustom}
                 value={apiUrl}
               />

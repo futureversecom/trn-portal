@@ -8,8 +8,8 @@ import React, { useRef } from 'react';
 import { Table } from '@polkadot/react-components';
 import { useApi, useCall } from '@polkadot/react-hooks';
 
-import { useTranslation } from '../translate';
-import External from './External';
+import { useTranslation } from '../translate.js';
+import External from './External.js';
 
 interface Props {
   className?: string;
@@ -21,16 +21,16 @@ function Externals ({ className }: Props): React.ReactElement<Props> | null {
   const external = useCall<DeriveProposalExternal | null>(api.derive.democracy.nextExternal);
 
   const headerRef = useRef<([React.ReactNode?, string?, number?] | false)[]>([
-    [t<string>('external'), 'start'],
-    [t<string>('proposer'), 'address'],
-    [t<string>('locked')],
+    [t('external'), 'start'],
+    [t('proposer'), 'address'],
+    [t('locked')],
     []
   ]);
 
   return (
     <Table
       className={className}
-      empty={external === null && t<string>('No external proposal')}
+      empty={external === null && t('No external proposal')}
       header={headerRef.current}
     >
       {external && <External value={external} />}

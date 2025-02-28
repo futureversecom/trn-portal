@@ -8,9 +8,9 @@ import React, { useMemo } from 'react';
 import { useApi } from '@polkadot/react-hooks';
 import { u8aToHex } from '@polkadot/util';
 
-import Output from './Output';
-import { styled } from './styled';
-import { useTranslation } from './translate';
+import Output from './Output.js';
+import { styled } from './styled.js';
+import { useTranslation } from './translate.js';
 
 interface Props {
   className?: string;
@@ -35,7 +35,7 @@ function formatInspect ({ inner = [], name = '', outer = [] }: Inspect, result: 
     result.push({ name, value: value.join(' ') });
   }
 
-  for (let i = 0; i < inner.length; i++) {
+  for (let i = 0, count = inner.length; i < count; i++) {
     formatInspect(inner[i], result);
   }
 
@@ -85,7 +85,7 @@ function DecodedInspect ({ className, hex, inspect, label }: Props): React.React
               className='isLink'
               key='hex'
             >
-              <td><label>{t<string>('link')}</label></td>
+              <td><label>{t('link')}</label></td>
               <td>
                 <a
                   href={link}

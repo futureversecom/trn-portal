@@ -1,26 +1,26 @@
 // Copyright 2017-2025 @polkadot/app-staking authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
+import type { ApiPromise } from '@polkadot/api';
 import type { DeriveHeartbeatAuthor } from '@polkadot/api-derive/types';
 import type { Option } from '@polkadot/types';
 import type { SlashingSpans, ValidatorPrefs } from '@polkadot/types/interfaces';
 import type { BN } from '@polkadot/util';
-import type { NominatedBy as NominatedByType, ValidatorInfo } from '../../types';
-import type { NominatorValue } from './types';
+import type { NominatedBy as NominatedByType, ValidatorInfo } from '../../types.js';
+import type { NominatorValue } from './types.js';
 
 import React, { useMemo } from 'react';
 
-import { ApiPromise } from '@polkadot/api';
 import { AddressSmall, Columar, Icon, LinkExternal, Table, Tag } from '@polkadot/react-components';
 import { checkVisibility } from '@polkadot/react-components/util';
 import { useApi, useCall, useDeriveAccountInfo, useToggle } from '@polkadot/react-hooks';
 import { FormatBalance } from '@polkadot/react-query';
 import { BN_ZERO } from '@polkadot/util';
 
-import { useTranslation } from '../../translate';
-import NominatedBy from './NominatedBy';
-import StakeOther from './StakeOther';
-import Status from './Status';
+import { useTranslation } from '../../translate.js';
+import NominatedBy from './NominatedBy.js';
+import StakeOther from './StakeOther.js';
+import Status from './Status.js';
 
 interface Props {
   address: string;
@@ -50,19 +50,19 @@ interface StakingState {
   stakeOwn?: BN;
 }
 
-function expandInfo ({ exposure, validatorPrefs }: ValidatorInfo, minCommission?: BN): StakingState {
+function expandInfo ({ exposureMeta, exposurePaged, validatorPrefs }: ValidatorInfo, minCommission?: BN): StakingState {
   let nominators: NominatorValue[] | undefined;
   let stakeTotal: BN | undefined;
   let stakeOther: BN | undefined;
   let stakeOwn: BN | undefined;
 
-  if (exposure && exposure.total) {
-    nominators = exposure.others.map(({ value, who }) => ({
+  if (exposureMeta?.total) {
+    nominators = exposurePaged.others.map(({ value, who }) => ({
       nominatorId: who.toString(),
       value: value.unwrap()
     }));
-    stakeTotal = exposure.total?.unwrap() || BN_ZERO;
-    stakeOwn = exposure.own.unwrap();
+    stakeTotal = exposureMeta.total?.unwrap() || BN_ZERO;
+    stakeOwn = exposureMeta.own.unwrap();
     stakeOther = stakeTotal.sub(stakeOwn);
   }
 
@@ -92,7 +92,7 @@ function useAddressCalls (api: ApiPromise, address: string, isMain?: boolean) {
 
 function Address ({ address, className = '', filterName, hasQueries, isElected, isFavorite, isMain, isPara, lastBlock, minCommission, nominatedBy, points, recentlyOnline, toggleFavorite, validatorInfo, withIdentity }: Props): React.ReactElement<Props> | null {
   const { t } = useTranslation();
-  const { api } = useApi();
+  const { api, apiIdentity } = useApi();
   const [isExpanded, toggleIsExpanded] = useToggle(false);
   const { accountInfo, slashingSpans } = useAddressCalls(api, address, isMain);
 
@@ -104,8 +104,8 @@ function Address ({ address, className = '', filterName, hasQueries, isElected, 
   );
 
   const isVisible = useMemo(
-    () => accountInfo ? checkVisibility(api, address, accountInfo, filterName, withIdentity) : true,
-    [api, accountInfo, address, filterName, withIdentity]
+    () => accountInfo ? checkVisibility(apiIdentity, address, accountInfo, filterName, withIdentity) : true,
+    [accountInfo, address, filterName, apiIdentity, withIdentity]
   );
 
   const statsLink = useMemo(
@@ -194,7 +194,7 @@ function Address ({ address, className = '', filterName, hasQueries, isElected, 
               <Columar.Column>
                 {isMain && stakeOwn?.gtn(0) && (
                   <>
-                    <h5>{t<string>('own stake')}</h5>
+                    <h5>{t('own stake')}</h5>
                     <FormatBalance
                       value={stakeOwn}
                     />
@@ -204,13 +204,13 @@ function Address ({ address, className = '', filterName, hasQueries, isElected, 
               <Columar.Column>
                 {hasQueries && (
                   <>
-                    <h5>{t<string>('graphs')}</h5>
+                    <h5>{t('graphs')}</h5>
                     <a href={statsLink}>
                       <Icon
                         className='highlight--color'
                         icon='chart-line'
                       />
-                      &nbsp;{t<string>('historic results')}
+                      &nbsp;{t('historic results')}
                     </a>
                   </>
                 )}

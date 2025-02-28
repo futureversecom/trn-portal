@@ -1,14 +1,14 @@
 // Copyright 2017-2025 @polkadot/app-alliance authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { Member, Unscrupulous } from '../types';
+import type { Member, Unscrupulous } from '../types.js';
 
 import React, { useMemo, useState } from 'react';
 
 import { InputAddress, InputBalance, Modal, TxButton } from '@polkadot/react-components';
 import { useAccounts, useApi } from '@polkadot/react-hooks';
 
-import { useTranslation } from '../translate';
+import { useTranslation } from '../translate.js';
 
 interface Props {
   className?: string;
@@ -39,24 +39,24 @@ function Join ({ className, members, onClose, unscrupulous: { accounts } }: Prop
   return (
     <Modal
       className={className}
-      header={t<string>('Join alliance')}
+      header={t('Join alliance')}
       onClose={onClose}
       size='large'
     >
       <Modal.Content>
-        <Modal.Columns hint={t<string>('This account will be submitted to join the aliance. It will be allocated one of the alliance roles upon joining, starting with Ally.')}>
+        <Modal.Columns hint={t('This account will be submitted to join the aliance. It will be allocated one of the alliance roles upon joining, starting with Ally.')}>
           <InputAddress
             filter={available}
-            label={t<string>('alliance account')}
+            label={t('alliance account')}
             onChange={setAccountId}
             type='account'
           />
         </Modal.Columns>
-        <Modal.Columns hint={t<string>('The bond will be reserved for the duration of your alliance membership.')}>
+        <Modal.Columns hint={t('The bond will be reserved for the duration of your alliance membership.')}>
           <InputBalance
             defaultValue={api.consts.alliance.allyDeposit}
             isDisabled
-            label={t<string>('alliance deposit')}
+            label={t('alliance deposit')}
           />
         </Modal.Columns>
       </Modal.Content>

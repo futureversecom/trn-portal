@@ -4,8 +4,8 @@
 import strengthTester from 'owasp-password-strength-test';
 import React from 'react';
 
-import { styled } from './styled';
-import { useTranslation } from './translate';
+import { styled } from './styled.js';
+import { useTranslation } from './translate.js';
 
 const MAX_STRENGTH = 7; // equal to number of password tests in owasp strength tester
 
@@ -39,14 +39,14 @@ function PasswordStrength ({ className = '', value }: Props): React.ReactElement
       className={className}
       style={{ display: (value ? 'flex' : 'none') }}
     >
-      {t<string>('weak')}
+      {t('weak')}
       <div className='ui--Strength-bar'>
         <div
           className='ui--Strength-bar-highlighted'
           style={style}
         />
       </div>
-      {t<string>('strong')}
+      {t('strong')}
     </StyledDiv>
   );
 }

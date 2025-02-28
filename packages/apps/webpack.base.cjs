@@ -1,4 +1,4 @@
-// Copyright 2017-2024 @polkadot/apps authors & contributors
+// Copyright 2017-2025 @polkadot/apps authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
 /* eslint-disable camelcase */
@@ -12,7 +12,6 @@ const webpack = require('webpack');
 const findPackages = require('../../scripts/findPackages.cjs');
 
 function createWebpack (context, mode = 'production') {
-  const pkgJson = require(path.join(context, 'package.json'));
   const alias = findPackages().reduce((alias, { dir, name }) => {
     alias[name] = path.resolve(context, `../${dir}/src`);
 
@@ -32,13 +31,13 @@ function createWebpack (context, mode = 'production') {
 
   return {
     context,
-    entry: ['@babel/polyfill', './src/index.tsx'],
+    entry: './src/index.tsx',
     mode,
     module: {
       rules: [
         {
           scheme: 'data',
-          type: 'asset/resource',
+          type: 'asset/resource'
         },
         {
           include: /node_modules/,
@@ -55,12 +54,14 @@ function createWebpack (context, mode = 'production') {
         },
         {
           exclude: /(node_modules)/,
-          test: /\.(js|mjs|ts|tsx)$/,
+          test: /\.(ts|tsx)$/,
           use: [
-            require.resolve('thread-loader'),
             {
-              loader: require.resolve('babel-loader'),
-              options: require('@polkadot/dev/config/babel-config-webpack.cjs')
+              loader: require.resolve('ts-loader'),
+              options: {
+                configFile: 'tsconfig.webpack.json',
+                transpileOnly: true
+              }
             }
           ]
         }
@@ -144,6 +145,9 @@ function createWebpack (context, mode = 'production') {
     ].concat(plugins),
     resolve: {
       alias,
+      extensionAlias: {
+        '.js': ['.js', '.ts', '.tsx']
+      },
       extensions: ['.js', '.jsx', '.mjs', '.ts', '.tsx'],
       fallback: {
         assert: require.resolve('assert/'),

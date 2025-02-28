@@ -1,22 +1,25 @@
 // Copyright 2017-2025 @polkadot/react-components authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
+import type { SubmittableResult } from '@polkadot/api';
 import type { SubmittableExtrinsic } from '@polkadot/api/types';
-import type { TxButtonProps as Props } from './types';
+import type { TxButtonProps as Props } from './types.js';
 
 import React, { useCallback, useEffect, useState } from 'react';
 
-import { SubmittableResult } from '@polkadot/api';
-import { useIsMountedRef, useQueue } from '@polkadot/react-hooks';
+import { useApi, useIsMountedRef, usePayWithAsset, useQueue } from '@polkadot/react-hooks';
+import { getFeeAssetLocation } from '@polkadot/react-hooks/utils/getFeeAssetLocation';
 import { assert, isFunction } from '@polkadot/util';
 
-import Button from './Button';
-import { useTranslation } from './translate';
+import Button from './Button/index.js';
+import { useTranslation } from './translate.js';
 
 function TxButton ({ accountId, className = '', extrinsic: propsExtrinsic, icon, isBasic, isBusy, isDisabled, isIcon, isToplevel, isUnsigned, label, onClick, onFailed, onSendRef, onStart, onSuccess, onUpdate, params, tooltip, tx, withSpinner, withoutLink }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
+  const { api } = useApi();
   const mountedRef = useIsMountedRef();
   const { queueExtrinsic } = useQueue();
+  const { selectedFeeAsset } = usePayWithAsset();
   const [isSending, setIsSending] = useState(false);
   const [isStarted, setIsStarted] = useState(false);
 
@@ -73,9 +76,10 @@ function TxButton ({ accountId, className = '', extrinsic: propsExtrinsic, icon,
 
       extrinsics.forEach((extrinsic): void => {
         queueExtrinsic({
-          accountId: accountId && accountId.toString(),
+          accountId: accountId?.toString(),
           extrinsic,
           isUnsigned,
+          signerOptions: { assetId: getFeeAssetLocation(api, selectedFeeAsset), feeAsset: selectedFeeAsset },
           txFailedCb: withSpinner ? _onFailed : onFailed,
           txStartCb: _onStart,
           txSuccessCb: withSpinner ? _onSuccess : onSuccess,
@@ -85,7 +89,7 @@ function TxButton ({ accountId, className = '', extrinsic: propsExtrinsic, icon,
 
       onClick && onClick();
     },
-    [_onFailed, _onStart, _onSuccess, accountId, isUnsigned, onClick, onFailed, onSuccess, onUpdate, params, propsExtrinsic, queueExtrinsic, setIsSending, tx, withSpinner, mountedRef]
+    [_onFailed, _onStart, _onSuccess, accountId, api, isUnsigned, mountedRef, onClick, onFailed, onSuccess, onUpdate, params, propsExtrinsic, queueExtrinsic, selectedFeeAsset, tx, withSpinner]
   );
 
   if (onSendRef) {
@@ -107,7 +111,7 @@ function TxButton ({ accountId, className = '', extrinsic: propsExtrinsic, icon,
       )}
       isIcon={isIcon}
       isToplevel={isToplevel}
-      label={label || (isIcon ? '' : t<string>('Submit'))}
+      label={label || (isIcon ? '' : t('Submit'))}
       onClick={_onSend}
       tooltip={tooltip}
       withoutLink={withoutLink}

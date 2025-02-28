@@ -3,11 +3,11 @@
 
 import React, { useCallback, useMemo } from 'react';
 
-import EditButton from './EditButton';
-import InputTags from './InputTags';
-import { styled } from './styled';
-import Tag from './Tag';
-import { useTranslation } from './translate';
+import EditButton from './EditButton.js';
+import InputTags from './InputTags.js';
+import { styled } from './styled.js';
+import Tag from './Tag.js';
+import { useTranslation } from './translate.js';
 
 interface Props {
   children?: React.ReactNode;
@@ -33,7 +33,7 @@ function Tags ({ children, className = '', isEditable, isEditing, onChange, onSa
           label={tag}
         />
       ))
-      : <div>{t<string>('none')}</div>,
+      : <div>{t('none')}</div>,
     [t, value]
   );
 
@@ -48,7 +48,7 @@ function Tags ({ children, className = '', isEditable, isEditing, onChange, onSa
   return (
     <StyledDiv className={`${className} ui--Tags`}>
       {withTitle && (
-        <h5>{t<string>('Tags')}</h5>
+        <h5>{t('Tags')}</h5>
       )}
       {isEditable && isEditing
         ? (

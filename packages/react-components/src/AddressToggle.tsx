@@ -5,10 +5,10 @@ import React, { useCallback, useMemo } from 'react';
 
 import { useApi, useDeriveAccountInfo } from '@polkadot/react-hooks';
 
-import AddressMini from './AddressMini';
-import { styled } from './styled';
-import Toggle from './Toggle';
-import { checkVisibility } from './util';
+import { checkVisibility } from './util/index.js';
+import AddressMini from './AddressMini.js';
+import { styled } from './styled.js';
+import Toggle from './Toggle.js';
 
 interface Props {
   address: string;
@@ -21,12 +21,12 @@ interface Props {
 }
 
 function AddressToggle ({ address, className = '', filter, isHidden, noToggle, onChange, value }: Props): React.ReactElement<Props> | null {
-  const { api } = useApi();
+  const { apiIdentity } = useApi();
   const info = useDeriveAccountInfo(address);
 
   const isVisible = useMemo(
-    () => info ? checkVisibility(api, address, info, filter, false) : true,
-    [api, address, filter, info]
+    () => info ? checkVisibility(apiIdentity, address, info, filter, false) : true,
+    [address, filter, info, apiIdentity]
   );
 
   const _onClick = useCallback(

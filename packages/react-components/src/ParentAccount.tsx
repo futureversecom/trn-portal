@@ -1,11 +1,11 @@
-// Copyright 2017-2025 @polkadot/page-accounts authors & contributors
+// Copyright 2017-2025 @polkadot/react-components authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
 import React from 'react';
 
-import AccountName from './AccountName';
-import Icon from './Icon';
-import { styled } from './styled';
+import AccountName from './AccountName.js';
+import Icon from './Icon.js';
+import { styled } from './styled.js';
 
 interface ParentAccountProps {
   address: string,

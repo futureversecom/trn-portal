@@ -6,12 +6,12 @@ import type { BN } from '@polkadot/util';
 
 import React, { useMemo } from 'react';
 
-import { AddressMini, ExpanderScroll, MarkWarning } from '@polkadot/react-components';
+import { AddressMini, ExpanderScroll, MarkWarning, Spinner } from '@polkadot/react-components';
 import { useApi, useCall } from '@polkadot/react-hooks';
 import { isFunction, isToBn } from '@polkadot/util';
 
-import { useTranslation } from '../../translate';
-import useInactives from '../useInactives';
+import { useTranslation } from '../../translate.js';
+import useInactives from '../useInactives.js';
 
 interface Props {
   nominating?: string[];
@@ -68,14 +68,23 @@ function renderNominators (stashId: string, all: string[] = [], eraExposure?: De
 function ListNominees ({ nominating, stashId }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
   const { api } = useApi();
-  const { nomsActive, nomsChilled, nomsInactive, nomsOver, nomsWaiting } = useInactives(stashId, nominating);
   const sessionInfo = useCall<DeriveSessionIndexes>(api.query.staking && api.derive.session?.indexes);
   const eraExposure = useCall<DeriveEraExposure>(isFunction(api.query.staking.erasStakers) && api.derive.staking.eraExposure, [sessionInfo?.activeEra]);
+  const { nomsActive, nomsChilled, nomsInactive, nomsOver, nomsWaiting } = useInactives(stashId, nominating, eraExposure);
 
   const [renActive, renChilled, renInactive, renOver, renWaiting] = useMemo(
     () => [renderNominators(stashId, nomsActive, eraExposure), renderNominators(stashId, nomsChilled), renderNominators(stashId, nomsInactive), renderNominators(stashId, nomsOver), renderNominators(stashId, nomsWaiting)],
     [eraExposure, nomsActive, nomsChilled, nomsInactive, nomsOver, nomsWaiting, stashId]
   );
+
+  if (!nomsInactive && !nomsWaiting) {
+    return (
+      <Spinner
+        label='Checking validators'
+        variant='app'
+      />
+    );
+  }
 
   return (
     <>
@@ -83,35 +92,35 @@ function ListNominees ({ nominating, stashId }: Props): React.ReactElement<Props
         <ExpanderScroll
           className='stakeOver'
           renderChildren={renOver[1]}
-          summary={t<string>('Oversubscribed nominations ({{count}})', { replace: { count: renOver[0] } })}
+          summary={t('Oversubscribed nominations ({{count}})', { replace: { count: renOver[0] } })}
         />
       )}
       {renActive && (
         <ExpanderScroll
           renderChildren={renActive[1]}
-          summary={t<string>('Active nominations ({{count}})', { replace: { count: renActive[0] } })}
+          summary={t('Active nominations ({{count}})', { replace: { count: renActive[0] } })}
         />
       )}
       {renInactive && (
         <ExpanderScroll
           renderChildren={renInactive[1]}
-          summary={t<string>('Inactive nominations ({{count}})', { replace: { count: renInactive[0] } })}
+          summary={t('Inactive nominations ({{count}})', { replace: { count: renInactive[0] } })}
         />
       )}
       {renChilled && (
         <ExpanderScroll
           renderChildren={renChilled[1]}
-          summary={t<string>('Renomination required ({{count}})', { replace: { count: renChilled[0] } })}
+          summary={t('Renomination required ({{count}})', { replace: { count: renChilled[0] } })}
         />
       )}
       {renWaiting && (
         <ExpanderScroll
           renderChildren={renWaiting[1]}
-          summary={t<string>('Waiting nominations ({{count}})', { replace: { count: renWaiting[0] } })}
+          summary={t('Waiting nominations ({{count}})', { replace: { count: renWaiting[0] } })}
         />
       )}
       {nomsActive && nomsInactive && (nomsActive.length === 0) && (nomsInactive.length !== 0) && (
-        <MarkWarning content={t<string>('This could mean your nomination has not been applied to any validator in the active set by the election algorithm or it has been applied against a validator who is either oversubscribed or chilled.')} />
+        <MarkWarning content={t('This could mean your nomination has not been applied to any validator in the active set by the election algorithm or it has been applied against a validator who is either oversubscribed or chilled.')} />
       )}
     </>
   );

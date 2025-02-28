@@ -3,6 +3,7 @@
 
 import type { HeaderExtended } from '@polkadot/api-derive/types';
 import type { KeyedEvent } from '@polkadot/react-hooks/ctx/types';
+import type { V2Weight } from '@polkadot/react-hooks/useWeight';
 import type { EventRecord, RuntimeVersionPartial, SignedBlock } from '@polkadot/types/interfaces';
 
 import React, { useEffect, useMemo, useState } from 'react';
@@ -11,14 +12,14 @@ import { Link } from 'react-router-dom';
 import { AddressSmall, Columar, LinkExternal, MarkError, Table } from '@polkadot/react-components';
 import { useApi, useIsMountedRef } from '@polkadot/react-hooks';
 import { convertWeight } from '@polkadot/react-hooks/useWeight';
-import { formatNumber } from '@polkadot/util';
+import { formatNumber, isBn } from '@polkadot/util';
 
-import Events from '../Events';
-import { useTranslation } from '../translate';
-import Extrinsics from './Extrinsics';
-import Justifications from './Justifications';
-import Logs from './Logs';
-import Summary from './Summary';
+import Events from '../Events.js';
+import { useTranslation } from '../translate.js';
+import Extrinsics from './Extrinsics.js';
+import Justifications from './Justifications.js';
+import Logs from './Logs.js';
+import Summary from './Summary.js';
 
 interface Props {
   className?: string;
@@ -37,7 +38,7 @@ const EMPTY_HEADER: [React.ReactNode?, string?, number?][] = [['...', 'start', 6
 
 function transformResult ([[runtimeVersion, events], getBlock, getHeader]: [[RuntimeVersionPartial, EventRecord[] | null], SignedBlock, HeaderExtended?]): State {
   return {
-    events: events && events.map((record, index) => ({
+    events: events?.map((record, index) => ({
       indexes: [index],
       key: `${Date.now()}-${index}-${record.hash.toHex()}`,
       record
@@ -59,7 +60,7 @@ function BlockByHash ({ className = '', error, value }: Props): React.ReactEleme
   const [isVersionCurrent, maxBlockWeight] = useMemo(
     () => [
       !!runtimeVersion && api.runtimeVersion.specName.eq(runtimeVersion.specName) && api.runtimeVersion.specVersion.eq(runtimeVersion.specVersion),
-      api.consts.system.blockWeights && api.consts.system.blockWeights.maxBlock && convertWeight(api.consts.system.blockWeights.maxBlock).v1Weight
+      api.consts.system.blockWeights && api.consts.system.blockWeights.maxBlock && convertWeight(api.consts.system.blockWeights.maxBlock).v2Weight
     ],
     [api, runtimeVersion]
   );
@@ -69,7 +70,7 @@ function BlockByHash ({ className = '', error, value }: Props): React.ReactEleme
   }, [error]);
 
   const systemEvents = useMemo(
-    () => events && events.filter(({ record: { phase } }) => !phase.isApplyExtrinsic),
+    () => events?.filter(({ record: { phase } }) => !phase.isApplyExtrinsic),
     [events]
   );
 
@@ -105,10 +106,10 @@ function BlockByHash ({ className = '', error, value }: Props): React.ReactEleme
     () => getHeader
       ? [
         [formatNumber(getHeader.number.unwrap()), 'start --digits', 1],
-        [t<string>('hash'), 'start'],
-        [t<string>('parent'), 'start'],
-        [t<string>('extrinsics'), 'start media--1300'],
-        [t<string>('state'), 'start media--1200'],
+        [t('hash'), 'start'],
+        [t('parent'), 'start'],
+        [t('extrinsics'), 'start media--1300'],
+        [t('state'), 'start media--1200'],
         [runtimeVersion ? `${runtimeVersion.specName.toString()}/${runtimeVersion.specVersion.toString()}` : undefined, 'media--1000']
       ]
       : EMPTY_HEADER,
@@ -123,7 +124,8 @@ function BlockByHash ({ className = '', error, value }: Props): React.ReactEleme
     <div className={className}>
       <Summary
         events={events}
-        maxBlockWeight={maxBlockWeight}
+        maxBlockWeight={(maxBlockWeight as V2Weight).refTime.toBn()}
+        maxProofSize={isBn(maxBlockWeight.proofSize) ? maxBlockWeight.proofSize : (maxBlockWeight as V2Weight).proofSize.toBn()}
         signedBlock={getBlock}
       />
       <Table header={header}>
@@ -131,7 +133,7 @@ function BlockByHash ({ className = '', error, value }: Props): React.ReactEleme
           ? (
             <tr>
               <td colSpan={6}>
-                <MarkError content={t<string>('Unable to retrieve the specified block details. {{error}}', { replace: { error: blkError.message } }) } />
+                <MarkError content={t('Unable to retrieve the specified block details. {{error}}', { replace: { error: blkError.message } }) } />
               </td>
             </tr>
           )
@@ -167,7 +169,7 @@ function BlockByHash ({ className = '', error, value }: Props): React.ReactEleme
           <Extrinsics
             blockNumber={blockNumber}
             events={events}
-            maxBlockWeight={maxBlockWeight}
+            maxBlockWeight={(maxBlockWeight as V2Weight).refTime.toBn()}
             value={getBlock.block.extrinsics}
             withLink={isVersionCurrent}
           />
@@ -177,7 +179,7 @@ function BlockByHash ({ className = '', error, value }: Props): React.ReactEleme
                 error={evtError}
                 eventClassName='explorer--BlockByHash-block'
                 events={systemEvents}
-                label={t<string>('system events')}
+                label={t('system events')}
               />
             </Columar.Column>
             <Columar.Column>

@@ -1,14 +1,14 @@
-// Copyright 2017-2025 @polkadot/react-components authors & contributors
+// Copyright 2017-2025 @polkadot/react-hooks authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
 import type { ApiPromise } from '@polkadot/api';
 import type { ProviderStats } from '@polkadot/rpc-provider/types';
-import type { ApiStats } from './types';
+import type { ApiStats } from './types.js';
 
 import React, { useCallback } from 'react';
 
-import { useApi } from '../useApi';
-import { useTimer } from '../useTimer';
+import { useApi } from '../useApi.js';
+import { useTimer } from '../useTimer.js';
 
 interface Props {
   children?: React.ReactNode;
@@ -35,7 +35,7 @@ function getStats (...apis: ApiPromise[]): { stats: ProviderStats, when: number 
     }
   };
 
-  for (let i = 0; i < apis.length; i++) {
+  for (let i = 0, count = apis.length; i < count; i++) {
     const s = apis[i].stats;
 
     if (s) {

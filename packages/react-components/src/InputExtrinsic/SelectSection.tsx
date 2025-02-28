@@ -2,11 +2,12 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import type { SubmittableExtrinsicFunction } from '@polkadot/api/types';
-import type { DropdownOptions } from '../util/types';
+import type { DropdownOptions } from '../util/types.js';
 
 import React from 'react';
 
-import Dropdown from '../Dropdown';
+import Dropdown from '../Dropdown.js';
+import { filterDropdownItems } from '../util/index.js';
 
 interface Props {
   className?: string;
@@ -26,6 +27,7 @@ function SelectSection ({ className = '', defaultValue, isDisabled, isError, onC
       isDisabled={isDisabled}
       isError={isError}
       onChange={onChange}
+      onSearch={filterDropdownItems}
       options={options}
       value={value.section}
       withLabel={false}

@@ -1,7 +1,7 @@
 // Copyright 2017-2025 @polkadot/react-params authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { Props } from '../types';
+import type { Props } from '../types.js';
 
 import React, { useMemo } from 'react';
 
@@ -9,8 +9,8 @@ import { getTypeDef } from '@polkadot/types';
 import { encodeTypeDef } from '@polkadot/types/create';
 import { isUndefined } from '@polkadot/util';
 
-import findComponent from './findComponent';
-import Static from './Static';
+import findComponent from './findComponent.js';
+import Static from './Static.js';
 
 function formatJSON (input: string): string {
   return input
@@ -22,7 +22,7 @@ function formatJSON (input: string): string {
     .replace(/^{_alias: {.*}, /, '{');
 }
 
-function Param ({ className = '', defaultValue, isDisabled, isError, isOptional, name, onChange, onEnter, onEscape, overrides, registry, type }: Props): React.ReactElement<Props> | null {
+function Param ({ className = '', defaultValue, isDisabled, isError, isOptional, name, onChange, onEnter, onEscape, overrides, registry, type, withLength = true }: Props): React.ReactElement<Props> | null {
   const Component = useMemo(
     () => findComponent(registry, type, overrides),
     [registry, type, overrides]
@@ -71,6 +71,7 @@ function Param ({ className = '', defaultValue, isDisabled, isError, isOptional,
         overrides={overrides}
         registry={registry}
         type={type}
+        withLength={withLength}
       />
     );
 }

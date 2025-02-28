@@ -11,7 +11,7 @@ import React, { useMemo } from 'react';
 import { Columar, Inspect as DecodedInspect, Output, styled } from '@polkadot/react-components';
 import { u8aToHex } from '@polkadot/util';
 
-import { useTranslation } from './translate';
+import { useTranslation } from './translate.js';
 
 interface Props {
   className?: string;
@@ -77,7 +77,7 @@ function Decoded ({ className, extrinsic, isCall, payload, withData = true, with
           <Output
             isDisabled
             isTrimmed
-            label={t<string>('encoded call data')}
+            label={t('encoded call data')}
             value={hex}
             withCopy
           />
@@ -85,7 +85,7 @@ function Decoded ({ className, extrinsic, isCall, payload, withData = true, with
         {withHash && (
           <Output
             isDisabled
-            label={t<string>('encoded call hash')}
+            label={t('encoded call hash')}
             value={hash}
             withCopy
           />
@@ -95,7 +95,7 @@ function Decoded ({ className, extrinsic, isCall, payload, withData = true, with
         <DecodedInspect
           hex={hex}
           inspect={inspect}
-          label={t<string>('encoding details')}
+          label={t('encoding details')}
         />
       </Columar.Column>
     </StyledColumar>
