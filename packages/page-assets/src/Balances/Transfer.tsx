@@ -92,7 +92,7 @@ function Transfer ({ accountId, assetId, className, minBalance, siFormat: [siDec
                 accountId={accountId}
                 icon='paper-plane'
                 isDisabled={!recipientId || !amount}
-                label={t<string>('Send')}
+                label={t('Send')}
                 onStart={toggleOpen}
                 params={[recipientId, amount]}
                 tx={

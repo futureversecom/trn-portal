@@ -19,7 +19,7 @@ interface Props {
   targets: SortedTargets;
 }
 
-function Summary ({ className = '', stakingOverview, targets: { counterForNominators, inflation: { idealStake, inflation, stakedFraction }, nominators, waitingIds } }: Props): React.ReactElement<Props> {
+function Summary ({ className = '', stakingOverview, targets: { counterForNominators, nominators, waitingIds } }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
 
   // const percent = <span className='percent'>%</span>;

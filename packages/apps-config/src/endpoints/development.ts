@@ -4,7 +4,7 @@
 import type { TFunction } from '../types.js';
 import type { LinkOption } from './types.js';
 
-import { chainsRootnetPNG } from '../ui/logos/chains';
+import { chainsRootnetPNG } from '@polkadot/apps-config/ui/logos/chains';
 
 export const CUSTOM_ENDPOINT_KEY = 'polkadot-app-custom-endpoints';
 

@@ -91574,6 +91574,11 @@ export const typesBundle = {
             },
             "ExtrinsicSignature": "EthereumSignature",
             "EthyId": "[u8; 32]",
+            "EthLog1": {
+              "address": "EthAddress",
+              "topics": "Vec<H256>",
+              "data": "Bytes"
+            },
             "EthWalletCall": {
               "nonce": "u32"
             },
@@ -91590,7 +91595,7 @@ export const typesBundle = {
                 }
               }
             },
-            'EthEventProofResponse': {
+            "EthEventProofResponse": {
               "event_id": "EventProofId",
               "signatures": "Vec<Bytes>",
               "validators": "Vec<AccountId20>",
@@ -91657,7 +91662,7 @@ export const typesBundle = {
             "params": [
               {
                 "name": "amountOut",
-                "type": "Balance"
+                "type": "balance"
               },
               {
                 "name": "path",
@@ -91743,8 +91748,14 @@ export const typesBundle = {
                 "name": "who",
                 "type": "AccountId"
               },
-              { "name": "cursor", "type": "SerialNumber" },
-              { "name": "limit", "type": "u16" }
+              {
+                "name": "cursor",
+                "type": "SerialNumber"
+              },
+              {
+                "name": "limit",
+                "type": "u16"
+              }
             ],
             "type": "Json"
           },

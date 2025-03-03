@@ -15,7 +15,7 @@ import BlockHeaders from './BlockHeaders.js';
 import Events from './Events.js';
 import Query from './Query.js';
 import Summary from './Summary.js';
-import { useTranslation } from './translate';
+import { useTranslation } from './translate.js';
 
 interface Props {
   eventCount: number;

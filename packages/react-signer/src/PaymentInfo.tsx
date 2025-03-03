@@ -9,7 +9,7 @@ import type { RuntimeDispatchInfo } from '@polkadot/types/interfaces';
 import React, { useEffect, useState } from 'react';
 import { Trans } from 'react-i18next';
 
-import { useFeeAssetBalance } from '@polkadot/custom/hooks/useFeeAssetBalance';
+// import { useFeeAssetBalance } from '@polkadot/custom/hooks/useFeeAssetBalance';
 import { Expander, MarkWarning } from '@polkadot/react-components';
 import { useApi, useCall, useIsMountedRef } from '@polkadot/react-hooks';
 import { BN, formatBalance, nextTick } from '@polkadot/util';

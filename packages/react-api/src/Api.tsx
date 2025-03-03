@@ -10,7 +10,7 @@ import type { RegistryTypes } from '@polkadot/types/types';
 import type { KeyringStore } from '@polkadot/ui-keyring/types';
 import type { ApiProps, ApiState, InjectedAccountExt } from './types.js';
 
-import { ChopsticksProvider, setStorage } from '@acala-network/chopsticks-core';
+// import { ChopsticksProvider, setStorage } from '@acala-network/chopsticks-core';
 import * as Sc from '@substrate/connect';
 import { getApiOptions } from '@therootnetwork/api';
 import React, { useEffect, useMemo, useState } from 'react';
@@ -231,7 +231,7 @@ async function getLightProvider (chain: string): Promise<ScProvider> {
 /**
  * @internal
  */
-async function createApi (apiUrl: string, signer: ApiSigner, isLocalFork: boolean, onError: (error: unknown) => void): Promise<CreateApiReturn> {
+async function createApi (apiUrl: string, signer: ApiSigner, onError: (error: unknown) => void): Promise<CreateApiReturn> {
   const isLight = apiUrl.startsWith('light://');
   const typesRpc = getApiOptions();
   const types = getDevTypes();
@@ -288,38 +288,38 @@ export function ApiCtxRoot ({ apiUrl, children, isElectron, store: keyringStore 
   const [extensions, setExtensions] = useState<InjectedExtension[] | undefined>();
   const [isLocalFork] = useState(store.get('localFork') === apiUrl);
   const apiEndpoint = useEndpoint(apiUrl);
-  const peopleEndpoint = usePeopleEndpoint(apiEndpoint?.relayName || apiEndpoint?.info);
-  const coreTimeEndpoint = useCoretimeEndpoint(apiEndpoint?.relayName || apiEndpoint?.info);
+  // const peopleEndpoint = usePeopleEndpoint(apiEndpoint?.relayName || apiEndpoint?.info);
+  // const coreTimeEndpoint = useCoretimeEndpoint(apiEndpoint?.relayName || apiEndpoint?.info);
   const relayUrls = useMemo(
     () => (apiEndpoint?.valueRelay && isNumber(apiEndpoint.paraId) && (apiEndpoint.paraId < 2000))
       ? apiEndpoint.valueRelay
       : null,
     [apiEndpoint]
   );
-  const peopleUrls = useMemo(
-    () => (peopleEndpoint?.isPeople && !apiEndpoint?.isPeople && peopleEndpoint?.providers && apiEndpoint?.isPeopleForIdentity)
-      ? peopleEndpoint.providers
-      : null,
-    [apiEndpoint, peopleEndpoint]
-  );
-  const coretimeUrls = useMemo(
-    () => (coreTimeEndpoint?.providers)
-      ? coreTimeEndpoint.providers
-      : null,
-    [coreTimeEndpoint]
-  );
+  // const peopleUrls = useMemo(
+  //   () => (peopleEndpoint?.isPeople && !apiEndpoint?.isPeople && peopleEndpoint?.providers && apiEndpoint?.isPeopleForIdentity)
+  //     ? peopleEndpoint.providers
+  //     : null,
+  //   [apiEndpoint, peopleEndpoint]
+  // );
+  // const coretimeUrls = useMemo(
+  //   () => (coreTimeEndpoint?.providers)
+  //     ? coreTimeEndpoint.providers
+  //     : null,
+  //   [coreTimeEndpoint]
+  // );
   const apiRelay = useApiUrl(relayUrls);
-  const apiCoretime = useApiUrl(coretimeUrls);
-  const apiSystemPeople = useApiUrl(peopleUrls);
+  // const apiCoretime = useApiUrl(coretimeUrls);
+  // const apiSystemPeople = useApiUrl(peopleUrls);
   const createLink = useMemo(
     () => makeCreateLink(apiUrl, isElectron),
     [apiUrl, isElectron]
   );
-  const enableIdentity = apiEndpoint?.isPeople ||
-    // Ensure that parachains that don't have isPeopleForIdentity set, can access there own identity pallet.
-    (isNumber(apiEndpoint?.paraId) && (apiEndpoint?.paraId >= 2000) && !apiEndpoint?.isPeopleForIdentity) ||
-    // Ensure that when isPeopleForIdentity is set to false that it enables the identity pallet access.
-    (typeof apiEndpoint?.isPeopleForIdentity === 'boolean' && !apiEndpoint?.isPeopleForIdentity);
+  // const enableIdentity = apiEndpoint?.isPeople ||
+  //   // Ensure that parachains that don't have isPeopleForIdentity set, can access there own identity pallet.
+  //   (isNumber(apiEndpoint?.paraId) && (apiEndpoint?.paraId >= 2000) && !apiEndpoint?.isPeopleForIdentity) ||
+  //   // Ensure that when isPeopleForIdentity is set to false that it enables the identity pallet access.
+  //   (typeof apiEndpoint?.isPeopleForIdentity === 'boolean' && !apiEndpoint?.isPeopleForIdentity);
   const value = useMemo<ApiProps>(
     () => objectSpread({}, state, { api: statics.api, apiEndpoint, apiError, apiRelay, apiUrl, createLink, extensions, isApiConnected, isApiInitialized, isElectron, isWaitingInjected: !extensions }),
     [apiError, createLink, extensions, isApiConnected, isApiInitialized, isElectron, state, apiEndpoint, apiRelay, apiUrl]
@@ -333,7 +333,7 @@ export function ApiCtxRoot ({ apiUrl, children, isElectron, store: keyringStore 
       setApiError((error as Error).message);
     };
 
-    createApi(apiUrl, new ApiSigner(statics.registry, queuePayload, queueSetTxStatus), isLocalFork, onError)
+    createApi(apiUrl, new ApiSigner(statics.registry, queuePayload, queueSetTxStatus), onError)
       .then(({ fork, types }): void => {
         statics.api.on('connected', () => setIsApiConnected(true));
         statics.api.on('disconnected', () => setIsApiConnected(false));

@@ -182,6 +182,7 @@ export default function withCall<P extends ApiProps> (endpoint: string, { at, at
         ) || [{}, expanded[0][1], expanded[0][2], expanded[0][3]];
 
         if (section === 'democracy') {
+          // @ts-ignore
           return;
         }
 

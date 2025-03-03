@@ -12,7 +12,7 @@ import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { useApi } from '@polkadot/react-hooks/useApi';
 import { keyring } from '@polkadot/ui-keyring';
 
-import { useLocalStorage } from '../hooks/useLocalStorage';
+import { useLocalStorage } from '@polkadot/custom/hooks/useLocalStorage';
 
 export interface EthereumWallet {
   hasEthereumWallet: boolean;
@@ -59,7 +59,7 @@ export function EthereumWalletCtxRoot ({ children }: Props): React.ReactElement<
     }
 
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
-    connectedAccounts.forEach(async (account) => {
+    connectedAccounts.forEach(async (account: string) => {
       await addAccount(api, account);
     });
   }, [connectedAccounts, isApiReady, api]);
