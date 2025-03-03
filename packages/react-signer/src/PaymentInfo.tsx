@@ -6,10 +6,10 @@ import type { DeriveBalancesAll } from '@polkadot/api-derive/types';
 import type { QueueTx } from '@polkadot/react-components/Status/types';
 import type { RuntimeDispatchInfo } from '@polkadot/types/interfaces';
 
-import { useFeeAssetBalance } from '@trnsp/custom/hooks/useFeeAssetBalance';
 import React, { useEffect, useState } from 'react';
 import { Trans } from 'react-i18next';
 
+import { useFeeAssetBalance } from '@polkadot/custom/hooks/useFeeAssetBalance';
 import { Expander, MarkWarning } from '@polkadot/react-components';
 import { useApi, useCall, useIsMountedRef } from '@polkadot/react-hooks';
 import { BN, formatBalance, nextTick } from '@polkadot/util';

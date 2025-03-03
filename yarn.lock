@@ -2506,6 +2506,7 @@ __metadata:
     "@acala-network/chopsticks-core": "npm:^1.0.1"
     "@polkadot/apps-config": "npm:^0.150.1"
     "@polkadot/apps-routing": "npm:^0.150.1"
+    "@polkadot/custom": "npm:*"
     "@polkadot/dev": "npm:^0.83.2"
     "@polkadot/react-api": "npm:^0.150.1"
     "@polkadot/react-components": "npm:^0.150.1"
@@ -2513,7 +2514,6 @@ __metadata:
     "@polkadot/react-params": "npm:^0.150.1"
     "@polkadot/react-query": "npm:^0.150.1"
     "@polkadot/react-signer": "npm:^0.150.1"
-    "@trnsp/custom": "npm:*"
     "@types/punycode": "npm:^2.1.3"
     assert: "npm:^2.1.0"
     buffer: "npm:^6.0.3"
@@ -2538,6 +2538,15 @@ __metadata:
   peerDependencies:
     typescript: "*"
     webpack: "*"
+  languageName: unknown
+  linkType: soft
+
+"@polkadot/custom@npm:*, @polkadot/custom@workspace:packages/trnsp-custom":
+  version: 0.0.0-use.local
+  resolution: "@polkadot/custom@workspace:packages/trnsp-custom"
+  dependencies:
+    "@ethersproject/providers": "npm:^5.7.2"
+    ethers: "npm:^6.0.8"
   languageName: unknown
   linkType: soft
 
@@ -3999,15 +4008,6 @@ __metadata:
   checksum: 10/ad87447820dd3f24825d2d947ebc03072b20a42bfc96cbafec16bff8bbda6c1a81fcb0be56d5b21968560c5359a0af4038a68ba150c3e1694fe4c109a063bed8
   languageName: node
   linkType: hard
-
-"@trnsp/custom@npm:*, @trnsp/custom@workspace:packages/trnsp-custom":
-  version: 0.0.0-use.local
-  resolution: "@trnsp/custom@workspace:packages/trnsp-custom"
-  dependencies:
-    "@ethersproject/providers": "npm:^5.7.2"
-    ethers: "npm:^6.0.8"
-  languageName: unknown
-  linkType: soft
 
 "@tsconfig/strictest@npm:^2.0.2":
   version: 2.0.2

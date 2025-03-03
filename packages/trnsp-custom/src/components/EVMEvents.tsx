@@ -1,13 +1,14 @@
 // Copyright 2017-2025 @polkadot/app-explorer authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
+import type { BlockEVMEvent } from '../types';
+
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
 import { MarkError, Table } from '@polkadot/react-components';
 
-import { BlockEVMEvent } from '../types';
 import EVMEvent from './EVMEvent';
 
 interface Props {
@@ -64,7 +65,7 @@ function EVMEvents ({ className = '', emptyLabel, error, eventClassName, events,
             <td><MarkError content={t<string>('Unable to decode the block events. {{error}}', { replace: { error: error.message } })} /></td>
           </tr>
         )
-        : events && events.map((e) => renderEvent(eventClassName, e))
+        : events?.map((e) => renderEvent(eventClassName, e))
       }
     </Table>
   );

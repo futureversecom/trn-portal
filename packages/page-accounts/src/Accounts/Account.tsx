@@ -15,10 +15,10 @@ import type { ProxyDefinition, RecoveryConfig } from '@polkadot/types/interfaces
 import type { KeyringAddress, KeyringJson$Meta } from '@polkadot/ui-keyring/types';
 import type { AccountBalance, Delegation } from '../types.js';
 
-import { useEthereumWallet } from '@trnsp/custom/providers/EthereumWallet';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import useAccountLocks from '@polkadot/app-referenda/useAccountLocks';
+import { useEthereumWallet } from '@polkadot/custom/providers/EthereumWallet';
 import { AddressInfo, AddressSmall, Badge, Button, ChainLock, Columar, CryptoType, Forget, LinkExternal, Menu, Popup, styled, Table, Tags, TransferModal } from '@polkadot/react-components';
 import { useAccountInfo, useApi, useBalancesAll, useBestNumber, useCall, useLedger, useQueue, useStakingInfo, useToggle } from '@polkadot/react-hooks';
 import { keyring } from '@polkadot/ui-keyring';
@@ -469,7 +469,7 @@ function Account ({ account: { address, meta }, className = '', delegation, filt
       />
     ])
   ].filter((i) => i),
-  [_clearDemocracyLocks, _clearReferendaLocks, _showOnHardware, _vestingVest, api, apiIdentity?.tx.identity, enableIdentity, delegation, democracyUnlockTx, genesisHash, identity, isDevelopment, isDevelopmentApiProps, isEthereumApiProps, isEditable, isEthereum, isExternal, isHardware, isInjected, isMultisig, multiInfos, onSetGenesisHash, proxy, referendaUnlockTx, recoveryInfo, t, toggleBackup, toggleDelegate, toggleDerive, toggleForget, toggleIdentityMain, toggleIdentitySub, toggleMultisig, togglePassword, toggleProxyOverview, toggleRecoverAccount, toggleRecoverSetup, toggleUndelegate, vestingVestTx]);
+  [_clearDemocracyLocks, _clearReferendaLocks, _showOnHardware, _vestingVest, api, apiIdentity?.tx.identity, enableIdentity, delegation, democracyUnlockTx, genesisHash, identity, isDevelopment, isDevelopmentApiProps, isEthereumApiProps, isEditable, isEthereum, isExternal, isHardware, isInjected, isMultisig, multiInfos, onSetGenesisHash, referendaUnlockTx, recoveryInfo, t, toggleBackup, toggleDelegate, toggleDerive, toggleForget, toggleIdentityMain, toggleIdentitySub, toggleMultisig, togglePassword, toggleRecoverAccount, toggleRecoverSetup, toggleUndelegate, vestingVestTx]);
 
   if (!isVisible) {
     return null;

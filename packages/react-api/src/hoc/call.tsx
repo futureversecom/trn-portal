@@ -181,7 +181,7 @@ export default function withCall<P extends ApiProps> (endpoint: string, { at, at
           !!apiSection
         ) || [{}, expanded[0][1], expanded[0][2], expanded[0][3]];
 
-        if (section === "democracy") {
+        if (section === 'democracy') {
           return;
         }
 

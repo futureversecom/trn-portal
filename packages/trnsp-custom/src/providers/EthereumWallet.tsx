@@ -1,14 +1,16 @@
 /* eslint-disable header/header */
 
-import { ExternalProvider } from '@ethersproject/providers';
+import type { ExternalProvider } from '@ethersproject/providers';
+import type { ApiPromise } from '@polkadot/api';
+import type { Option } from '@polkadot/types';
+import type { Codec } from '@polkadot/types/types';
+import type { Keyring } from '@polkadot/ui-keyring';
+
 import { ethers } from 'ethers';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 
-import { ApiPromise } from '@polkadot/api';
 import { useApi } from '@polkadot/react-hooks/useApi';
-import { Option } from '@polkadot/types';
-import { Codec } from '@polkadot/types/types';
-import { Keyring, keyring } from '@polkadot/ui-keyring';
+import { keyring } from '@polkadot/ui-keyring';
 
 import { useLocalStorage } from '../hooks/useLocalStorage';
 

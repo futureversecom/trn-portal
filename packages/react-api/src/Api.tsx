@@ -3,10 +3,10 @@
 
 import type { Blockchain } from '@acala-network/chopsticks-core';
 // import '@therootnetwork/api-types';
-
 import type { LinkOption } from '@polkadot/apps-config/endpoints/types';
 import type { InjectedExtension } from '@polkadot/extension-inject/types';
 import type { ChainProperties, ChainType } from '@polkadot/types/interfaces';
+import type { RegistryTypes } from '@polkadot/types/types';
 import type { KeyringStore } from '@polkadot/ui-keyring/types';
 import type { ApiProps, ApiState, InjectedAccountExt } from './types.js';
 
@@ -24,7 +24,6 @@ import { TokenUnit } from '@polkadot/react-components/InputConsts/units';
 import { useApiUrl, useCoretimeEndpoint, useEndpoint, usePeopleEndpoint, useQueue } from '@polkadot/react-hooks';
 import { ApiCtx } from '@polkadot/react-hooks/ctx/Api';
 import { ApiSigner } from '@polkadot/react-signer/signers';
-import { RegistryTypes } from '@polkadot/types/types';
 import { keyring } from '@polkadot/ui-keyring';
 import { settings } from '@polkadot/ui-settings';
 import { formatBalance, isNumber, isTestChain, objectSpread, stringify } from '@polkadot/util';
@@ -236,7 +235,7 @@ async function createApi (apiUrl: string, signer: ApiSigner, isLocalFork: boolea
   const isLight = apiUrl.startsWith('light://');
   const typesRpc = getApiOptions();
   const types = getDevTypes();
-  let chopsticksFork: Blockchain | null = null;
+  const chopsticksFork: Blockchain | null = null;
 
   try {
     const provider = isLight

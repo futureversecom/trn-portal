@@ -19,12 +19,14 @@ import type { AddressFlags, AddressProxy, QrState } from './types.js';
 
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
+import { useEthereumWallet } from '@polkadot/custom/providers/EthereumWallet';
+import { signWithEthereumWallet } from '@polkadot/custom/utils/signWithEthereumWallet';
 import { web3FromSource } from '@polkadot/extension-dapp';
 import { Button, ErrorBoundary, Modal, Output, styled, Toggle } from '@polkadot/react-components';
 import { useApi, useLedger, useQueue, useToggle } from '@polkadot/react-hooks';
 import { keyring } from '@polkadot/ui-keyring';
 import { settings } from '@polkadot/ui-settings';
-import {assert, nextTick, u8aToHex} from '@polkadot/util';
+import { assert, nextTick, u8aToHex } from '@polkadot/util';
 import { addressEq } from '@polkadot/util-crypto';
 
 import { AccountSigner, LedgerSigner, QrSigner } from './signers/index.js';
@@ -35,8 +37,6 @@ import Tip from './Tip.js';
 import Transaction from './Transaction.js';
 import { useTranslation } from './translate.js';
 import { cacheUnlock, extractExternal, handleTxResults } from './util.js';
-import { signWithEthereumWallet } from "@trnsp/custom/utils/signWithEthereumWallet";
-import { useEthereumWallet } from "@trnsp/custom/providers/EthereumWallet";
 
 interface Props {
   className?: string;
@@ -341,6 +341,46 @@ function TxSigned ({ className, currentItem, isQueueSubmit, queueSize, requestAd
     async (queueSetTxStatus: QueueTxMessageSetStatus, currentItem: QueueTx, senderInfo: AddressProxy): Promise<void> => {
       const addressToCheckInEthWallet = senderInfo.signAddress;
       const canSignExternally = !!addressToCheckInEthWallet && connectedAccounts.indexOf(addressToCheckInEthWallet) >= 0;
+
+      async function signViaEthWallet (senderInfo: AddressProxy, extrinsic: SubmittableExtrinsic<'promise'>, currentItem: QueueTx) {
+        const errorHandler = (error: Error): void => {
+          console.error(error);
+
+          setBusy(false);
+          setError(error);
+        };
+
+        const externalErrorHandler = (message: string): void => {
+          setBusy(false);
+          setPasswordError(message);
+        };
+
+        try {
+          const signedExtrinsic = await signWithEthereumWallet(api, senderInfo.signAddress!, extrinsic, { tip });
+          const signature = u8aToHex(signedExtrinsic.signature);
+
+          queueSetTxStatus(currentItem.id, 'sending');
+
+          if (signedExtrinsic.send) {
+            currentItem.txStartCb && currentItem.txStartCb();
+            const unsubscribe: () => void = await signedExtrinsic.send(handleTxResults('signAndSend', queueSetTxStatus, currentItem, () => unsubscribe()));
+          } else {
+            const { id, signerCb = NOOP } = currentItem;
+
+            signerCb(id, { id, signature });
+          }
+        } catch (error) {
+          queueSetTxStatus(currentItem.id, 'error', null, error as Error);
+          const { code, message } = error as {code: number, message: string};
+
+          if (code) {
+            return externalErrorHandler(`${code}: ${message}`);
+          }
+
+          errorHandler(error as Error);
+        }
+      }
+
       if (senderInfo.signAddress) {
         const [tx, [status, pairOrAddress, options, isMockSign]] = await Promise.all([
           wrapTx(api, currentItem, senderInfo),
@@ -348,6 +388,7 @@ function TxSigned ({ className, currentItem, isQueueSubmit, queueSize, requestAd
         ]);
 
         queueSetTxStatus(currentItem.id, status);
+
         if (canSignExternally) {
           await signViaEthWallet(senderInfo, tx, currentItem);
         } else {
@@ -355,35 +396,8 @@ function TxSigned ({ className, currentItem, isQueueSubmit, queueSize, requestAd
         }
       }
     },
-    [api, getLedger, tip]
+    [api, connectedAccounts, getLedger, tip]
   );
-
-  async function signViaEthWallet(senderInfo: AddressProxy, extrinsic: SubmittableExtrinsic<'promise'>, currentItem: QueueTx) {
-    try {
-      const signedExtrinsic = await signWithEthereumWallet(api, senderInfo.signAddress as string, extrinsic, { tip });
-      const signature = u8aToHex(signedExtrinsic.signature);
-
-      queueSetTxStatus(currentItem.id, 'sending');
-
-      if (signedExtrinsic.send) {
-        currentItem.txStartCb && currentItem.txStartCb();
-        const unsubscribe: () => void = await signedExtrinsic.send(handleTxResults('signAndSend', queueSetTxStatus, currentItem, () => unsubscribe()));
-      } else {
-        const { id, signerCb = NOOP } = currentItem;
-
-        signerCb(id, { id, signature });
-      }
-    } catch (error) {
-      queueSetTxStatus(currentItem.id, 'error', null, error as Error);
-      const { code, message } = error as {code: number, message: string};
-
-      if (code) {
-        return externalErrorHandler(`${code}: ${message}`);
-      }
-
-      errorHandler(error as Error);
-    }
-  }
 
   const _onSign = useCallback(
     async (queueSetTxStatus: QueueTxMessageSetStatus, currentItem: QueueTx, senderInfo: AddressProxy): Promise<void> => {

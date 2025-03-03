@@ -4,10 +4,10 @@
 import type { TabItem } from '@polkadot/react-components/types';
 import type { KeyedEvent } from '@polkadot/react-hooks/ctx/types';
 
-import { useBlockEVMEvents } from '@trnsp/custom/hooks/useBlockEVMEvents';
 import React, { useMemo, useRef } from 'react';
 import { Route, Routes } from 'react-router';
 
+import { useBlockEVMEvents } from '@polkadot/custom/hooks/useBlockEVMEvents';
 import { Tabs } from '@polkadot/react-components';
 import { useApi, useBlockAuthors, useBlockEvents } from '@polkadot/react-hooks';
 import { isFunction } from '@polkadot/util';

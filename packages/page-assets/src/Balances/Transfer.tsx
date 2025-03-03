@@ -87,30 +87,34 @@ function Transfer ({ accountId, assetId, className, minBalance, siFormat: [siDec
             </Modal.Columns>
           </Modal.Content>
           <Modal.Actions>
-            { assetId.toString() === '1' && <TxButton
-              accountId={accountId}
-              icon='paper-plane'
-              isDisabled={!recipientId || !amount}
-              label={t<string>('Send')}
-              onStart={toggleOpen}
-              params={[recipientId, amount]}
-              tx={
-                isProtected
-                  ? api.tx.balances.transferKeepAlive
-                  : api.tx.balances.transfer}
-            />}
-            { assetId.toString() !== '1' && <TxButton
-              accountId={accountId}
-              icon='paper-plane'
-              isDisabled={!recipientId || !amount}
-              label={t('Send')}
-              onStart={toggleOpen}
-              params={[assetId, recipientId, amount]}
-              tx={
-                isProtected
-                  ? api.tx.assets.transferKeepAlive
-                  : api.tx.assets.transfer}
-            />}
+            { assetId.toString() === '1' &&
+              <TxButton
+                accountId={accountId}
+                icon='paper-plane'
+                isDisabled={!recipientId || !amount}
+                label={t<string>('Send')}
+                onStart={toggleOpen}
+                params={[recipientId, amount]}
+                tx={
+                  isProtected
+                    ? api.tx.balances.transferKeepAlive
+                    : api.tx.balances.transfer}
+              />
+            }
+            { assetId.toString() !== '1' &&
+              <TxButton
+                accountId={accountId}
+                icon='paper-plane'
+                isDisabled={!recipientId || !amount}
+                label={t('Send')}
+                onStart={toggleOpen}
+                params={[assetId, recipientId, amount]}
+                tx={
+                  isProtected
+                    ? api.tx.assets.transferKeepAlive
+                    : api.tx.assets.transfer}
+              />
+            }
           </Modal.Actions>
         </Modal>
       )}

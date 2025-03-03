@@ -1,10 +1,10 @@
 /* eslint-disable header/header */
 
+import type { ApiPromise } from '@polkadot/api';
 import type { SignerOptions } from '@polkadot/api/submittable/types';
+import type { SubmittableExtrinsic } from '@polkadot/api/types';
+import type { GenericSignerPayload } from '@polkadot/types';
 
-import { ApiPromise } from '@polkadot/api';
-import { SubmittableExtrinsic } from '@polkadot/api/types';
-import { GenericSignerPayload } from '@polkadot/types';
 import { blake2AsHex } from '@polkadot/util-crypto';
 
 export async function signWithEthereumWallet (api: ApiPromise, address: string, extrinsic: SubmittableExtrinsic<'promise'>, options?: Partial<SignerOptions>): Promise<SubmittableExtrinsic<'promise'>> {

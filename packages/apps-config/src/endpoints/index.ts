@@ -4,7 +4,7 @@
 import type { TFunction, TOptions } from '../types.js';
 import type { LinkOption } from './types.js';
 
-import { createCustom, createDev, createOwn } from './development.js';
+import { createDev, createOwn } from './development.js';
 import { prodChains } from './production.js';
 import { testChains } from './testing.js';
 import { expandEndpoints } from './util.js';

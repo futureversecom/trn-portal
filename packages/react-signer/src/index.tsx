@@ -6,10 +6,10 @@ import type { QueueTx, QueueTxMessageSetStatus, QueueTxResult } from '@polkadot/
 import type { BareProps as Props } from '@polkadot/react-components/types';
 import type { DefinitionRpcExt } from '@polkadot/types/types';
 
-import TxExternalSigned from '@trnsp/custom/components/TxExternalSigned';
-import { useEthereumWallet } from '@trnsp/custom/providers/EthereumWallet';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
+import TxExternalSigned from '@polkadot/custom/components/TxExternalSigned';
+import { useEthereumWallet } from '@polkadot/custom/providers/EthereumWallet';
 import { Modal, styled } from '@polkadot/react-components';
 import { useApi, useQueue } from '@polkadot/react-hooks';
 import { assert, isFunction, loggerFormat } from '@polkadot/util';

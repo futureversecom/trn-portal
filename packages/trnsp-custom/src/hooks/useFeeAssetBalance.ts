@@ -2,12 +2,12 @@
 
 import type { Option } from '@polkadot/types';
 import type { PalletAssetsAssetAccount } from '@polkadot/types/lookup';
+import type { BN } from '@polkadot/util';
 
 import { ethers } from 'ethers';
 import { useCallback, useEffect, useState } from 'react';
 
 import { useApi, useCall } from '@polkadot/react-hooks';
-import { BN } from '@polkadot/util';
 
 export interface FeeAsset {
   assetId: number;

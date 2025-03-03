@@ -1,19 +1,17 @@
 // Copyright 2017-2025 @polkadot/react-query authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { Vec } from '@polkadot/types';
+import type { ApiPromise } from '@polkadot/api';
+import type { Option, Vec } from '@polkadot/types';
 import type { EthTransactionStatus, H256 } from '@polkadot/types/interfaces';
+import type { BlockHash } from '@polkadot/types/interfaces/chain';
+import type { EthTransaction } from '@polkadot/types/interfaces/eth';
+import type { u32 } from '@polkadot/types-codec';
+import type { BlockEVMEvent } from '../types';
 
 import React, { useEffect, useState } from 'react';
 
-import { ApiPromise } from '@polkadot/api';
 import { useApi, useCall } from '@polkadot/react-hooks';
-import { Option } from '@polkadot/types';
-import { BlockHash } from '@polkadot/types/interfaces/chain';
-import { EthTransaction } from '@polkadot/types/interfaces/eth';
-import { u32 } from '@polkadot/types-codec';
-
-import { BlockEVMEvent } from '../types';
 
 interface Props {
   children: React.ReactNode;
@@ -58,7 +56,7 @@ export function BlockEVMEventsCtxRoot ({ children }: Props): React.ReactElement<
       ? [...rawEvents, ...evmEvents.filter((e) => !transactionHashes.has(e?.transactionHash))]
       : evmEvents) as unknown as Vec<EthTransactionStatus>;
 
-    if (evmRecords && evmRecords.length) {
+    if (evmRecords?.length) {
       evmDetails(evmRecords, api).then((evmRecordsUpdated) => setEVMEvents(evmRecordsUpdated)).catch(console.error);
     }
   }, [api, evmEvents, rawEvents, transactionHashes]);

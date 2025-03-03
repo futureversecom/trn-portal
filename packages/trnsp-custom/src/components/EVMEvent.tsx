@@ -1,11 +1,12 @@
 // Copyright 2017-2025 @polkadot/app-explorer authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
+import type { BlockEVMEvent } from '../types';
+
 import React from 'react';
 
 import { Expander, styled } from '@polkadot/react-components';
 
-import { BlockEVMEvent } from '../types';
 import EVMEventDisplay from './EVMEventDisplay';
 
 interface Props {
