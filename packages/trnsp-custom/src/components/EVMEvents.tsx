@@ -4,12 +4,12 @@
 import type { BlockEVMEvent } from '../types';
 
 import React, { useMemo } from 'react';
-import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
 import { MarkError, Table } from '@polkadot/react-components';
 
-import EVMEvent from './EVMEvent';
+import EVMEvent from './EVMEvent.jsx';
+import { useTranslation } from "../translate.js";
 
 interface Props {
   className?: string;
@@ -45,7 +45,7 @@ function EVMEvents ({ className = '', emptyLabel, error, eventClassName, events,
 
   const header = useMemo<[React.ReactNode?, string?, number?][]>(
     () => [
-      [label || t<string>('recent evm events'), 'start']
+      [label || t('recent evm events'), 'start']
     ],
     [label, t]
   );
@@ -53,7 +53,7 @@ function EVMEvents ({ className = '', emptyLabel, error, eventClassName, events,
   return (
     <Table
       className={className}
-      empty={emptyLabel || t<string>('No events available')}
+      empty={emptyLabel || t('No events available')}
       header={header}
     >
       {error
@@ -62,7 +62,7 @@ function EVMEvents ({ className = '', emptyLabel, error, eventClassName, events,
             className={eventClassName}
             key='error'
           >
-            <td><MarkError content={t<string>('Unable to decode the block events. {{error}}', { replace: { error: error.message } })} /></td>
+            <td><MarkError content={t('Unable to decode the block events. {{error}}', { replace: { error: error.message } })} /></td>
           </tr>
         )
         : events?.map((e) => renderEvent(eventClassName, e))
