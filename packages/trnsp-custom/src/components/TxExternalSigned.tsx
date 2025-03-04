@@ -11,11 +11,11 @@ import { useApi, useQueue, useToggle } from '@polkadot/react-hooks';
 import Address from '@polkadot/react-signer/Address';
 import Tip from '@polkadot/react-signer/Tip';
 import Transaction from '@polkadot/react-signer/Transaction';
-import { useTranslation } from '@polkadot/react-signer/translate';
+import { useTranslation } from '../translate.js';
 import { handleTxResults } from '@polkadot/react-signer/util';
 import { nextTick, u8aToHex } from '@polkadot/util';
 
-import { signWithEthereumWallet } from '../utils/signWithEthereumWallet';
+import { signWithEthereumWallet } from '../utils/signWithEthereumWallet.js';
 
 interface Props {
   className?: string;
@@ -143,7 +143,7 @@ function TxSigned ({ className, currentItem, requestAddress }: Props): React.Rea
               <Output
                 isDisabled
                 isTrimmed
-                label={t<string>('call hash')}
+                label={t('call hash')}
                 value={innerHash}
                 withCopy
               />
@@ -156,7 +156,7 @@ function TxSigned ({ className, currentItem, requestAddress }: Props): React.Rea
           icon='sign-in-alt'
           isBusy={isBusy}
           isDisabled={!senderInfo.signAddress || isRenderError}
-          label={t<string>('Sign and Submit')}
+          label={t('Sign and Submit')}
           onClick={_doStart}
           tabIndex={2}
         />

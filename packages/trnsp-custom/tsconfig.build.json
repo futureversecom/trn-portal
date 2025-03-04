@@ -5,10 +5,7 @@
     "outDir": "./build",
     "rootDir": "./src"
   },
-  "include": [
-    "src/providers/*",
-    "src/components/*",
-    "src/hooks/*"
-  ],
-  "references": []
+  "references": [
+    { "path": "../react-signer/tsconfig.xref.json" }
+  ]
 }
