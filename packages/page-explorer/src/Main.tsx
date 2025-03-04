@@ -29,8 +29,8 @@ function Main ({ eventCount, events, evmEvents, headers }: Props): React.ReactEl
   const [intentIndex, setIntentIndex] = useLocalStorage<number>('explorer:event', 0);
 
   const intentOptions = useRef([
-    { text: t<string>('Substrate Events'), value: 'substrate' },
-    { text: t<string>('EVM Events'), value: 'evm' }
+    { text: t('Substrate Events'), value: 'substrate' },
+    { text: t('EVM Events'), value: 'evm' }
   ]);
 
   return (
