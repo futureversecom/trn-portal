@@ -1,8 +1,8 @@
 // Copyright 2017-2025 @polkadot/react-signer authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
+import type { ExternalProvider } from '@ethersproject/providers';
 import type { SignerResult } from '@polkadot/api/types';
-import type { ExternalProvider } from "@ethersproject/providers";
 
 export interface AddressFlags {
   accountOffset: number;
@@ -50,13 +50,4 @@ declare global {
   interface Window {
     ethereum: MetaMaskIshProvider
   }
-}
-
-export interface AddressProxy {
-  isMultiCall: boolean;
-  isUnlockCached: boolean;
-  multiRoot: string | null;
-  proxyRoot: string | null;
-  signAddress: string | null;
-  signPassword: string;
 }
