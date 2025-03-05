@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import type { BlockEVMEvent } from '@polkadot/react-hooks/ctx/types';
+
 import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 

@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import type { BlockEVMEvent } from './types.js';
+
 import React from 'react';
 
 import { Expander, styled } from '@polkadot/react-components';

@@ -12,7 +12,6 @@ import { ApiCtxRoot } from '@polkadot/react-api';
 import { EthereumWalletCtxRoot } from '@polkadot/react-components';
 import { ApiStatsCtxRoot, BlockAuthorsCtxRoot, BlockEventsCtxRoot, KeyringCtxRoot, QueueCtxRoot, WindowSizeCtxRoot } from '@polkadot/react-hooks';
 import { BlockEVMEventsCtxRoot } from '@polkadot/react-hooks/ctx/BlockEVMEvents';
-
 import { settings } from '@polkadot/ui-settings';
 
 import Apps from './Apps.js';

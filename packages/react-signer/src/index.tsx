@@ -8,12 +8,12 @@ import type { DefinitionRpcExt } from '@polkadot/types/types';
 
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
-import TxExternalSigned from './TxExternalSigned.js';
 import { Modal, styled, useEthereumWallet } from '@polkadot/react-components';
 import { useApi, useQueue } from '@polkadot/react-hooks';
 import { assert, isFunction, loggerFormat } from '@polkadot/util';
 
 import { useTranslation } from './translate.js';
+import TxExternalSigned from './TxExternalSigned.js';
 import TxSigned from './TxSigned.js';
 import TxUnsigned from './TxUnsigned.js';
 

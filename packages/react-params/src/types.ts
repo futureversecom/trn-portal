@@ -2,12 +2,12 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import type React from 'react';
+import type { Option, u32, Vec } from '@polkadot/types';
+import type { H256 } from '@polkadot/types/interfaces';
+import type { BlockHash } from '@polkadot/types/interfaces/chain';
+import type { EthAddress, EthBloom, EthLog } from '@polkadot/types/interfaces/eth/types';
 import type { Registry, TypeDef } from '@polkadot/types/types';
 import type { HexString } from '@polkadot/util/types';
-import type { H256 } from '@polkadot/types/interfaces';
-import type { Option, u32, Vec } from '@polkadot/types';
-import type { EthAddress, EthBloom, EthLog } from '@polkadot/types/interfaces/eth/types';
-import type { BlockHash } from '@polkadot/types/interfaces/chain';
 
 // FIXME Ideally, we want these as Base from api-codec - as a stop-gap, any this until we have
 // params returning types extending Base (i.e. anything from api-codec)

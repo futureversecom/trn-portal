@@ -3,6 +3,7 @@
 
 import type { QueueTx } from '@polkadot/react-components/Status/types';
 import type { BN } from '@polkadot/util';
+import type { AddressProxy } from './types.js';
 
 import React, { useCallback, useEffect, useState } from 'react';
 
@@ -16,7 +17,6 @@ import { nextTick, u8aToHex } from '@polkadot/util';
 
 import { signWithEthereumWallet } from './signers/signWithEthereumWallet.js';
 import { useTranslation } from './translate.js';
-import type { AddressProxy } from './types.js';
 
 interface Props {
   className?: string;

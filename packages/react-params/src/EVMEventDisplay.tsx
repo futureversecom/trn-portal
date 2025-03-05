@@ -1,10 +1,10 @@
 // Copyright 2017-2025 @polkadot/react-components authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { RawParam } from './types.js';
 import type { EthAddress, EthBloom, EthLog } from '@polkadot/types/interfaces/eth/types';
 import type { H256 } from '@polkadot/types/interfaces/runtime';
 import type { Option, u32, Vec } from '@polkadot/types-codec';
+import type { RawParam } from './types.js';
 
 import React from 'react';
 
