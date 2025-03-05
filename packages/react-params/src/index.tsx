@@ -11,7 +11,7 @@ import { statics } from '@polkadot/react-api/statics';
 import { ErrorBoundary } from '@polkadot/react-components';
 import { stringify } from '@polkadot/util';
 
-import EVMEvents from "./EVMEvents.js";
+import EVMEvents from './EVMEvents.js';
 import Holder from './Holder.js';
 import ParamComp from './ParamComp.js';
 import translate from './translate.js';
