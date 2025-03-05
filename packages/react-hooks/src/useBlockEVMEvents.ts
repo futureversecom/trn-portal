@@ -6,7 +6,7 @@ import type { BlockEVMEvent } from './types.js';
 import { useContext } from 'react';
 
 import { createNamedHook } from '@polkadot/react-hooks';
-import {BlockEVMEventsCtx} from "./ctx/BlockEVMEvents.js";
+import { BlockEVMEventsCtx } from "./ctx/BlockEVMEvents.js";
 
 // import { BlockEVMEventsCtx } from '../providers/BlockEVMEvents';
 
