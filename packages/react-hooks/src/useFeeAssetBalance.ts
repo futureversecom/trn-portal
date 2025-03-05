@@ -1,4 +1,5 @@
-/* eslint-disable header/header */
+// Copyright 2017-2025 @polkadot/react-hooks authors & contributors
+// SPDX-License-Identifier: Apache-2.0
 
 import type { Option } from '@polkadot/types';
 import type { PalletAssetsAssetAccount } from '@polkadot/types/lookup';
