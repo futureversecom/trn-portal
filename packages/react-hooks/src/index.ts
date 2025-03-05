@@ -99,3 +99,7 @@ export { useWindowColumns } from './useWindowColumns.js';
 export { useWindowSize } from './useWindowSize.js';
 export { useWorkloadInfos } from './useWorkloadInfos.js';
 export { useWorkplanInfos } from './useWorkplanInfos.js';
+export { useLocalStorage } from './useLocalStorage.js';
+export { useBlockEVMEvents } from './useBlockEVMEvents.js';
+export { useFeeAssetBalance } from './useFeeAssetBalance.js';
+export { useExposeApi } from './useExposeApi.js';

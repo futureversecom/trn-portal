@@ -8,8 +8,8 @@ import React, { Suspense, useEffect, useState } from 'react';
 import { HashRouter } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 
-import { BlockEVMEventsCtxRoot } from '@polkadot/custom/providers/BlockEVMEvents';
-import { EthereumWalletCtxRoot } from '@polkadot/custom/providers/EthereumWallet';
+import { BlockEVMEventsCtxRoot } from '@polkadot/react-hooks/ctx/BlockEVMEvents';
+import { EthereumWalletCtxRoot } from '@polkadot/react-components';
 import { ApiCtxRoot } from '@polkadot/react-api';
 import { ApiStatsCtxRoot, BlockAuthorsCtxRoot, BlockEventsCtxRoot, KeyringCtxRoot, QueueCtxRoot, WindowSizeCtxRoot } from '@polkadot/react-hooks';
 import { settings } from '@polkadot/ui-settings';

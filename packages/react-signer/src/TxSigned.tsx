@@ -19,8 +19,7 @@ import type { AddressFlags, AddressProxy, QrState } from './types.js';
 
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { useEthereumWallet } from '@polkadot/custom/providers/EthereumWallet';
-import { signWithEthereumWallet } from '@polkadot/custom/utils/signWithEthereumWallet';
+import { useEthereumWallet } from '@polkadot/react-components';
 import { web3FromSource } from '@polkadot/extension-dapp';
 import { Button, ErrorBoundary, Modal, Output, styled, Toggle } from '@polkadot/react-components';
 import { useApi, useLedger, useQueue, useToggle } from '@polkadot/react-hooks';
@@ -29,7 +28,7 @@ import { settings } from '@polkadot/ui-settings';
 import { assert, nextTick, u8aToHex } from '@polkadot/util';
 import { addressEq } from '@polkadot/util-crypto';
 
-import { AccountSigner, LedgerSigner, QrSigner } from './signers/index.js';
+import { AccountSigner, LedgerSigner, QrSigner, signWithEthereumWallet } from './signers/index.js';
 import Address from './Address.js';
 import Qr from './Qr.js';
 import SignFields from './SignFields.js';

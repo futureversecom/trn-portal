@@ -2,14 +2,14 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import type { DropdownItemProps } from 'semantic-ui-react';
-import type { EthereumWallet } from '@polkadot/custom/providers/EthereumWallet';
+import type { EthereumWallet } from '../EthereumWallet.js';
 import type { KeyringOption$Type, KeyringOptions, KeyringSectionOption } from '@polkadot/ui-keyring/options/types';
 import type { Option } from './types.js';
 
 import React from 'react';
 import store from 'store';
 
-import { EthereumWalletCtx } from '@polkadot/custom/providers/EthereumWallet';
+import { EthereumWalletCtx } from '../EthereumWallet.js';
 import { withMulti, withObservable } from '@polkadot/react-api/hoc';
 import { keyring } from '@polkadot/ui-keyring';
 import { createOptionItem } from '@polkadot/ui-keyring/options/item';

@@ -2,13 +2,12 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import type { HeaderExtended } from '@polkadot/api-derive/types';
-import type { BlockEVMEvent } from '@polkadot/custom/types';
-import type { KeyedEvent } from '@polkadot/react-hooks/ctx/types';
+import type { BlockEVMEvent, KeyedEvent } from '@polkadot/react-hooks/ctx/types';
 
 import React, { useRef } from 'react';
 
-import EVMEvents from '@polkadot/custom/components/EVMEvents';
-import { useLocalStorage } from '@polkadot/custom/hooks/useLocalStorage';
+import { EVMEvents } from '@polkadot/react-params';
+import { useLocalStorage } from '@polkadot/react-hooks';
 import { Columar, styled, ToggleGroup } from '@polkadot/react-components';
 
 import BlockHeaders from './BlockHeaders.js';

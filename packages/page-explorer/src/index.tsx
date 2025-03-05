@@ -7,7 +7,7 @@ import type { KeyedEvent } from '@polkadot/react-hooks/ctx/types';
 import React, { useMemo, useRef } from 'react';
 import { Route, Routes } from 'react-router';
 
-import { useBlockEVMEvents } from '@polkadot/custom/hooks/useBlockEVMEvents';
+import { useBlockEVMEvents } from '@polkadot/react-hooks';
 import { Tabs } from '@polkadot/react-components';
 import { useApi, useBlockAuthors, useBlockEvents } from '@polkadot/react-hooks';
 import { isFunction } from '@polkadot/util';

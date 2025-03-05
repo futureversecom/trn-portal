@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import type { SignerResult } from '@polkadot/api/types';
+import type { ExternalProvider } from "@ethersproject/providers";
 
 export interface AddressFlags {
   accountOffset: number;
@@ -38,4 +39,24 @@ export interface Signed {
   data: Uint8Array;
   message: Uint8Array;
   signature: Uint8Array;
+}
+
+interface MetaMaskIshProvider extends ExternalProvider {
+  on: (event: string, handler: (args: any) => void) => void;
+  removeListener: (event: string, handler: (args: any) => void) => void;
+}
+
+declare global {
+  interface Window {
+    ethereum: MetaMaskIshProvider
+  }
+}
+
+export interface AddressProxy {
+  isMultiCall: boolean;
+  isUnlockCached: boolean;
+  multiRoot: string | null;
+  proxyRoot: string | null;
+  signAddress: string | null;
+  signPassword: string;
 }

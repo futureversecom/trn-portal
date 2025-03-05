@@ -8,9 +8,8 @@ import type { PalletStakingStakingLedger } from '@polkadot/types/lookup';
 
 import React, { useEffect, useState } from 'react';
 
-import { useFeeAssetBalance } from '@polkadot/custom/hooks/useFeeAssetBalance';
 import { MarkError, MarkWarning } from '@polkadot/react-components';
-import { useApi, useCall } from '@polkadot/react-hooks';
+import { useApi, useCall, useFeeAssetBalance } from '@polkadot/react-hooks';
 
 import { useTranslation } from '../../translate.js';
 

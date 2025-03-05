@@ -18,7 +18,7 @@ import type { AccountBalance, Delegation } from '../types.js';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import useAccountLocks from '@polkadot/app-referenda/useAccountLocks';
-import { useEthereumWallet } from '@polkadot/custom/providers/EthereumWallet';
+import { useEthereumWallet } from '@polkadot/react-components';
 import { AddressInfo, AddressSmall, Badge, Button, ChainLock, Columar, CryptoType, Forget, LinkExternal, Menu, Popup, styled, Table, Tags, TransferModal } from '@polkadot/react-components';
 import { useAccountInfo, useApi, useBalancesAll, useBestNumber, useCall, useLedger, useQueue, useStakingInfo, useToggle } from '@polkadot/react-hooks';
 import { keyring } from '@polkadot/ui-keyring';

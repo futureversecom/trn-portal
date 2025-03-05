@@ -9,8 +9,7 @@ import type { SortCategory } from '../util.js';
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import { useEthereumWallet } from '@polkadot/custom/providers/EthereumWallet';
-import { Button, FilterInput, SortDropdown, styled, SummaryBox, Table } from '@polkadot/react-components';
+import { Button, FilterInput, SortDropdown, styled, SummaryBox, Table, useEthereumWallet } from '@polkadot/react-components';
 import { getAccountCryptoType } from '@polkadot/react-components/util';
 import { useAccounts, useApi, useDelegations, useFavorites, useIpfs, useLedger, useNextTick, useProxies, useToggle } from '@polkadot/react-hooks';
 import { keyring } from '@polkadot/ui-keyring';

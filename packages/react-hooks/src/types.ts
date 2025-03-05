@@ -8,13 +8,16 @@ import type { ApiPromise } from '@polkadot/api';
 import type { SubmittableExtrinsic } from '@polkadot/api/types';
 import type { DeriveAccountFlags, DeriveAccountRegistration } from '@polkadot/api-derive/types';
 import type { Option, u32, u128, Vec } from '@polkadot/types';
-import type { AccountId, BlockNumber, Call, Hash, SessionIndex, ValidatorPrefs } from '@polkadot/types/interfaces';
+import type { AccountId, BlockNumber, Call, H256, Hash, SessionIndex, ValidatorPrefs } from '@polkadot/types/interfaces';
 import type { PalletAssetsAssetDetails, PalletAssetsAssetMetadata, PalletPreimageRequestStatus, PalletStakingRewardDestination, PalletStakingStakingLedger, PolkadotRuntimeParachainsAssignerCoretimeCoreDescriptor, SpStakingExposurePage, SpStakingPagedExposureMetadata } from '@polkadot/types/lookup';
 import type { ICompact, IExtrinsic, INumber } from '@polkadot/types/types';
 import type { KeyringJson$Meta } from '@polkadot/ui-keyring/types';
 import type { BN } from '@polkadot/util';
 import type { HexString } from '@polkadot/util/types';
 import type { CoreTimeTypes } from './constants.js';
+
+import type { EthAddress, EthBloom, EthLog } from "@polkadot/types/interfaces/eth/types";
+import type { BlockHash } from "@polkadot/types/interfaces/chain";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type CallParam = any;
@@ -382,4 +385,16 @@ export interface PotentialRenewal {
   mask: string[]
   maskBits: number,
   task: string
+}
+
+export interface BlockEVMEvent {
+  transactionHash: H256;
+  readonly transactionIndex: u32;
+  readonly from: EthAddress;
+  readonly to: Option<EthAddress>;
+  readonly contractAddress: Option<EthAddress>;
+  readonly logs: Vec<EthLog>;
+  readonly logsBloom: EthBloom;
+  blockHash?: BlockHash;
+  blockNumber?: Option<u32>;
 }
