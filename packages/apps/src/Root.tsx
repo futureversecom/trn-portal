@@ -3,14 +3,15 @@
 
 import type { ThemeDef } from '@polkadot/react-components/types';
 import type { KeyringStore } from '@polkadot/ui-keyring/types';
-import { ApiCtxRoot } from '@polkadot/react-api';
-import { EthereumWalletCtxRoot } from '@polkadot/react-components';
-import { ApiStatsCtxRoot, BlockAuthorsCtxRoot, BlockEventsCtxRoot, KeyringCtxRoot, QueueCtxRoot, WindowSizeCtxRoot } from '@polkadot/react-hooks';
-import { BlockEVMEventsCtxRoot } from '@polkadot/react-hooks/ctx/BlockEVMEvents';
 
 import React, { Suspense, useEffect, useState } from 'react';
 import { HashRouter } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
+
+import { ApiCtxRoot } from '@polkadot/react-api';
+import { EthereumWalletCtxRoot } from '@polkadot/react-components';
+import { ApiStatsCtxRoot, BlockAuthorsCtxRoot, BlockEventsCtxRoot, KeyringCtxRoot, QueueCtxRoot, WindowSizeCtxRoot } from '@polkadot/react-hooks';
+import { BlockEVMEventsCtxRoot } from '@polkadot/react-hooks/ctx/BlockEVMEvents';
 
 import { settings } from '@polkadot/ui-settings';
 
