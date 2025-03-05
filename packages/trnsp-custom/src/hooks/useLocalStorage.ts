@@ -1,4 +1,5 @@
-/* eslint-disable header/header */
+// Copyright 2017-2025 @polkadot/custom authors & contributors
+// SPDX-License-Identifier: Apache-2.0
 
 import type { Dispatch, SetStateAction } from 'react';
 

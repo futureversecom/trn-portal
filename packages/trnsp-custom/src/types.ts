@@ -1,4 +1,6 @@
-/* eslint-disable header/header */
+// Copyright 2017-2025 @polkadot/custom authors & contributors
+// SPDX-License-Identifier: Apache-2.0
+
 import type { BlockHash } from '@polkadot/types/interfaces/chain';
 import type { EthAddress, EthBloom, EthLog } from '@polkadot/types/interfaces/eth/types';
 import type { H256 } from '@polkadot/types/interfaces/runtime';
