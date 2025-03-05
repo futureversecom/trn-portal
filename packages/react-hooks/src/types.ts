@@ -16,8 +16,8 @@ import type { BN } from '@polkadot/util';
 import type { HexString } from '@polkadot/util/types';
 import type { CoreTimeTypes } from './constants.js';
 
-import type { EthAddress, EthBloom, EthLog } from "@polkadot/types/interfaces/eth/types";
-import type { BlockHash } from "@polkadot/types/interfaces/chain";
+import type { EthAddress, EthBloom, EthLog } from '@polkadot/types/interfaces/eth/types';
+import type { BlockHash } from '@polkadot/types/interfaces/chain';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type CallParam = any;

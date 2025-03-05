@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import type { QueueTx } from '@polkadot/react-components/Status/types';
-import type { AddressProxy } from './types.js';
 import type { BN } from '@polkadot/util';
 
 import React, { useCallback, useEffect, useState } from 'react';
@@ -12,11 +11,12 @@ import { useApi, useQueue, useToggle } from '@polkadot/react-hooks';
 import Address from '@polkadot/react-signer/Address';
 import Tip from '@polkadot/react-signer/Tip';
 import Transaction from '@polkadot/react-signer/Transaction';
-import { useTranslation } from './translate.js';
 import { handleTxResults } from '@polkadot/react-signer/util';
 import { nextTick, u8aToHex } from '@polkadot/util';
 
 import { signWithEthereumWallet } from './signers/signWithEthereumWallet.js';
+import { useTranslation } from './translate.js';
+import type { AddressProxy } from './types.js';
 
 interface Props {
   className?: string;

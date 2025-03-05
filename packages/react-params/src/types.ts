@@ -5,7 +5,7 @@ import type React from 'react';
 import type { Registry, TypeDef } from '@polkadot/types/types';
 import type { HexString } from '@polkadot/util/types';
 import type { H256 } from '@polkadot/types/interfaces';
-import { Option, u32, Vec } from '@polkadot/types';
+import type { Option, u32, Vec } from '@polkadot/types';
 import type { EthAddress, EthBloom, EthLog } from '@polkadot/types/interfaces/eth/types';
 import type { BlockHash } from '@polkadot/types/interfaces/chain';
 
