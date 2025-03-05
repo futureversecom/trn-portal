@@ -6,9 +6,9 @@ import type { BlockEVMEvent, KeyedEvent } from '@polkadot/react-hooks/ctx/types'
 
 import React, { useRef } from 'react';
 
-import { EVMEvents } from '@polkadot/react-params';
-import { useLocalStorage } from '@polkadot/react-hooks';
 import { Columar, styled, ToggleGroup } from '@polkadot/react-components';
+import { useLocalStorage } from '@polkadot/react-hooks';
+import { EVMEvents } from '@polkadot/react-params';
 
 import BlockHeaders from './BlockHeaders.js';
 import Events from './Events.js';

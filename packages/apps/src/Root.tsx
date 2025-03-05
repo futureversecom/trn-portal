@@ -1,12 +1,12 @@
 // Copyright 2017-2025 @polkadot/apps authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
+import type { ThemeDef } from '@polkadot/react-components/types';
+import type { KeyringStore } from '@polkadot/ui-keyring/types';
 import { ApiCtxRoot } from '@polkadot/react-api';
 import { EthereumWalletCtxRoot } from '@polkadot/react-components';
-import type { ThemeDef } from '@polkadot/react-components/types';
 import { ApiStatsCtxRoot, BlockAuthorsCtxRoot, BlockEventsCtxRoot, KeyringCtxRoot, QueueCtxRoot, WindowSizeCtxRoot } from '@polkadot/react-hooks';
 import { BlockEVMEventsCtxRoot } from '@polkadot/react-hooks/ctx/BlockEVMEvents';
-import type { KeyringStore } from '@polkadot/ui-keyring/types';
 
 import React, { Suspense, useEffect, useState } from 'react';
 import { HashRouter } from 'react-router-dom';

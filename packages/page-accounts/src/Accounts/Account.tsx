@@ -266,6 +266,7 @@ function Account ({ account: { address, meta }, className = '', delegation, filt
 
       try {
         keyring.forgetAccount(address);
+        // @ts-expect-error
         removeAccount?.(address);
         status.status = 'success';
         status.message = t('account forgotten');
