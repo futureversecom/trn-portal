@@ -1,4 +1,5 @@
-/* eslint-disable header/header */
+// Copyright 2017-2025 @polkadot/react-components authors & contributors
+// SPDX-License-Identifier: Apache-2.0
 
 import type { ExternalProvider } from '@ethersproject/providers';
 import type { ApiPromise } from '@polkadot/api';
