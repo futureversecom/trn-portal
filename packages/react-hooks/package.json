@@ -13,6 +13,10 @@
     "url": "https://github.com/polkadot-js/apps.git"
   },
   "sideEffects": false,
+  "browser": {
+    "fs": false,
+    "path": false
+  },
   "type": "module",
   "version": "0.150.1",
   "dependencies": {
