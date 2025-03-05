@@ -31,6 +31,7 @@ export { default as CryptoType } from './CryptoType.js';
 export { default as Dropdown } from './Dropdown.js';
 export { default as EditButton } from './EditButton.js';
 export { default as Editor } from './Editor.js';
+export { useEthereumWallet, EthereumWalletCtxRoot } from './EthereumWallet.js';
 export { default as ErrorBoundary } from './ErrorBoundary.js';
 export { default as ExpandButton } from './ExpandButton.js';
 export { default as Expander } from './Expander.js';
@@ -101,7 +102,6 @@ export { default as TxButton } from './TxButton.js';
 export { default as UsageBar } from './UsageBar.js';
 export { default as VoteAccount } from './VoteAccount.js';
 export { default as VoteValue } from './VoteValue.js';
-export { useEthereumWallet, EthereumWalletCtxRoot } from './EthereumWallet.js';
 // star exports
 export * from './modals/index.js';
 export * from './themes.js';

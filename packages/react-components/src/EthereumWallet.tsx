@@ -1,19 +1,18 @@
 // Copyright 2017-2025 @polkadot/react-components authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
+import { ethers } from 'ethers';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
+
 import type { ExternalProvider } from '@ethersproject/providers';
 import type { ApiPromise } from '@polkadot/api';
 import type { Option } from '@polkadot/types';
 import type { Codec } from '@polkadot/types/types';
 import type { Keyring } from '@polkadot/ui-keyring';
 
-import { ethers } from 'ethers';
-import React, { useCallback, useContext, useEffect, useState } from 'react';
-
 import { useApi } from '@polkadot/react-hooks/useApi';
-import { keyring } from '@polkadot/ui-keyring';
-
 import { useLocalStorage } from '@polkadot/react-hooks/useLocalStorage';
+import { keyring } from '@polkadot/ui-keyring';
 
 export interface EthereumWallet {
   hasEthereumWallet: boolean;

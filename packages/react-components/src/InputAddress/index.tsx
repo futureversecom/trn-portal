@@ -2,8 +2,9 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import type { DropdownItemProps } from 'semantic-ui-react';
-import type { EthereumWallet } from '../EthereumWallet.js';
+
 import type { KeyringOption$Type, KeyringOptions, KeyringSectionOption } from '@polkadot/ui-keyring/options/types';
+import type { EthereumWallet } from '../EthereumWallet.js';
 import type { Option } from './types.js';
 
 import React from 'react';

@@ -182,8 +182,7 @@ export default function withCall<P extends ApiProps> (endpoint: string, { at, at
         ) || [{}, expanded[0][1], expanded[0][2], expanded[0][3]];
 
         if (section === 'democracy') {
-          // @ts-expect-error
-          return;
+          throw new Error('No democracy section');
         }
 
         assert(apiSection?.[method], `Unable to find api.${area}.${section}.${method}`);
