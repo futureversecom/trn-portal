@@ -1,4 +1,5 @@
-/* eslint-disable header/header */
+// Copyright 2017-2025 @polkadot/react-signer authors & contributors
+// SPDX-License-Identifier: Apache-2.0
 
 import type { ApiPromise } from '@polkadot/api';
 import type { SignerOptions } from '@polkadot/api/submittable/types';

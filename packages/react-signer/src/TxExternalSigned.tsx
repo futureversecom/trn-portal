@@ -1,4 +1,5 @@
-/* eslint-disable header/header */
+// Copyright 2017-2025 @polkadot/react-signer authors & contributors
+// SPDX-License-Identifier: Apache-2.0
 
 import type { QueueTx } from '@polkadot/react-components/Status/types';
 import type { AddressProxy } from './types.js';
