@@ -99,10 +99,10 @@ function StakingApp ({ basePath, className = '' }: Props): React.ReactElement<Pr
       name: 'actions',
       text: t('Accounts')
     },
-    hasStashes && isFunction(api.query.staking.activeEra) && {
-      name: 'payout',
-      text: t('Payouts')
-    },
+    // hasStashes && isFunction(api.query.staking.activeEra) && {
+    //   name: 'payout',
+    //   text: t('Payouts')
+    // },
     isFunction(api.query.nominationPools?.minCreateBond) && {
       name: 'pools',
       text: t('Pools')
@@ -112,10 +112,10 @@ function StakingApp ({ basePath, className = '' }: Props): React.ReactElement<Pr
       name: 'targets',
       text: t('Targets')
     },
-    hasStashes && isFunction((api.query.voterBagsList || api.query.bagsList || api.query.voterList)?.counterForListNodes) && {
-      name: 'bags',
-      text: t('Bags')
-    },
+    // hasStashes && isFunction((api.query.voterBagsList || api.query.bagsList || api.query.voterList)?.counterForListNodes) && {
+    //   name: 'bags',
+    //   text: t('Bags')
+    // },
     {
       count: slashes.reduce((count, [, unapplied]) => count + unapplied.length, 0),
       name: 'slashes',
@@ -126,7 +126,7 @@ function StakingApp ({ basePath, className = '' }: Props): React.ReactElement<Pr
       name: 'query',
       text: t('Validator stats')
     }
-  ].filter((q): q is { name: string; text: string } => !!q), [api, hasStashes, slashes, t]);
+  ].filter((q): q is { name: string; text: string } => !!q), [api, slashes, t]);
 
   return (
     <StyledMain className={`${className} staking--App`}>
