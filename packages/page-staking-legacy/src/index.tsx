@@ -69,10 +69,10 @@ function StakingApp ({ basePath, className = '' }: Props): React.ReactElement<Pr
     [api, hasAccounts]
   );
 
-  const hasStashes = useMemo(
-    () => hasAccounts && !!ownStashes && (ownStashes.length !== 0),
-    [hasAccounts, ownStashes]
-  );
+  // const hasStashes = useMemo(
+  //   () => hasAccounts && !!ownStashes && (ownStashes.length !== 0),
+  //   [hasAccounts, ownStashes]
+  // );
 
   const ownValidators = useMemo(
     () => (ownStashes || []).filter(({ isStashValidating }) => isStashValidating),
