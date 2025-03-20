@@ -1,22 +1,23 @@
 // Copyright 2017-2025 @polkadot/react-signer authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
+import type { ApiPromise } from '@polkadot/api';
 import type { QueueTx, QueueTxMessageSetStatus, QueueTxResult } from '@polkadot/react-components/Status/types';
 import type { BareProps as Props } from '@polkadot/react-components/types';
 import type { DefinitionRpcExt } from '@polkadot/types/types';
 
-import TxExternalSigned from '@trnsp/custom/components/TxExternalSigned';
-import { useEthereumWallet } from '@trnsp/custom/providers/EthereumWallet';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { ApiPromise } from '@polkadot/api';
-import { Modal, styled } from '@polkadot/react-components';
+import { Modal, styled, useEthereumWallet } from '@polkadot/react-components';
 import { useApi, useQueue } from '@polkadot/react-hooks';
 import { assert, isFunction, loggerFormat } from '@polkadot/util';
 
-import { useTranslation } from './translate';
-import TxSigned from './TxSigned';
-import TxUnsigned from './TxUnsigned';
+import { useTranslation } from './translate.js';
+import TxExternalSigned from './TxExternalSigned.js';
+import TxSigned from './TxSigned.js';
+import TxUnsigned from './TxUnsigned.js';
+
+export * from './signers/index.js';
 
 interface ItemState {
   currentItem: QueueTx | null;
@@ -34,7 +35,7 @@ async function submitRpc (api: ApiPromise, { method, section }: DefinitionRpcExt
   try {
     const rpc = api.rpc as unknown as Record<string, Record<string, (...params: unknown[]) => Promise<unknown>>>;
 
-    assert(isFunction(rpc[section] && rpc[section][method]), `api.rpc.${section}.${method} does not exist`);
+    assert(isFunction(rpc[section]?.[method]), `api.rpc.${section}.${method} does not exist`);
 
     const result = await rpc[section][method](...values);
 
@@ -84,7 +85,7 @@ function extractCurrent (txqueue: QueueTx[]): ItemState {
     isRpc,
     isVisible,
     queueSize: available.length,
-    requestAddress: (currentItem && currentItem.accountId) || null
+    requestAddress: (currentItem?.accountId) || null
   };
 }
 

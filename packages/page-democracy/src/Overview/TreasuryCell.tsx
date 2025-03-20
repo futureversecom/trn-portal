@@ -12,7 +12,7 @@ import { useApi, useCall } from '@polkadot/react-hooks';
 import Params from '@polkadot/react-params';
 import { getTypeDef } from '@polkadot/types/create';
 
-import { useTranslation } from '../translate';
+import { useTranslation } from '../translate.js';
 
 interface Props {
   className?: string;
@@ -74,12 +74,12 @@ function TreasuryCell ({ className = '', value }: Props): React.ReactElement<Pro
         <InputAddress
           defaultValue={proposal.beneficiary}
           isDisabled
-          label={t<string>('beneficiary')}
+          label={t('beneficiary')}
         />
         <InputBalance
           defaultValue={proposal.value}
           isDisabled
-          label={t<string>('payout')}
+          label={t('payout')}
         />
       </Params>
     </div>

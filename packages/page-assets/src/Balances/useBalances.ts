@@ -2,13 +2,13 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import type { ApiPromise } from '@polkadot/api';
+import type { RuntimeVersion } from '@polkadot/types/interfaces';
 import type { FrameSystemAccountInfo, PalletAssetsAssetAccount } from '@polkadot/types/lookup';
 import type { Option } from '@polkadot/types-codec';
 
 import { useMemo } from 'react';
 
 import { createNamedHook, useAccounts, useApi, useCall } from '@polkadot/react-hooks';
-import { RuntimeVersion } from '@polkadot/types/interfaces';
 import { BN, BN_ONE } from '@polkadot/util';
 
 interface AccountResult {
@@ -56,7 +56,7 @@ const BALANCES_OPTS = {
       // @ts-ignore
       const { data: { feeFrozen, free, frozen, miscFrozen, reserved } } = account;
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      const balance = (specVersion as number) < 55 ? free.sub(BN.max(feeFrozen, miscFrozen)) : (free.add(reserved as BN)).sub(frozen as BN);
+      const balance = (specVersion!) < 55 ? free.sub(BN.max(feeFrozen, miscFrozen)) : (free.add(reserved as BN)).sub(frozen as BN);
 
       return {
         account: api.registry.createType('PalletAssetsAssetAccount', {
@@ -77,7 +77,7 @@ function useBalancesImpl (id?: BN | null): AccountResult[] | null {
   const { api } = useApi();
   const { allAccounts } = useAccounts();
   const keys = useMemo(
-    () => id ? [allAccounts.map((a) => [id, a])] : [[]],
+    () => [allAccounts.map((a) => [id, a]).filter((tup) => !!tup[0])],
     [allAccounts, id]
   );
   const isBalances = id?.toString() === '1';
@@ -90,7 +90,7 @@ function useBalancesImpl (id?: BN | null): AccountResult[] | null {
   specVersion = runtimeVersion?.specVersion?.toNumber();
 
   return (isBalances
-    ? balancesQuery && balancesQuery.accounts
+    ? balancesQuery?.accounts
     : assetsQuery && id && (assetsQuery.assetId === id) && assetsQuery.accounts) || null;
 }
 

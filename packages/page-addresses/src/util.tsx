@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import type { KeyringAddress } from '@polkadot/ui-keyring/types';
-import type { SortedAccount } from './types';
+import type { SortedAccount } from './types.js';
 
 import React from 'react';
 
@@ -36,7 +36,7 @@ export function sortAccounts (addresses: string[], favorites: string[]): SortedA
       children: [],
       isFavorite: favorites.includes(account.address)
     }))
-    .sort((a, b) => (a.account.meta.whenCreated as number || 0) - (b.account.meta.whenCreated as number || 0));
+    .sort((a, b) => (a.account.meta.whenCreated! || 0) - (b.account.meta.whenCreated! || 0));
 
   return mapped
     .filter((entry): boolean => {

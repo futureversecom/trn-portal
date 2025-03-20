@@ -9,7 +9,7 @@ import { CardSummary, SummaryBox } from '@polkadot/react-components';
 import { FormatBalance } from '@polkadot/react-query';
 import { BN_THREE, BN_TWO, formatNumber } from '@polkadot/util';
 
-import { useTranslation } from '../translate';
+import { useTranslation } from '../translate.js';
 
 interface Props {
   activeCap: BN;
@@ -26,13 +26,13 @@ function Summary ({ activeCap, activeRaised, className, fundCount, isLoading, to
 
   return (
     <SummaryBox className={className}>
-      <CardSummary label={t<string>('funds')}>
+      <CardSummary label={t('funds')}>
         {fundCount === undefined
           ? <span className='--tmp'>99</span>
           : formatNumber(fundCount)}
       </CardSummary>
       <CardSummary
-        label={`${t<string>('active raised / cap')}`}
+        label={`${t('active raised / cap')}`}
         progress={{
           hideValue: true,
           isBlurred: isLoading,
@@ -54,7 +54,7 @@ function Summary ({ activeCap, activeRaised, className, fundCount, isLoading, to
         </span>
       </CardSummary>
       <CardSummary
-        label={`${t<string>('total raised / cap')}`}
+        label={`${t('total raised / cap')}`}
         progress={{
           hideValue: true,
           isBlurred: isLoading,

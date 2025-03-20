@@ -8,8 +8,8 @@ import React from 'react';
 import { Button } from '@polkadot/react-components';
 import { useAccounts, useToggle } from '@polkadot/react-hooks';
 
-import { useTranslation } from '../../translate';
-import Create from './Create';
+import { useTranslation } from '../../translate.js';
+import Create from './Create.js';
 
 interface Props {
   assetIds?: BN[];
@@ -27,7 +27,7 @@ function CreateButton ({ assetIds, className, openId }: Props): React.ReactEleme
       <Button
         icon='plus'
         isDisabled={!assetIds || !hasAccounts}
-        label={t<string>('Create')}
+        label={t('Create')}
         onClick={toggleOpen}
       />
       {isOpen && assetIds && (

@@ -4,14 +4,14 @@
 import type { Changes } from '@polkadot/react-hooks/useEventChanges';
 import type { StorageKey } from '@polkadot/types';
 import type { AccountId32, EventRecord } from '@polkadot/types/interfaces';
-import type { SessionInfo, Validator } from './types';
+import type { SessionInfo, Validator } from './types.js';
 
 import { useMemo } from 'react';
 
 import { createNamedHook, useApi, useEventChanges, useMapKeys } from '@polkadot/react-hooks';
 
-import { useCacheValue } from './useCache';
-import useTaggedValidators from './useTaggedValidators';
+import { useCacheValue } from './useCache.js';
+import useTaggedValidators from './useTaggedValidators.js';
 
 const EMPTY_PARAMS: unknown[] = [];
 
@@ -36,7 +36,7 @@ function eventFilter (records: EventRecord[]): Changes<AccountId32> {
 }
 
 function mapValidators (validators?: AccountId32[]): Validator[] | undefined {
-  return validators && validators.map((a) => {
+  return validators?.map((a) => {
     const stashId = a.toString();
 
     return {

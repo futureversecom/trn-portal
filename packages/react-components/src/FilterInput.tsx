@@ -1,10 +1,10 @@
-// Copyright 2017-2025 @polkadot/app-accounts authors & contributors
+// Copyright 2017-2025 @polkadot/react-components authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
 import React from 'react';
 
-import Input from './Input';
-import { styled } from './styled';
+import Input from './Input.js';
+import { styled } from './styled.js';
 
 interface Props {
   className?: string;

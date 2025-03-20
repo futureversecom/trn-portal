@@ -1,14 +1,14 @@
 // Copyright 2017-2025 @polkadot/app-staking authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { Params } from './types';
+import type { Params } from './types.js';
 
 import React from 'react';
 
 import { CardSummary, SummaryBox } from '@polkadot/react-components';
 import { formatNumber, isNumber } from '@polkadot/util';
 
-import { useTranslation } from '../translate';
+import { useTranslation } from '../translate.js';
 
 interface Props {
   className?: string;
@@ -21,7 +21,7 @@ function Summary ({ className, params: { maxMembers, maxMembersPerPool, maxPools
 
   return (
     <SummaryBox className={className}>
-      <CardSummary label={t<string>('pools')}>
+      <CardSummary label={t('pools')}>
         {isNumber(poolCount) && (
           <>
             {formatNumber(poolCount)}
@@ -33,12 +33,12 @@ function Summary ({ className, params: { maxMembers, maxMembersPerPool, maxPools
       </CardSummary>
       <section>
         {maxMembers > 0 && (
-          <CardSummary label={t<string>('max. members')}>
+          <CardSummary label={t('max. members')}>
             {formatNumber(maxMembers)}
           </CardSummary>
         )}
         {maxMembersPerPool > 0 && (
-          <CardSummary label={t<string>('max. members / pool')}>
+          <CardSummary label={t('max. members / pool')}>
             {formatNumber(maxMembersPerPool)}
           </CardSummary>
         )}

@@ -2,20 +2,19 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import type { HeaderExtended } from '@polkadot/api-derive/types';
-import type { KeyedEvent } from '@polkadot/react-hooks/ctx/types';
+import type { BlockEVMEvent, KeyedEvent } from '@polkadot/react-hooks/ctx/types';
 
-import EVMEvents from '@trnsp/custom/components/EVMEvents';
-import { useLocalStorage } from '@trnsp/custom/hooks/useLocalStorage';
-import { BlockEVMEvent } from '@trnsp/custom/types';
 import React, { useRef } from 'react';
 
 import { Columar, styled, ToggleGroup } from '@polkadot/react-components';
+import { useLocalStorage } from '@polkadot/react-hooks';
+import { EVMEvents } from '@polkadot/react-params';
 
-import BlockHeaders from './BlockHeaders';
-import Events from './Events';
-import Query from './Query';
-import Summary from './Summary';
-import { useTranslation } from './translate';
+import BlockHeaders from './BlockHeaders.js';
+import Events from './Events.js';
+import Query from './Query.js';
+import Summary from './Summary.js';
+import { useTranslation } from './translate.js';
 
 interface Props {
   eventCount: number;
@@ -29,8 +28,8 @@ function Main ({ eventCount, events, evmEvents, headers }: Props): React.ReactEl
   const [intentIndex, setIntentIndex] = useLocalStorage<number>('explorer:event', 0);
 
   const intentOptions = useRef([
-    { text: t<string>('Substrate Events'), value: 'substrate' },
-    { text: t<string>('EVM Events'), value: 'evm' }
+    { text: t('Substrate Events'), value: 'substrate' },
+    { text: t('EVM Events'), value: 'evm' }
   ]);
 
   return (

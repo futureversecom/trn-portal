@@ -1,25 +1,26 @@
 // Copyright 2017-2025 @polkadot/react-params authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
+import type React from 'react';
+import type { Option, u32, Vec } from '@polkadot/types';
+import type { H256 } from '@polkadot/types/interfaces';
+import type { BlockHash } from '@polkadot/types/interfaces/chain';
+import type { EthAddress, EthBloom, EthLog } from '@polkadot/types/interfaces/eth/types';
 import type { Registry, TypeDef } from '@polkadot/types/types';
 import type { HexString } from '@polkadot/util/types';
 
 // FIXME Ideally, we want these as Base from api-codec - as a stop-gap, any this until we have
 // params returning types extending Base (i.e. anything from api-codec)
-export type RawParamValue = unknown | undefined;
-
-export type RawParamValueArray = (RawParamValue | RawParamValue[])[];
-
-export type RawParamValues = RawParamValue | RawParamValueArray;
+export type RawParamValue = unknown;
 
 export interface RawParam {
   isValid: boolean;
-  value: RawParamValues;
+  value: RawParamValue;
 }
 
 export interface RawParamOnChangeValue {
   isValid: boolean;
-  value: RawParamValues;
+  value: RawParamValue;
 }
 
 export type RawParamOnChange = (value: RawParamOnChangeValue) => void;
@@ -46,6 +47,7 @@ export interface Props {
   registry: Registry;
   type: TypeDefExt;
   withLabel?: boolean;
+  withLength?: boolean;
 }
 
 export type Size = 'full' | 'large' | 'medium' | 'small';
@@ -69,4 +71,16 @@ export interface ExpandedCid {
 
 export interface TypeDefExt extends TypeDef {
   withOptionActive?: boolean;
+}
+
+export interface BlockEVMEvent {
+  transactionHash: H256;
+  readonly transactionIndex: u32;
+  readonly from: EthAddress;
+  readonly to: Option<EthAddress>;
+  readonly contractAddress: Option<EthAddress>;
+  readonly logs: Vec<EthLog>;
+  readonly logsBloom: EthBloom;
+  blockHash?: BlockHash;
+  blockNumber?: Option<u32>;
 }

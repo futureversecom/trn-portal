@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import type { BN } from '@polkadot/util';
-import type { Campaign, LeasePeriod } from '../types';
+import type { Campaign, LeasePeriod } from '../types.js';
 
 import React, { useEffect, useMemo, useState } from 'react';
 
@@ -11,10 +11,10 @@ import { useAccounts, useApi, useParaEndpoints } from '@polkadot/react-hooks';
 import { BlockToTime, FormatBalance } from '@polkadot/react-query';
 import { formatNumber } from '@polkadot/util';
 
-import { useTranslation } from '../translate';
-import Contribute from './Contribute';
-import Refund from './Refund';
-import useContributions from './useContributions';
+import { useTranslation } from '../translate.js';
+import Contribute from './Contribute.js';
+import Refund from './Refund.js';
+import useContributions from './useContributions.js';
 
 interface Props {
   bestHash?: string;
@@ -83,14 +83,14 @@ function Fund ({ bestHash, bestNumber, className = '', isOngoing, leasePeriod, v
       <td className='badge'><ParaLink id={paraId} /></td>
       <td className='media--800'>
         {isWinner
-          ? t<string>('Winner')
+          ? t('Winner')
           : blocksLeft
             ? isCapped
-              ? t<string>('Capped')
+              ? t('Capped')
               : isOngoing
-                ? t<string>('Active')
-                : t<string>('Past')
-            : t<string>('Ended')
+                ? t('Active')
+                : t('Past')
+            : t('Ended')
         }
       </td>
       <td className='address media--2000'><AddressMini value={depositor} /></td>
@@ -114,7 +114,7 @@ function Fund ({ bestHash, bestNumber, className = '', isOngoing, leasePeriod, v
         <div>{percentage}</div>
         {myAccounts.length !== 0 && (
           <Expander
-            summary={t<string>('My contributions ({{count}})', { replace: { count: myAccounts.length } })}
+            summary={t('My contributions ({{count}})', { replace: { count: myAccounts.length } })}
             withBreaks
           >
             {myAccounts.map((a, index) => (
@@ -163,8 +163,8 @@ function Fund ({ bestHash, bestNumber, className = '', isOngoing, leasePeriod, v
             isDisabled={!(isDepositor || hasEnded)}
             label={
               isEnded
-                ? t<string>('Close')
-                : t<string>('Cancel')
+                ? t('Close')
+                : t('Cancel')
             }
             params={[paraId]}
             tx={api.tx.crowdloan.dissolve}
@@ -184,7 +184,7 @@ function Fund ({ bestHash, bestNumber, className = '', isOngoing, leasePeriod, v
               href={homepage}
               rel='noopener noreferrer'
               target='_blank'
-            >{t<string>('Homepage')}</a>&nbsp;&nbsp;&nbsp;
+            >{t('Homepage')}</a>&nbsp;&nbsp;&nbsp;
           </div>
         )}
       </td>

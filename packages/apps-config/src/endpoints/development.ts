@@ -1,10 +1,10 @@
 // Copyright 2017-2025 @polkadot/apps-config authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { TFunction } from '../types';
-import type { LinkOption } from './types';
+import type { TFunction } from '../types.js';
+import type { LinkOption } from './types.js';
 
-import { chainsRootnetPNG } from '../ui/logos/chains';
+import { chainsRootnetPNG } from '@polkadot/apps-config/ui/logos/chains';
 
 export const CUSTOM_ENDPOINT_KEY = 'polkadot-app-custom-endpoints';
 

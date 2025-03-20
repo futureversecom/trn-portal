@@ -12,7 +12,7 @@ import { CardSummary, styled, SummaryBox } from '@polkadot/react-components';
 import { FormatBalance } from '@polkadot/react-query';
 import { BN_THREE, BN_TWO, BN_ZERO } from '@polkadot/util';
 
-import { useTranslation } from '../translate';
+import { useTranslation } from '../translate.js';
 
 interface Props {
   avgStaked?: BN;
@@ -49,7 +49,7 @@ function getProgressInfo (value?: BN, total?: BN): ProgressInfo {
   };
 }
 
-function Summary ({ avgStaked, className, lastEra, lowStaked, minNominated, minNominatorBond, stakedReturn, totalIssuance, totalStaked }: Props): React.ReactElement<Props> {
+function Summary ({ avgStaked, className, lowStaked, minNominated, minNominatorBond, totalIssuance, totalStaked }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
   // const { api } = useApi();
   // const lastReward = useCall<BN>(lastEra && api.query.staking.erasValidatorReward, [lastEra], OPT_REWARD);
@@ -70,7 +70,7 @@ function Summary ({ avgStaked, className, lastEra, lowStaked, minNominated, minN
     <StyledSummaryBox className={className}>
       <section className='media--800'>
         <CardSummary
-          label={t<string>('total staked')}
+          label={t('total staked')}
           progress={progressStake}
         >
           <FormatBalance
@@ -82,7 +82,7 @@ function Summary ({ avgStaked, className, lastEra, lowStaked, minNominated, minN
       </section>
       {/*
       <section className='media--800'>
-        <CardSummary label={t<string>('returns')}>
+        <CardSummary label={t('returns')}>
           {totalIssuance && (stakedReturn > 0)
             ? Number.isFinite(stakedReturn)
               ? <>{stakedReturn.toFixed(1)}{percent}</>
@@ -93,7 +93,7 @@ function Summary ({ avgStaked, className, lastEra, lowStaked, minNominated, minN
       </section>*/}
       <section className='media--1000'>
         <CardSummary
-          label={`${t<string>('lowest / avg staked')}`}
+          label={`${t('lowest / avg staked')}`}
           progress={progressAvg}
         >
           <span className={progressAvg.isBlurred ? '--tmp' : ''}>
@@ -117,8 +117,8 @@ function Summary ({ avgStaked, className, lastEra, lowStaked, minNominated, minN
             className='media--1600'
             label={
               minNominatorBond
-                ? t<string>('min nominated / threshold')
-                : t<string>('min nominated')}
+                ? t('min nominated / threshold')
+                : t('min nominated')}
           >
             <FormatBalance
               value={minNominated}
@@ -139,7 +139,7 @@ function Summary ({ avgStaked, className, lastEra, lowStaked, minNominated, minN
       </section>
       {/*
       <section>
-        <CardSummary label={t<string>('last reward')}>
+        <CardSummary label={t('last reward')}>
           <FormatBalance
             className={lastReward ? '' : '--tmp'}
             value={lastReward || 1}

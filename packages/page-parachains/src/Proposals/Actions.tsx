@@ -6,8 +6,8 @@ import React from 'react';
 import { Button } from '@polkadot/react-components';
 import { useAccounts, useToggle } from '@polkadot/react-hooks';
 
-import { useTranslation } from '../translate';
-import Propose from './Propose';
+import { useTranslation } from '../translate.js';
+import Propose from './Propose.js';
 
 interface Props {
   className?: string;
@@ -24,7 +24,7 @@ function Actions (): React.ReactElement<Props> {
         <Button
           icon='plus'
           isDisabled={!hasAccounts}
-          label={t<string>('Propose')}
+          label={t('Propose')}
           onClick={togglePropose}
         />
       </Button.Group>

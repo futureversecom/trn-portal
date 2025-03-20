@@ -4,30 +4,31 @@
 import type { ActionStatus } from '@polkadot/react-components/Status/types';
 import type { KeyringAddress } from '@polkadot/ui-keyring/types';
 import type { BN } from '@polkadot/util';
-import type { AccountBalance, Delegation, SortedAccount } from '../types';
-import type { SortCategory } from '../util';
+import type { AccountBalance, Delegation, SortedAccount } from '../types.js';
+import type { SortCategory } from '../util.js';
 
-import { useEthereumWallet } from '@trnsp/custom/providers/EthereumWallet';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import { Button, FilterInput, SortDropdown, styled, SummaryBox, Table } from '@polkadot/react-components';
+import { Button, FilterInput, SortDropdown, styled, SummaryBox, Table, useEthereumWallet } from '@polkadot/react-components';
 import { getAccountCryptoType } from '@polkadot/react-components/util';
 import { useAccounts, useApi, useDelegations, useFavorites, useIpfs, useLedger, useNextTick, useProxies, useToggle } from '@polkadot/react-hooks';
 import { keyring } from '@polkadot/ui-keyring';
 import { settings } from '@polkadot/ui-settings';
 import { BN_ZERO, isFunction } from '@polkadot/util';
 
-import CreateModal from '../modals/Create';
-import ImportModal from '../modals/Import';
-import Ledger from '../modals/Ledger';
-import Multisig from '../modals/MultisigCreate';
-import Proxy from '../modals/ProxiedAdd';
-import Qr from '../modals/Qr';
-import { useTranslation } from '../translate';
-import { SORT_CATEGORY, sortAccounts } from '../util';
-import Account from './Account';
-import BannerClaims from './BannerClaims';
-import Summary from './Summary';
+import CreateModal from '../modals/Create.js';
+import ImportModal from '../modals/Import.js';
+import Ledger from '../modals/Ledger.js';
+import Local from '../modals/LocalAdd.js';
+import Multisig from '../modals/MultisigCreate.js';
+import Proxy from '../modals/ProxiedAdd.js';
+import Qr from '../modals/Qr.js';
+import { useTranslation } from '../translate.js';
+import { SORT_CATEGORY, sortAccounts } from '../util.js';
+import Account from './Account.js';
+import BannerClaims from './BannerClaims.js';
+// import BannerExtension from './BannerExtension.js';
+import Summary from './Summary.js';
 
 interface Balances {
   accounts: Record<string, AccountBalance>;
@@ -44,17 +45,18 @@ interface SortControls {
   sortFromMax: boolean;
 }
 
-type GroupName = 'accounts' | 'hardware' | 'injected' | 'multisig' | 'proxied' | 'qr' | 'testing';
+type GroupName = 'accounts' | 'chopsticks' | 'hardware' | 'injected' | 'multisig' | 'proxied' | 'qr' | 'testing';
 
 const DEFAULT_SORT_CONTROLS: SortControls = { sortBy: 'date', sortFromMax: true };
 
 const STORE_FAVS = 'accounts:favorites';
 
-const GROUP_ORDER: GroupName[] = ['accounts', 'injected', 'qr', 'hardware', 'proxied', 'multisig', 'testing'];
+const GROUP_ORDER: GroupName[] = ['accounts', 'injected', 'qr', 'hardware', 'proxied', 'multisig', 'testing', 'chopsticks'];
 
 function groupAccounts (accounts: SortedAccount[]): Record<GroupName, string[]> {
   const ret: Record<GroupName, string[]> = {
     accounts: [],
+    chopsticks: [],
     hardware: [],
     injected: [],
     multisig: [],
@@ -63,7 +65,7 @@ function groupAccounts (accounts: SortedAccount[]): Record<GroupName, string[]> 
     testing: []
   };
 
-  for (let i = 0; i < accounts.length; i++) {
+  for (let i = 0, count = accounts.length; i < count; i++) {
     const { account, address } = accounts[i];
     const cryptoType = getAccountCryptoType(address);
 
@@ -77,6 +79,8 @@ function groupAccounts (accounts: SortedAccount[]): Record<GroupName, string[]> 
       ret.multisig.push(address);
     } else if (cryptoType === 'proxied') {
       ret.proxied.push(address);
+    } else if (cryptoType === 'chopsticks') {
+      ret.chopsticks.push(address);
     } else if (cryptoType === 'qr') {
       ret.qr.push(address);
     } else {
@@ -89,7 +93,7 @@ function groupAccounts (accounts: SortedAccount[]): Record<GroupName, string[]> 
 
 function Overview ({ className = '', onStatusChange }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
-  const { api, isElectron } = useApi();
+  const { api, fork, isElectron } = useApi();
   const { allAccounts, hasAccounts } = useAccounts();
   const { isIpfs } = useIpfs();
   const { isLedgerEnabled } = useLedger();
@@ -98,6 +102,7 @@ function Overview ({ className = '', onStatusChange }: Props): React.ReactElemen
   const [isLedgerOpen, toggleLedger] = useToggle();
   const [isMultisigOpen, toggleMultisig] = useToggle();
   const [isProxyOpen, toggleProxy] = useToggle();
+  const [isLocalOpen, toggleLocal] = useToggle();
   const [isQrOpen, toggleQr] = useToggle();
   const [favorites, toggleFavorite] = useFavorites(STORE_FAVS);
   const [balances, setBalances] = useState<Balances>({ accounts: {} });
@@ -135,7 +140,7 @@ function Overview ({ className = '', onStatusChange }: Props): React.ReactElemen
             locked: aggregate('locked'),
             redeemable: aggregate('redeemable'),
             total: aggregate('total'),
-            transferrable: aggregate('transferrable'),
+            transferable: aggregate('transferable'),
             unbonding: aggregate('unbonding')
           }
         };
@@ -168,10 +173,10 @@ function Overview ({ className = '', onStatusChange }: Props): React.ReactElemen
   );
 
   // proxy support
-  // const hasPalletProxy = useMemo(
-  //   () => isFunction(api.tx.proxy?.addProxy),
-  //   [api]
-  // );
+  const hasPalletProxy = useMemo(
+    () => isFunction(api.tx.proxy?.addProxy),
+    [api]
+  );
 
   const accountsMap = useMemo(
     () => allAccounts
@@ -202,13 +207,14 @@ function Overview ({ className = '', onStatusChange }: Props): React.ReactElemen
   const header = useMemo(
     (): Record<GroupName, [React.ReactNode?, string?, number?, (() => void)?][]> => {
       const ret: Record<GroupName, [React.ReactNode?, string?, number?, (() => void)?][]> = {
-        accounts: [[<>{t<string>('accounts')}<div className='sub'>{t<string>('all locally stored accounts')}</div></>]],
-        hardware: [[<>{t<string>('hardware')}<div className='sub'>{t<string>('accounts managed via hardware devices')}</div></>]],
-        injected: [[<>{t<string>('extension')}<div className='sub'>{t<string>('accounts available via browser extensions')}</div></>]],
-        multisig: [[<>{t<string>('multisig')}<div className='sub'>{t<string>('on-chain multisig accounts')}</div></>]],
-        proxied: [[<>{t<string>('proxied')}<div className='sub'>{t<string>('on-chain proxied accounts')}</div></>]],
-        qr: [[<>{t<string>('via qr')}<div className='sub'>{t<string>('accounts available via mobile devices')}</div></>]],
-        testing: [[<>{t<string>('development')}<div className='sub'>{t<string>('accounts derived via development seeds')}</div></>]]
+        accounts: [[<>{t('accounts')}<div className='sub'>{t('all locally stored accounts')}</div></>]],
+        chopsticks: [[<>{t('chopsticks')}<div className='sub'>{t('local accounts added via chopsticks fork')}</div></>]],
+        hardware: [[<>{t('hardware')}<div className='sub'>{t('accounts managed via hardware devices')}</div></>]],
+        injected: [[<>{t('extension')}<div className='sub'>{t('accounts available via browser extensions')}</div></>]],
+        multisig: [[<>{t('multisig')}<div className='sub'>{t('on-chain multisig accounts')}</div></>]],
+        proxied: [[<>{t('proxied')}<div className='sub'>{t('on-chain proxied accounts')}</div></>]],
+        qr: [[<>{t('via qr')}<div className='sub'>{t('accounts available via mobile devices')}</div></>]],
+        testing: [[<>{t('development')}<div className='sub'>{t('accounts derived via development seeds')}</div></>]]
       };
 
       Object.values(ret).forEach((a): void => {
@@ -293,6 +299,12 @@ function Overview ({ className = '', onStatusChange }: Props): React.ReactElemen
       {isLedgerOpen && (
         <Ledger onClose={toggleLedger} />
       )}
+      {isLocalOpen && (
+        <Local
+          onClose={toggleLocal}
+          onStatusChange={onStatusChange}
+        />
+      )}
       {isMultisigOpen && (
         <Multisig
           onClose={toggleMultisig}
@@ -321,7 +333,7 @@ function Overview ({ className = '', onStatusChange }: Props): React.ReactElemen
           <SortDropdown
             className='media--1500'
             defaultValue={sortBy}
-            label={t<string>('sort by')}
+            label={t('sort by')}
             onChange={onSortChange}
             onClick={onSortDirectionChange}
             options={sortOptions.current}
@@ -333,7 +345,7 @@ function Overview ({ className = '', onStatusChange }: Props): React.ReactElemen
           />
           <FilterInput
             filterOn={filterOn}
-            label={t<string>('filter by name or tags')}
+            label={t('filter by name or tags')}
             setFilter={setFilter}
           />
         </section>
@@ -342,12 +354,12 @@ function Overview ({ className = '', onStatusChange }: Props): React.ReactElemen
             <>
               <Button
                 icon='plus'
-                label={t<string>('Account')}
+                label={t('Account')}
                 onClick={toggleCreate}
               />
               <Button
                 icon='sync'
-                label={t<string>('From JSON')}
+                label={t('From JSON')}
                 onClick={toggleImport}
               />
             </>
@@ -355,47 +367,60 @@ function Overview ({ className = '', onStatusChange }: Props): React.ReactElemen
           {hasEthereumWallet && (
             <Button
               icon='wallet'
-              label={t<string>('From Ethereum Wallet')}
+              label={t('From Ethereum Wallet')}
               onClick={onEthereumWallet}
             />
           )}
           <Button
             icon='qrcode'
-            label={t<string>('From Qr')}
+            label={t('From Qr')}
             onClick={toggleQr}
           />
           {isLedgerEnabled && (
             <Button
               icon='project-diagram'
-              label={t<string>('From Ledger')}
+              label={t('From Ledger')}
               onClick={toggleLedger}
             />
           )}
-          <Button
-            icon='plus'
-            isDisabled={!hasPalletMultisig || !hasAccounts}
-            label={t<string>('Multisig')}
-            onClick={toggleMultisig}
-          />
-          {/* <Button
-            icon='plus'
-            isDisabled={!hasPalletProxy || !hasAccounts}
-            label={t<string>('Proxied')}
-            onClick={toggleProxy}
-          /> */}
+          {hasAccounts && (
+            <>
+              {hasPalletMultisig && (
+                <Button
+                  icon='plus'
+                  label={t('Multisig')}
+                  onClick={toggleMultisig}
+                />
+              )}
+              {hasPalletProxy && (
+                <Button
+                  icon='plus'
+                  label={t('Proxied')}
+                  onClick={toggleProxy}
+                />
+              )}
+            </>
+          )}
+          {fork && (
+            <Button
+              icon='plus'
+              label={t('Local')}
+              onClick={toggleLocal}
+            />
+          )}
         </Button.Group>
       </SummaryBox>
       {!isNextTick || !sortedAccounts.length
         ? (
           <Table
-            empty={isNextTick && sortedAccounts && t<string>("You don't have any accounts. Some features are currently hidden and will only become available once you have accounts.")}
+            empty={isNextTick && sortedAccounts && t("You don't have any accounts. Some features are currently hidden and will only become available once you have accounts.")}
             header={header.accounts}
           />
         )
         : GROUP_ORDER.map((group) =>
           groups[group] && (
             <Table
-              empty={t<string>('No accounts')}
+              empty={t('No accounts')}
               header={header[group]}
               isSplit
               key={group}

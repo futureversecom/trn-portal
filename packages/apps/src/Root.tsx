@@ -1,21 +1,20 @@
 // Copyright 2017-2025 @polkadot/apps authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { ThemeDef } from '@polkadot/react-hooks/ctx/types';
+import type { ThemeDef } from '@polkadot/react-components/types';
 import type { KeyringStore } from '@polkadot/ui-keyring/types';
 
-import { BlockEVMEventsCtxRoot } from '@trnsp/custom/providers/BlockEVMEvents';
-import { EthereumWalletCtxRoot } from '@trnsp/custom/providers/EthereumWallet';
 import React, { Suspense, useEffect, useState } from 'react';
 import { HashRouter } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 
 import { ApiCtxRoot } from '@polkadot/react-api';
+import { EthereumWalletCtxRoot } from '@polkadot/react-components';
 import { ApiStatsCtxRoot, BlockAuthorsCtxRoot, BlockEventsCtxRoot, KeyringCtxRoot, QueueCtxRoot, WindowSizeCtxRoot } from '@polkadot/react-hooks';
+import { BlockEVMEventsCtxRoot } from '@polkadot/react-hooks/ctx/BlockEVMEvents';
 import { settings } from '@polkadot/ui-settings';
 
-import Apps from './Apps';
-import { darkTheme, lightTheme } from './themes';
+import Apps from './Apps.js';
 
 interface Props {
   isElectron: boolean;
@@ -23,14 +22,13 @@ interface Props {
 }
 
 function createTheme ({ uiTheme }: { uiTheme: string }): ThemeDef {
-  const validTheme = uiTheme === 'dark' ? 'dark' : 'light';
+  const theme = uiTheme === 'dark'
+    ? 'dark'
+    : 'light';
 
-  document && document.documentElement &&
-    document.documentElement.setAttribute('data-theme', validTheme);
+  document?.documentElement?.setAttribute('data-theme', theme);
 
-  return uiTheme === 'dark'
-    ? darkTheme
-    : lightTheme;
+  return { theme };
 }
 
 function Root ({ isElectron, store }: Props): React.ReactElement<Props> {
@@ -41,7 +39,7 @@ function Root ({ isElectron, store }: Props): React.ReactElement<Props> {
   }, []);
 
   // The ordering here is critical. It defines the hierarchy of dependencies,
-  // i.e. Block* could from Api. Certainly no cross-deps allowed
+  // i.e. Block* depends on Api. Certainly no cross-deps allowed
   return (
     <Suspense fallback='...'>
       <ThemeProvider theme={theme}>

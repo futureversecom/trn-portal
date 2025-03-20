@@ -3,7 +3,7 @@
 
 import type { PalletReferendaTrackInfo } from '@polkadot/types/lookup';
 import type { BN } from '@polkadot/util';
-import type { PalletReferenda } from '../../types';
+import type { PalletReferenda } from '../../types.js';
 
 import React, { useState } from 'react';
 
@@ -11,7 +11,7 @@ import { Button, InputAddress, InputBalance, InputNumber, Modal, TxButton } from
 import { useApi, useToggle } from '@polkadot/react-hooks';
 import { Available } from '@polkadot/react-query';
 
-import { useTranslation } from '../../translate';
+import { useTranslation } from '../../translate.js';
 
 interface Props {
   className?: string;
@@ -31,17 +31,17 @@ function Deposit ({ className = '', id, palletReferenda, track }: Props): React.
       {isOpen && (
         <Modal
           className={className}
-          header={t<string>('Place decision deposit')}
+          header={t('Place decision deposit')}
           onClose={toggleOpen}
           size='large'
         >
           <Modal.Content>
-            <Modal.Columns hint={t<string>('The deposit will be registered from this account and the balance lock will be applied here.')}>
+            <Modal.Columns hint={t('The deposit will be registered from this account and the balance lock will be applied here.')}>
               <InputAddress
-                label={t<string>('deposit from account')}
+                label={t('deposit from account')}
                 labelExtra={
                   <Available
-                    label={<span className='label'>{t<string>('transferrable')}</span>}
+                    label={<span className='label'>{t('transferable')}</span>}
                     params={accountId}
                   />
                 }
@@ -49,18 +49,18 @@ function Deposit ({ className = '', id, palletReferenda, track }: Props): React.
                 type='account'
               />
             </Modal.Columns>
-            <Modal.Columns hint={t<string>('The referendum this deposit would apply to.')}>
+            <Modal.Columns hint={t('The referendum this deposit would apply to.')}>
               <InputNumber
                 defaultValue={id}
                 isDisabled
-                label={t<string>('referendum id')}
+                label={t('referendum id')}
               />
             </Modal.Columns>
-            <Modal.Columns hint={t<string>('The deposit for this proposal will be locked for the referendum duration.')}>
+            <Modal.Columns hint={t('The deposit for this proposal will be locked for the referendum duration.')}>
               <InputBalance
                 defaultValue={track.decisionDeposit}
                 isDisabled
-                label={t<string>('decision deposit')}
+                label={t('decision deposit')}
               />
             </Modal.Columns>
           </Modal.Content>
@@ -68,7 +68,7 @@ function Deposit ({ className = '', id, palletReferenda, track }: Props): React.
             <TxButton
               accountId={accountId}
               icon='plus'
-              label={t<string>('Place deposit')}
+              label={t('Place deposit')}
               onStart={toggleOpen}
               params={[id]}
               tx={api.tx[palletReferenda as 'referenda'].placeDecisionDeposit}
@@ -78,7 +78,7 @@ function Deposit ({ className = '', id, palletReferenda, track }: Props): React.
       )}
       <Button
         icon='plus'
-        label={t<string>('Decision deposit')}
+        label={t('Decision deposit')}
         onClick={toggleOpen}
       />
     </>

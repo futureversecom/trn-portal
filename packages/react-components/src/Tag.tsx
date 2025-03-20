@@ -1,14 +1,14 @@
 // Copyright 2017-2025 @polkadot/react-components authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { ThemeDef } from '@polkadot/react-hooks/ctx/types';
-import type { FlagColor as TagColor } from './types';
+import type { FlagColor as TagColor } from './types.js';
 
-import React, { useContext, useState } from 'react';
-import { ThemeContext } from 'styled-components';
+import React, { useState } from 'react';
 
-import { styled } from './styled';
-import Tooltip from './Tooltip';
+import { useTheme } from '@polkadot/react-hooks';
+
+import { styled } from './styled.js';
+import Tooltip from './Tooltip.js';
 
 interface Props {
   className?: string;
@@ -21,7 +21,7 @@ interface Props {
 let tagId = 0;
 
 function Tag ({ className = '', color = 'theme', hover, label, size = 'small' }: Props): React.ReactElement<Props> {
-  const { theme } = useContext(ThemeContext as React.Context<ThemeDef>);
+  const { theme } = useTheme();
   const [trigger] = useState(() => `tag-hover-${Date.now()}-${tagId++}`);
 
   return (

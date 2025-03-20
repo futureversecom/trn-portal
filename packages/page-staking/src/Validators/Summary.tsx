@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import type { DeriveStakingOverview } from '@polkadot/api-derive/types';
-import type { SortedTargets } from '../types';
+import type { SortedTargets } from '../types.js';
 
 import React from 'react';
 
@@ -10,7 +10,7 @@ import SummarySession from '@polkadot/app-explorer/SummarySession';
 import { CardSummary, styled, SummaryBox } from '@polkadot/react-components';
 import { formatNumber } from '@polkadot/util';
 
-import { useTranslation } from '../translate';
+import { useTranslation } from '../translate.js';
 
 interface Props {
   className?: string;
@@ -19,7 +19,7 @@ interface Props {
   targets: SortedTargets;
 }
 
-function Summary ({ className = '', stakingOverview, targets: { counterForNominators, inflation: { idealStake, inflation, stakedFraction }, nominators, waitingIds } }: Props): React.ReactElement<Props> {
+function Summary ({ className = '', stakingOverview, targets: { counterForNominators, nominators, waitingIds } }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
 
   // const percent = <span className='percent'>%</span>;
@@ -27,7 +27,7 @@ function Summary ({ className = '', stakingOverview, targets: { counterForNomina
   return (
     <StyledSummaryBox className={className}>
       <section>
-        <CardSummary label={t<string>('validators')}>
+        <CardSummary label={t('validators')}>
           {stakingOverview
             ? <>{formatNumber(stakingOverview.validators.length)}&nbsp;/&nbsp;{formatNumber(stakingOverview.validatorCount)}</>
             : <span className='--tmp'>999 / 999</span>
@@ -35,7 +35,7 @@ function Summary ({ className = '', stakingOverview, targets: { counterForNomina
         </CardSummary>
         <CardSummary
           className='media--900'
-          label={t<string>('waiting')}
+          label={t('waiting')}
         >
           {waitingIds
             ? formatNumber(waitingIds.length)
@@ -46,8 +46,8 @@ function Summary ({ className = '', stakingOverview, targets: { counterForNomina
           className='media--1000'
           label={
             counterForNominators
-              ? t<string>('active / nominators')
-              : t<string>('nominators')
+              ? t('active / nominators')
+              : t('nominators')
           }
         >
           {nominators
@@ -68,7 +68,7 @@ function Summary ({ className = '', stakingOverview, targets: { counterForNomina
         {(idealStake > 0) && Number.isFinite(idealStake) && (
           <CardSummary
             className='media--1400'
-            label={t<string>('ideal staked')}
+            label={t('ideal staked')}
           >
             <>{(idealStake * 100).toFixed(1)}{percent}</>
           </CardSummary>
@@ -76,7 +76,7 @@ function Summary ({ className = '', stakingOverview, targets: { counterForNomina
         {(stakedFraction > 0) && (
           <CardSummary
             className='media--1300'
-            label={t<string>('staked')}
+            label={t('staked')}
           >
             <>{(stakedFraction * 100).toFixed(1)}{percent}</>
           </CardSummary>
@@ -84,7 +84,7 @@ function Summary ({ className = '', stakingOverview, targets: { counterForNomina
         {(inflation > 0) && Number.isFinite(inflation) && (
           <CardSummary
             className='media--1200'
-            label={t<string>('inflation')}
+            label={t('inflation')}
           >
             <>{inflation.toFixed(1)}{percent}</>
           </CardSummary>

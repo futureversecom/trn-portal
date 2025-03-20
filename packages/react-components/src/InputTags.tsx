@@ -1,14 +1,13 @@
 // Copyright 2017-2025 @polkadot/react-components authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { ThemeDef } from '@polkadot/react-hooks/ctx/types';
-
-import React, { useContext } from 'react';
+import React from 'react';
 import store from 'store';
-import { ThemeContext } from 'styled-components';
 
-import Dropdown from './Dropdown';
-import { styled } from './styled';
+import { useTheme } from '@polkadot/react-hooks';
+
+import Dropdown from './Dropdown.js';
+import { styled } from './styled.js';
 
 interface Option {
   key: string;
@@ -57,7 +56,7 @@ function onAddTag (value: string): void {
 }
 
 function InputTags ({ allowAdd = true, className = '', defaultValue, isDisabled, isError, label, onBlur, onChange, onClose, placeholder, searchInput, value, withLabel }: Props): React.ReactElement<Props> {
-  const { theme } = useContext(ThemeContext as React.Context<ThemeDef>);
+  const { theme } = useTheme();
 
   return (
     <StyledDropdown

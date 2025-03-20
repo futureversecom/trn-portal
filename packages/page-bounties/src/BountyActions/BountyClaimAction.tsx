@@ -6,12 +6,12 @@ import type { BN } from '@polkadot/util';
 
 import React, { useMemo } from 'react';
 
-import { useBounties } from '@polkadot/app-bounties/hooks';
 import { TxButton } from '@polkadot/react-components';
 import { useAccounts } from '@polkadot/react-hooks';
 
-import { isClaimable } from '../helpers';
-import { useTranslation } from '../translate';
+import { isClaimable } from '../helpers/index.js';
+import { useBounties } from '../hooks/index.js';
+import { useTranslation } from '../translate.js';
 
 interface Props {
   beneficiaryId: AccountId;
@@ -34,7 +34,7 @@ function BountyClaimAction ({ beneficiaryId, index, payoutDue }: Props) {
       <TxButton
         accountId={beneficiaryId}
         icon='plus'
-        label={t<string>('Claim')}
+        label={t('Claim')}
         params={[index]}
         tx={claimBounty}
       />

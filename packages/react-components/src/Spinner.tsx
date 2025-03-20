@@ -3,9 +3,9 @@
 
 import React from 'react';
 
-import spinnerSrc from './Spinner.png';
-import { styled } from './styled';
-import { useTranslation } from './translate';
+import spinnerSrc from './Spinner.png.js';
+import { styled } from './styled.js';
+import { useTranslation } from './translate.js';
 
 interface Props {
   className?: string;
@@ -23,7 +23,7 @@ function Spinner ({ className = '', label, noLabel, variant = 'app' }: Props): R
         className={variant === 'push' ? '' : 'highlight--bg highlight--border'}
         src={spinnerSrc}
       />
-      {!noLabel && variant.startsWith('app') && <div className='text'>{label || t<string>('Retrieving data')}</div>}
+      {!noLabel && variant.startsWith('app') && <div className='text'>{label || t('Retrieving data')}</div>}
     </StyledSpinner>
   );
 }

@@ -2,10 +2,10 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import type { DropdownItemProps } from 'semantic-ui-react';
-import type { KeyringOption$Type, KeyringOptions, KeyringSectionOption, KeyringSectionOptions } from '@polkadot/ui-keyring/options/types';
-import type { Option } from './types';
+import type { KeyringOption$Type, KeyringOptions, KeyringSectionOption } from '@polkadot/ui-keyring/options/types';
+import type { EthereumWallet } from '../EthereumWallet.js';
+import type { Option } from './types.js';
 
-import { EthereumWallet, EthereumWalletCtx } from '@trnsp/custom/providers/EthereumWallet';
 import React from 'react';
 import store from 'store';
 
@@ -15,13 +15,14 @@ import { createOptionItem } from '@polkadot/ui-keyring/options/item';
 import { isNull, isUndefined } from '@polkadot/util';
 import { isAddress } from '@polkadot/util-crypto';
 
-import Dropdown from '../Dropdown';
-import MarkError from '../MarkError';
-import Static from '../Static';
-import { styled } from '../styled';
-import { getAddressName, toAddress } from '../util';
-import createHeader from './createHeader';
-import createItem from './createItem';
+import Dropdown from '../Dropdown.js';
+import { EthereumWalletCtx } from '../EthereumWallet.js';
+import MarkError from '../MarkError.js';
+import Static from '../Static.js';
+import { styled } from '../styled.js';
+import { getAddressName, toAddress } from '../util/index.js';
+import createHeader from './createHeader.js';
+import createItem from './createItem.js';
 
 interface Props {
   className?: string;
@@ -65,7 +66,7 @@ const MULTI_DEFAULT: string[] = [];
 function transformToAddress (value?: string | Uint8Array | null): string | null {
   try {
     return toAddress(value, false, keyring.keyring.type === 'ethereum' ? 20 : 32) || null;
-  } catch (error) {
+  } catch {
     // noop, handled by return
   }
 
@@ -90,13 +91,13 @@ function createOption (address: string): Option | null {
   let name: string | undefined;
 
   if (pair) {
-    name = (pair.meta.name as string);
+    name = pair.meta.name;
   } else {
     const addr = keyring.getAddress(address);
 
     if (addr) {
-      name = (addr.meta.name as string);
-      isRecent = (addr.meta.isRecent as boolean);
+      name = addr.meta.name;
+      isRecent = addr.meta.isRecent;
     } else {
       isRecent = true;
     }
@@ -148,7 +149,7 @@ class InputAddress extends React.PureComponent<Props, State> {
           ? value.map((v) => toAddress(v))
           : (toAddress(value) || undefined)
       };
-    } catch (error) {
+    } catch {
       return null;
     }
   }
@@ -178,7 +179,7 @@ class InputAddress extends React.PureComponent<Props, State> {
         ? defaultValue
         : this.hasValue(lastValue)
           ? lastValue
-          : (lastOption && lastOption.value)
+          : lastOption?.value
     );
     const actualOptions: Option[] = options
       ? dedupe(
@@ -228,7 +229,12 @@ class InputAddress extends React.PureComponent<Props, State> {
             : this.onChange
         }
         onSearch={this.onSearch}
-        options={actualOptions}
+        options={
+          // FIXME: this is a "bit" of a HACK - the issue is that the "null"
+          // value from Option is not correct for the supplied type. (This
+          // originates in the ui repo for the KeyringOption)
+          actualOptions as unknown as React.ReactNode[]
+        }
         placeholder={placeholder}
         renderLabel={
           isMultiple
@@ -273,7 +279,7 @@ class InputAddress extends React.PureComponent<Props, State> {
   }
 
   private hasValue (test?: Uint8Array | string | null): boolean {
-    const address = test && test.toString();
+    const address = test?.toString();
 
     return this.getFiltered().some(({ value }) => value === address);
   }
@@ -317,19 +323,19 @@ class InputAddress extends React.PureComponent<Props, State> {
       onChangeMulti(
         addresses
           .map(transformToAccountId)
-          .filter((address) => address as string) as string[]
+          .filter((address): address is string => !!address)
       );
     }
   };
 
-  private onSearch = (filteredOptions: KeyringSectionOptions, _query: string): DropdownItemProps[] => {
+  private onSearch = (filteredOptions: DropdownItemProps[], _query: string): DropdownItemProps[] => {
     const { isInput = true } = this.props;
     const query = _query.trim();
     const queryLower = query.toLowerCase();
     const matches = filteredOptions.filter((item): boolean =>
-      !!item.value && (
-        (item.name.toLowerCase && item.name.toLowerCase().includes(queryLower)) ||
-        item.value.toLowerCase().includes(queryLower)
+      !!item.value && typeof item.name === 'string' && (
+        (item.name.toLowerCase?.().includes(queryLower)) ||
+        item.value.toString().toLowerCase().includes(queryLower)
       )
     );
 
@@ -337,11 +343,15 @@ class InputAddress extends React.PureComponent<Props, State> {
       const accountId = transformToAccountId(query);
 
       if (accountId) {
-        matches.push(
-          keyring.saveRecent(
-            accountId.toString()
-          ).option
-        );
+        const item = keyring.saveRecent(
+          accountId.toString()
+        ).option;
+
+        matches.push({
+          key: item.key,
+          name: item.name,
+          value: item.value || undefined
+        });
       }
     }
 
@@ -353,10 +363,10 @@ class InputAddress extends React.PureComponent<Props, State> {
     return matches.filter((item, index): boolean => {
       const isLast = index === matches.length - 1;
       const nextItem = matches[index + 1];
-      const hasNext = nextItem && nextItem.value;
+      const hasNext = nextItem?.value;
 
       return !(isNull(item.value) || isUndefined(item.value)) || (!isLast && !!hasNext);
-    }) as DropdownItemProps[];
+    });
   };
 }
 

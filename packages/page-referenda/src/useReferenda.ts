@@ -3,15 +3,15 @@
 
 import type { Option } from '@polkadot/types';
 import type { BN } from '@polkadot/util';
-import type { PalletReferenda, ReferendaGroup, ReferendaGroupKnown, Referendum, TrackDescription } from './types';
+import type { PalletReferenda, ReferendaGroup, ReferendaGroupKnown, Referendum, TrackDescription } from './types.js';
 
 import { useMemo } from 'react';
 
 import { createNamedHook, useApi, useCall } from '@polkadot/react-hooks';
 
-import useReferendaIds from './useReferendaIds';
-import useTracks from './useTracks';
-import { calcDecidingEnd, getTrackName, isConvictionVote } from './util';
+import useReferendaIds from './useReferendaIds.js';
+import useTracks from './useTracks.js';
+import { calcDecidingEnd, getTrackName, isConvictionVote } from './util.js';
 
 function sortOngoing (a: Referendum, b: Referendum): number {
   const ao = a.info.asOngoing;
@@ -81,7 +81,7 @@ function group (tracks: TrackDescription[], totalIssuance?: BN, referenda?: Refe
   const other: ReferendaGroupKnown = { key: 'referenda', referenda: [] };
 
   // sort the referenda by track inside groups
-  for (let i = 0; i < referenda.length; i++) {
+  for (let i = 0, count = referenda.length; i < count; i++) {
     const ref = referenda[i];
 
     // only ongoing have tracks
@@ -132,7 +132,7 @@ function group (tracks: TrackDescription[], totalIssuance?: BN, referenda?: Refe
   }
 
   // sort referenda per group
-  for (let i = 0; i < grouped.length; i++) {
+  for (let i = 0, count = grouped.length; i < count; i++) {
     grouped[i].referenda.sort(sortReferenda);
   }
 

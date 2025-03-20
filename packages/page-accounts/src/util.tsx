@@ -2,10 +2,9 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import type { ActionStatus } from '@polkadot/react-components/Status/types';
-import type { DisplayedJudgement } from '@polkadot/react-components/types';
 import type { AccountId, AccountIndex, Address } from '@polkadot/types/interfaces';
 import type { CreateResult } from '@polkadot/ui-keyring/types';
-import type { AccountBalance, SortedAccount } from './types';
+import type { AccountBalance, SortedAccount } from './types.js';
 
 import FileSaver from 'file-saver';
 import React from 'react';
@@ -75,7 +74,7 @@ export type SortCategory = typeof SORT_CATEGORY[number];
 function comparator (accountsMap: Record<string, SortedAccount>, balances: Record<string, AccountBalance | undefined>, category: SortCategory, fromMax: boolean): (a: SortedAccount, b: SortedAccount) => number {
   function accountQualifiedName (account: SortedAccount | undefined): string {
     if (account) {
-      const parent = (account.account?.meta.parentAddress || '') as string;
+      const parent = (account.account?.meta.parentAddress || '');
 
       return accountQualifiedName(accountsMap[parent]) + account.address;
     } else {
@@ -97,10 +96,10 @@ function comparator (accountsMap: Record<string, SortedAccount>, balances: Recor
       return make(accountQualifiedName, (a, b) => a.localeCompare(b));
 
     case 'name':
-      return make((acc) => getAddressMeta(acc.address).name ?? '', (a, b) => (a as string).localeCompare(b as string));
+      return make((acc) => getAddressMeta(acc.address).name ?? '', (a, b) => (a).localeCompare(b));
 
     case 'date':
-      return make((acc) => acc.account?.meta.whenCreated ?? 0, (a, b) => ((a as number) - (b as number)));
+      return make((acc) => acc.account?.meta.whenCreated ?? 0, (a, b) => ((a) - (b)));
 
     case 'balances':
       return make((acc) => balances[acc.address]?.total ?? BN_ZERO, (a, b) => a.cmp(b));
@@ -116,10 +115,4 @@ export function sortAccounts (accountsList: SortedAccount[], accountsMap: Record
         : b.isFavorite
           ? 1
           : -1);
-}
-
-export function getJudgementColor (name: DisplayedJudgement): 'green' | 'red' {
-  return (name === 'Erroneous' || name === 'Low quality')
-    ? 'red'
-    : 'green';
 }

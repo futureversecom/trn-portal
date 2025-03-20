@@ -11,8 +11,8 @@ import React from 'react';
 import { useAccounts, useApi, useCall } from '@polkadot/react-hooks';
 import { FormatBalance } from '@polkadot/react-query';
 
-import { useTranslation } from './translate';
-import TxButton from './TxButton';
+import { useTranslation } from './translate.js';
+import TxButton from './TxButton.js';
 
 interface DeriveStakingAccountPartial {
   controllerId: DeriveStakingAccount['controllerId'] | string;
@@ -60,7 +60,7 @@ function StakingRedeemable ({ className = '', isPool, stakingInfo }: Props): Rea
                     ? [spanCount]
                     : []
               }
-              tooltip={t<string>('Withdraw these unbonded funds')}
+              tooltip={t('Withdraw these unbonded funds')}
               tx={
                 isPool
                   ? api.tx.nominationPools.withdrawUnbonded

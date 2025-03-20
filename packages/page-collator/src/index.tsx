@@ -5,8 +5,8 @@ import React, { useRef } from 'react';
 
 import { Tabs } from '@polkadot/react-components';
 
-import Collators from './Collators';
-import { useTranslation } from './translate';
+import Collators from './Collators.js';
+import { useTranslation } from './translate.js';
 
 interface Props {
   basePath: string;
@@ -20,7 +20,7 @@ function CollatorApp ({ basePath, className }: Props): React.ReactElement<Props>
     {
       isRoot: true,
       name: 'index',
-      text: t<string>('Overview')
+      text: t('Overview')
     }
   ]);
 

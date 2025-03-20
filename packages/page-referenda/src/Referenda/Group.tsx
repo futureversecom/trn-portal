@@ -2,16 +2,16 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import type { BN } from '@polkadot/util';
-import type { PalletReferenda, PalletVote, ReferendaGroup, TrackDescription } from '../types';
+import type { PalletReferenda, PalletVote, ReferendaGroup, TrackDescription } from '../types.js';
 
 import React, { useMemo } from 'react';
 
 import { ExpandButton, Table } from '@polkadot/react-components';
 import { useApi, useToggle } from '@polkadot/react-hooks';
 
-import { useTranslation } from '../translate';
-import { getTrackInfo } from '../util';
-import Referendum from './Referendum';
+import { useTranslation } from '../translate.js';
+import { getTrackInfo } from '../util.js';
+import Referendum from './Referendum.js';
 
 interface Props extends ReferendaGroup {
   activeIssuance?: BN;
@@ -54,8 +54,8 @@ function Group ({ activeIssuance, className, isMember, members, palletReferenda,
   const [header, key] = useMemo(
     (): [([React.ReactNode?, string?, number?] | null)[], string] => [
       [
-        [trackName ? <>{trackName}<div className='sub'>{trackInfo?.text}</div></> : t<string>('referenda'), 'start', 8],
-        null && [headerButton]
+        [trackName ? <>{trackName}<div className='sub'>{trackInfo?.text}</div></> : t('referenda'), 'start', 8],
+        [headerButton]
       ],
       trackName
         ? `track:${trackName}`
@@ -67,13 +67,13 @@ function Group ({ activeIssuance, className, isMember, members, palletReferenda,
   return (
     <Table
       className={className}
-      empty={referenda && t<string>('No active referenda')}
+      empty={referenda && t('No active referenda')}
       header={header}
       headerChildren={headerChildren}
       isSplit={!trackId}
       key={key}
     >
-      {referenda && referenda.map((r) => (
+      {referenda?.map((r) => (
         <Referendum
           activeIssuance={activeIssuance}
           isMember={isMember}

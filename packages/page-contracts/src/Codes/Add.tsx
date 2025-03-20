@@ -6,11 +6,11 @@ import React, { useCallback, useState } from 'react';
 import { Button, Input, Modal } from '@polkadot/react-components';
 import { isNull } from '@polkadot/util';
 
-import { ABI, InputName } from '../shared';
-import store from '../store';
-import { useTranslation } from '../translate';
-import useAbi from '../useAbi';
-import ValidateCode from './ValidateCode';
+import { ABI, InputName } from '../shared/index.js';
+import store from '../store.js';
+import { useTranslation } from '../translate.js';
+import useAbi from '../useAbi.js';
+import ValidateCode from './ValidateCode.js';
 
 interface Props {
   onClose: () => void;
@@ -40,14 +40,14 @@ function Add ({ onClose }: Props): React.ReactElement {
 
   return (
     <Modal
-      header={t<string>('Add an existing code hash')}
+      header={t('Add an existing code hash')}
       onClose={onClose}
     >
       <Modal.Content>
         <Input
           autoFocus
           isError={codeHash.length > 0 && !isCodeHashValid}
-          label={t<string>('code hash')}
+          label={t('code hash')}
           onChange={setCodeHash}
           value={codeHash}
         />
@@ -74,7 +74,7 @@ function Add ({ onClose }: Props): React.ReactElement {
         <Button
           icon='save'
           isDisabled={!isValid}
-          label={t<string>('Save')}
+          label={t('Save')}
           onClick={_onSave}
         />
       </Modal.Actions>

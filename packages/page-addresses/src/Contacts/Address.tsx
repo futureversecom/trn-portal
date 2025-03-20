@@ -3,16 +3,16 @@
 
 import type { ActionStatus } from '@polkadot/react-components/Status/types';
 import type { KeyringAddress } from '@polkadot/ui-keyring/types';
+import type { HexString } from '@polkadot/util/types';
 
 import React, { useCallback, useEffect, useState } from 'react';
 
-import Transfer from '@polkadot/app-accounts/modals/Transfer';
-import { AddressInfo, AddressSmall, Button, ChainLock, Columar, Forget, LinkExternal, Menu, Popup, Table, Tags } from '@polkadot/react-components';
+import { AddressInfo, AddressSmall, Button, ChainLock, Columar, Forget, LinkExternal, Menu, Popup, Table, Tags, TransferModal } from '@polkadot/react-components';
 import { useApi, useBalancesAll, useDeriveAccountInfo, useToggle } from '@polkadot/react-hooks';
 import { keyring } from '@polkadot/ui-keyring';
 import { isFunction } from '@polkadot/util';
 
-import { useTranslation } from '../translate';
+import { useTranslation } from '../translate.js';
 
 interface Props {
   address: string;
@@ -68,17 +68,16 @@ function Address ({ address, className = '', filter, isFavorite, toggleFavorite 
 
   useEffect((): void => {
     const current = keyring.getAddress(address);
-    const genesisHash: string | null = (current?.meta?.genesisHash) as string || null;
 
     setCurrent(current || null);
-    setGenesisHash(genesisHash);
+    setGenesisHash((current?.meta.genesisHash) || null);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect((): void => {
     const { identity, nickname } = info || {};
 
-    if (isFunction(api.api.query.identity?.identityOf)) {
+    if (isFunction(api.apiIdentity?.query.identity?.identityOf)) {
       if (identity?.display) {
         setAccName(identity.display);
       }
@@ -90,8 +89,8 @@ function Address ({ address, className = '', filter, isFavorite, toggleFavorite 
   useEffect((): void => {
     const account = keyring.getAddress(address);
 
-    _setTags(account?.meta?.tags as string[] || []);
-    setAccName(account?.meta?.name as string || '');
+    _setTags(account?.meta?.tags || []);
+    setAccName(account?.meta?.name || '');
   }, [_setTags, address]);
 
   useEffect((): void => {
@@ -109,7 +108,7 @@ function Address ({ address, className = '', filter, isFavorite, toggleFavorite 
   }, [accName, filter, tags]);
 
   const _onGenesisChange = useCallback(
-    (genesisHash: string | null): void => {
+    (genesisHash: HexString | null): void => {
       setGenesisHash(genesisHash);
 
       const account = keyring.getAddress(address);
@@ -142,7 +141,7 @@ function Address ({ address, className = '', filter, isFavorite, toggleFavorite 
         try {
           keyring.forgetAddress(address);
           status.status = 'success';
-          status.message = t<string>('address forgotten');
+          status.message = t('address forgotten');
         } catch (error) {
           status.status = 'error';
           status.message = (error as Error).message;
@@ -160,7 +159,7 @@ function Address ({ address, className = '', filter, isFavorite, toggleFavorite 
     <Menu>
       <Menu.Item
         isDisabled={!isEditable}
-        label={t<string>('Forget this address')}
+        label={t('Forget this address')}
         onClick={_toggleForget}
       />
       {isEditable && !api.isDevelopment && (
@@ -201,7 +200,7 @@ function Address ({ address, className = '', filter, isFavorite, toggleFavorite 
                 />
               )}
               {isTransferOpen && (
-                <Transfer
+                <TransferModal
                   key='modal-transfer'
                   onClose={_toggleTransfer}
                   recipientId={address}
@@ -212,12 +211,12 @@ function Address ({ address, className = '', filter, isFavorite, toggleFavorite 
         </td>
         <td className='actions button'>
           <Button.Group>
-            {isFunction(api.api.tx.balances?.transfer) && (
+            {(isFunction(api.api.tx.balances?.transferAllowDeath) || isFunction(api.api.tx.balances?.transfer)) && (
               <Button
                 className='send-button'
                 icon='paper-plane'
                 key='send'
-                label={t<string>('send')}
+                label={t('send')}
                 onClick={_toggleTransfer}
               />
             )}

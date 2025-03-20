@@ -8,7 +8,7 @@ import React from 'react';
 
 import { useApi, useCall } from '@polkadot/react-hooks';
 
-import FormatBalance from './FormatBalance';
+import FormatBalance from './FormatBalance.js';
 
 interface Props {
   children?: React.ReactNode;
@@ -25,7 +25,7 @@ function AvailableDisplay ({ children, className = '', label, params }: Props): 
     <FormatBalance
       className={className}
       label={label}
-      value={allBalances?.availableBalance}
+      value={allBalances?.transferable || allBalances?.availableBalance}
     >
       {children}
     </FormatBalance>

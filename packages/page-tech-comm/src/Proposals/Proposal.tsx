@@ -13,8 +13,8 @@ import { useApi, useCall, useCollectiveInstance, useVotingStatus } from '@polkad
 import { BlockToTime } from '@polkadot/react-query';
 import { formatNumber } from '@polkadot/util';
 
-import Close from './Close';
-import Voting from './Voting';
+import Close from './Close.js';
+import Voting from './Voting.js';
 
 interface Props {
   className?: string;
@@ -31,7 +31,7 @@ function Proposal ({ className = '', imageHash, isMember, members, prime, type }
   const { hasFailed, isCloseable, isVoteable, remainingBlocks } = useVotingStatus(derive?.votes, members.length, type);
   const modLocation = useCollectiveInstance(type);
 
-  if (!modLocation || !derive || !derive.votes) {
+  if (!modLocation || !derive?.votes) {
     return null;
   }
 
