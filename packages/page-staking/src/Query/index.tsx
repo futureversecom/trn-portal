@@ -18,7 +18,7 @@ interface Props {
 
 function doQuery (validatorId?: string | null): void {
   if (validatorId) {
-    window.location.hash = `/staking/query/${validatorId}`;
+    window.location.hash = `/legacy-staking/query/${validatorId}`;
   }
 }
 

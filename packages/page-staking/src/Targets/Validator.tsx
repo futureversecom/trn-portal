@@ -29,7 +29,7 @@ interface Props {
 }
 
 function queryAddress (address: string): void {
-  window.location.hash = `/staking/query/${address}`;
+  window.location.hash = `/legacy-staking/query/${address}`;
 }
 
 function Validator ({ allSlashes, canSelect, filterName, info: { accountId, bondOther, bondOwn, bondTotal, commissionPer, isBlocking, isElected, isFavorite, key, lastPayout, numNominators, rankOverall, stakedReturnCmp }, isNominated, isSelected, nominatedBy = [], toggleFavorite, toggleSelected }: Props): React.ReactElement<Props> | null {
