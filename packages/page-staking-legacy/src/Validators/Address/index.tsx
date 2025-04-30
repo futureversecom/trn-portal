@@ -109,7 +109,7 @@ function Address ({ address, className = '', filterName, hasQueries, isElected, 
   );
 
   const statsLink = useMemo(
-    () => `#/staking/query/${address}`,
+    () => `#/legacy-staking/query/${address}`,
     [address]
   );
 
