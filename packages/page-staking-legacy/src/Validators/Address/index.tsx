@@ -95,6 +95,7 @@ function Address ({ address, className = '', filterName, hasQueries, isElected, 
   const { api, apiIdentity } = useApi();
   const [isExpanded, toggleIsExpanded] = useToggle(false);
   const { accountInfo, slashingSpans } = useAddressCalls(api, address, isMain);
+  console.log('hasQueries::',hasQueries);
 
   const { commission, isChilled, nominators, stakeOther, stakeOwn } = useMemo(
     () => validatorInfo
