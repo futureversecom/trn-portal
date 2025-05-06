@@ -96,6 +96,8 @@ function Address ({ address, className = '', filterName, hasQueries, isElected, 
   const [isExpanded, toggleIsExpanded] = useToggle(false);
   const { accountInfo, slashingSpans } = useAddressCalls(api, address, isMain);
 
+  console.log('hasQueries::', hasQueries);
+
   const { commission, isChilled, nominators, stakeOther, stakeOwn } = useMemo(
     () => validatorInfo
       ? expandInfo(validatorInfo, minCommission)
@@ -109,7 +111,7 @@ function Address ({ address, className = '', filterName, hasQueries, isElected, 
   );
 
   const statsLink = useMemo(
-    () => `#/staking/query/${address}`,
+    () => `#/legacy-staking/query/${address}`,
     [address]
   );
 
