@@ -36,6 +36,7 @@ function PaymentInfo ({ accountId, className = '', extrinsic, isHeader, signerOp
       nextTick(async (): Promise<void> => {
         try {
           const info = await extrinsic.paymentInfo(accountId, signerOptions);
+
           if (signerOptions?.assetId) {
             const convertedFee = new BN((await api.call.assetConversionApi.quotePriceTokensForExactTokens(
               signerOptions?.assetId as string,
