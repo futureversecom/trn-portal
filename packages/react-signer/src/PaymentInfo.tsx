@@ -2,17 +2,15 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import type { SubmittableExtrinsic } from '@polkadot/api/promise/types';
-import type { DeriveBalancesAll } from '@polkadot/api-derive/types';
 import type { QueueTx } from '@polkadot/react-components/Status/types';
 import type { RuntimeDispatchInfo } from '@polkadot/types/interfaces';
 
 import React, { useEffect, useState } from 'react';
 import { Trans } from 'react-i18next';
 
-// import { useFeeAssetBalance } from '@polkadot/custom/hooks/useFeeAssetBalance';
 import { Expander, MarkWarning } from '@polkadot/react-components';
-import { useApi, useCall, useIsMountedRef } from '@polkadot/react-hooks';
-import { BN, formatBalance, nextTick } from '@polkadot/util';
+import { useApi, useFeeAssetBalance, useIsMountedRef } from '@polkadot/react-hooks';
+import { BN, nextTick } from '@polkadot/util';
 
 import { useTranslation } from './translate.js';
 
@@ -30,8 +28,8 @@ function PaymentInfo ({ accountId, className = '', extrinsic, isHeader, signerOp
   const { t } = useTranslation();
   const { api } = useApi();
   const [dispatchInfo, setDispatchInfo] = useState<RuntimeDispatchInfo | null>(null);
-  const balances = useCall<DeriveBalancesAll>(api.derive.balances?.all, [accountId]);
   const mountedRef = useIsMountedRef();
+  const [feeAsset, feeAssetBalance, formatFeeBalance] = useFeeAssetBalance(accountId);
 
   useEffect((): void => {
     accountId && extrinsic && extrinsic.hasPaymentInfo &&
@@ -66,10 +64,7 @@ function PaymentInfo ({ accountId, className = '', extrinsic, isHeader, signerOp
     return null;
   }
 
-  const isFeeError = api.consts.balances && !(api.tx.balances?.transferAllowDeath?.is(extrinsic) || api.tx.balances?.transfer?.is(extrinsic)) && balances?.accountId.eq(accountId) && (
-    (balances.transferable || balances.availableBalance).lte(dispatchInfo.partialFee) ||
-    balances.freeBalance.sub(dispatchInfo.partialFee).lte(api.consts.balances.existentialDeposit)
-  );
+  const isFeeError = feeAsset && feeAssetBalance?.lte(dispatchInfo.partialFee);
 
   return (
     <>
@@ -78,10 +73,7 @@ function PaymentInfo ({ accountId, className = '', extrinsic, isHeader, signerOp
         isHeader={isHeader}
         summary={
           <Trans i18nKey='feesForSubmission'>
-            Fees of <span className='highlight'>
-              {formatBalance(dispatchInfo.partialFee, { decimals: signerOptions?.feeAsset?.metadata.decimals.toNumber() ?? api.registry.chainDecimals.at(0), withSiFull: true }).split(' ').slice(0, -1).join(' ')}{' '}
-              {signerOptions?.feeAsset?.metadata.symbol.toHuman()?.toString() ?? api.registry.chainTokens.at(0) }
-            </span> will be applied to the submission
+            Fees of <span className='highlight'>{formatFeeBalance(dispatchInfo.partialFee)}</span> will be applied to the submission
           </Trans>
         }
       />
