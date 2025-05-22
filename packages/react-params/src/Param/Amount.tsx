@@ -9,7 +9,7 @@ import type { Props } from '../types.js';
 import React, { useCallback, useMemo } from 'react';
 
 import { Input, InputNumber } from '@polkadot/react-components';
-import { bnToBn, formatNumber, isUndefined } from '@polkadot/util';
+import { bnToBn, formatBalance, formatNumber, isUndefined } from '@polkadot/util';
 
 import Bare from './Bare.js';
 
@@ -29,12 +29,21 @@ function Amount ({ className = '', defaultValue: { value }, isDisabled, isError,
   );
 
   const defaultValue = useMemo(
-    () => isDisabled
-      ? value instanceof registry.createClass('AccountIndex')
-        ? value.toString()
-        : formatNumber(value as number)
-      : bnToBn((value as number) || 0).toString(),
-    [isDisabled, registry, value]
+    () => {
+      const feeOptions = { decimals: 6, forceUnit: '-', withAll: true, withSi: true, withUnit: 'XRP' };
+
+      if (isDisabled) {
+        if (value instanceof registry.createClass('AccountIndex')) {
+          return value.toString();
+        } else if (label === 'actualFee: u128' || label === 'tip: u128') {
+          return formatBalance(value as number, feeOptions);
+        } else {
+          return formatNumber(value as number);
+        }
+      } else {
+        return bnToBn((value as number) || 0).toString();
+      }
+    }, [isDisabled, registry, value, label]
   );
 
   const bitLength = useMemo(
