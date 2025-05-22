@@ -9,7 +9,7 @@ import type { Props } from '../types.js';
 import React, { useCallback, useMemo } from 'react';
 
 import { Input, InputNumber } from '@polkadot/react-components';
-import { bnToBn, formatNumber, isUndefined } from '@polkadot/util';
+import { bnToBn, formatBalance, formatNumber, isUndefined } from '@polkadot/util';
 
 import Bare from './Bare.js';
 
@@ -27,12 +27,13 @@ function Amount ({ className = '', defaultValue: { value }, isDisabled, isError,
     () => /^i\d*$/.test(type.type),
     [type]
   );
+  const feeOptions = { decimals: 6, withUnit: 'XRP', withSi: true,  forceUnit: '-', withAll: true };
 
   const defaultValue = useMemo(
     () => isDisabled
       ? value instanceof registry.createClass('AccountIndex')
         ? value.toString()
-        : formatNumber(value as number)
+        : label === "actualFee: u128" || "tip: u128" ? formatBalance(value as number, feeOptions) :  formatNumber(value as number)
       : bnToBn((value as number) || 0).toString(),
     [isDisabled, registry, value]
   );
