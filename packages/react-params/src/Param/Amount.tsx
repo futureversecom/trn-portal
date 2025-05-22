@@ -30,21 +30,21 @@ function Amount ({ className = '', defaultValue: { value }, isDisabled, isError,
 
   const defaultValue = useMemo(
     () => {
-      const feeOptions = {decimals: 6, forceUnit: '-', withAll: true, withSi: true, withUnit: 'XRP'};
+      const feeOptions = { decimals: 6, forceUnit: '-', withAll: true, withSi: true, withUnit: 'XRP' };
 
       if (isDisabled) {
         if (value instanceof registry.createClass('AccountIndex')) {
           return value.toString();
-        } else if (label === 'actualFee: u128' || 'tip: u128') {
+        } else if (label === 'actualFee: u128' || label === 'tip: u128') {
           return formatBalance(value as number, feeOptions);
         } else {
-          return formatNumber(value as number)
+          return formatNumber(value as number);
         }
       } else {
         return bnToBn((value as number) || 0).toString();
       }
-    },[isDisabled, registry, value, label]
-    );
+    }, [isDisabled, registry, value, label]
+  );
 
   const bitLength = useMemo(
     () => getBitLength(registry, type),
