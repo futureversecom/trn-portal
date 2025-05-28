@@ -36,7 +36,6 @@ export const balanceEvents = [
   'nominationPools.Bonded', 'nominationPools.PaidOut', 'nominationPools.PoolSlashed', 'nominationPools.Unbonded', 'nominationPools.UnbondingPoolSlashed',
   'referenda.DecisionDepositPlaced', 'referenda.DecisionDepositRefunded', 'referenda.DepositSlashed', 'referenda.SubmissionDepositRefunded',
   'staking.Bonded', 'staking.Rewarded', 'staking.Unbonded', 'staking.Withdrawn',
-  'transactionPayment.TransactionFeePaid',
   'treasury.Deposit'
 ];
 
