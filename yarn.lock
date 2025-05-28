@@ -3955,12 +3955,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@therootnetwork/api@npm:1.0.13":
-  version: 1.0.13
-  resolution: "@therootnetwork/api@npm:1.0.13"
+"@therootnetwork/api@npm:1.0.14":
+  version: 1.0.14
+  resolution: "@therootnetwork/api@npm:1.0.14"
   peerDependencies:
     "@polkadot/api": ^10.8.1
-  checksum: 10/e7492dd0499960212974c7e950f48aa8f9f5de72d742a24b1dcbf0256fd89f185cb1b8809cd1760aab0b22d1490a55d2dab05cee0c136a487c34e41c693af159
+  checksum: 10/a87112bf43c749665a29fc4768e22d4cb057ba9359fb18044c80c27388f9f1b36ceb82a6b8b395bd66601bb7ad1d3d3f93967ebe03a97ae86ddc714c18266b47
   languageName: node
   linkType: hard
 
@@ -3971,7 +3971,7 @@ __metadata:
     "@crustio/crust-pin": "npm:^1.0.0"
     "@pinata/sdk": "npm:^1.2.1"
     "@polkadot/dev": "npm:^0.83.2"
-    "@therootnetwork/api": "npm:1.0.13"
+    "@therootnetwork/api": "npm:1.0.14"
     "@types/chart.js": "npm:^2.9.41"
     "@types/file-saver": "npm:^2.0.7"
     "@types/react-beautiful-dnd": "npm:^13.1.7"
